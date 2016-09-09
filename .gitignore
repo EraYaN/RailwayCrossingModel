@@ -31,3 +31,9 @@
 # Debug files
 *.dSYM/
 *.su
+
+
+# mCRL2
+*.lps
+*.lts
+*.pbes
