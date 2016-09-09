@@ -1,0 +1,7 @@
+act a,b,c,d,e;
+
+proc P = a.b.c;
+	 Q = d + e;
+	 R = (a + b).c.d.e;
+
+init P;
