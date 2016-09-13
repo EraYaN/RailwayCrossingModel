@@ -1,0 +1,8 @@
+act coin, coffee, tea, Terminate;
+
+proc s0 = coin . s1;
+	 s1 = coffee . s2 + tea . s3;
+	 s2 = Terminate . delta;
+	 s3 = Terminate . delta;
+
+init s0;
