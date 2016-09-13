@@ -1,0 +1,10 @@
+[0] Config.pm:340> INFO - This is Biber 2.4
+[0] Config.pm:343> INFO - Logfile is 'project_plan.blg'
+[63] biber:290> INFO - === Tue Sep 13, 2016, 22:04:06
+[85] Biber.pm:347> INFO - Reading 'project_plan.bcf'
+[246] Utils.pm:147> WARN - Warning: Found biblatex control file version 2.9, expected version 3.0
+[251] Biber.pm:741> INFO - Found 0 citekeys in bib section 0
+[251] Utils.pm:147> WARN - The file 'project_plan.bcf' does not contain any citations!
+[268] bbl.pm:519> INFO - Writing 'project_plan.bbl' with encoding 'UTF-8'
+[268] bbl.pm:615> INFO - Output to project_plan.bbl
+[268] Biber.pm:108> INFO - WARNINGS: 2
