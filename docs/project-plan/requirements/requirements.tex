@@ -1,5 +1,5 @@
 %!TEX program = xelatex
-\documentclass[final]{report} %scrreprt of scrartcl
+\documentclass[final]{report} 
 \input{../../.library/preamble.tex}
 \input{../../.library/style.tex}
 \addbibresource{../../.library/bibliography.bib}
@@ -12,7 +12,7 @@
 \item 2 crossing roads
 \item 2 Barriers
 \item 2 Pairs of flashing Lights
-\item 2 Bells
+\item 1 Bell
 \item 6 Train Sensors
 \end{itemize}
 \section{System Configuration}
@@ -22,7 +22,7 @@ TODO: insert schematic image
 \subsection{Barriers closing}
 \begin{enumerate}
 \item Lights start blinking
-\item wait a few blinks, so noone is scared by an instant bell. %TODO[c]: is this what we want?
+\item wait a few blinks, so no one is scared by an instant bell. %TODO[c]: is this what we want?
 \item Bells start ringing
 \item Wait for all the cars to drive off of the intersection and give them time to brake/react.
 \item Barriers close
@@ -36,30 +36,25 @@ TODO: insert schematic image
 \end{enumerate}
 
 \section{System Requirements}
-The most obious requirement is of course that the system has to prevent cars from driving on the crossing when there is a train comming.
+The most obvious requirement is of course that the system has to prevent cars from driving on the crossing when there is a train coming.
 
-This means that the barriers have to be closed before a train enters the crossing and that they have to stay closed untill the crossing is clear of trains.
+This means that the barriers have to be closed before a train enters the crossing and that they have to stay closed until the crossing is clear of trains.
 
 Besides this trivial requirement, there are a couple less trivial ones.
 \begin{enumerate}
 \item A train can arrive on both tracks from both directions.
 	\begin{enumerate}
 	\item When a train left the crossing and the barriers are opening again, a new train can retrigger the closing sequence again, which has priority over the opening sequence. %TODO: I wanted to write something there, but forgot what.
-	\item Theoratically, it would be possible for two trains to arrive from the same direction where one of the trains is significantly shorter than the other one. %TODO: = Challenging Cases?
+	\item Theoretically, it would be possible for two trains to arrive from the same direction where one of the trains is significantly shorter than the other one. %TODO: = Challenging Cases?
 	\end{enumerate}
 
 \item The beams, lights and bells on both sides of the track operate synchronously.
 \end{enumerate}
 
 
-
-
-
-
-
 \subsection{Challenging Cases}
 	\begin{enumerate}
-		\item Theoratically, it would be possible for two trains to arrive from the same direction where one of the trains is significantly shorter than the other one.
+		\item Theoretically, it would be possible for two trains to arrive from the same direction where one of the trains is significantly shorter than the other one.
 
 	\end{enumerate}
 
