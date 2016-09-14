@@ -32,12 +32,30 @@
 			"*.run.xml",
 			"*.out",
 			"*.log",
-			"*.synctex.gz*"]
+			"*.synctex.gz*",
+			"*.md5",
+			"*.auxlock",
+			"*.bcf",
+			"*.lof",
+			"*.lot",
+			"thesis.pdf",
+			"*.vsdx",
+			"*.eps",
+			"*latexmk",
+			"*.ps1"]
 		}
 	],
 	
 	"settings":
 	{
-		"TEXroot": "template.tex"
+		"TEXroot": "template.tex",
+		"builder_settings" : {
+			"windows" : {
+				"env": {
+					"BIBTEX": "biber"
+				}
+			}
+		},
+		"spell_check": true
 	}
 }
