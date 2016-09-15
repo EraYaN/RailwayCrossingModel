@@ -5,8 +5,9 @@
 \addbibresource{../../.library/bibliography.bib}
 \begin{document}
 \chapter{Requirements}
+In this section, we will gather and describe the requirements of our railway crossing system needed for the later design, modelling and validation. First of all, we will enumerate and name the components of our system; and then describe the sequence in which they actuate in a fixed situation. Finally, we will establish the requirements our system has to fulfil for its modelling. 
 
-\section{System Components}
+\section{System Components} %TODO[c]: establish a notation for each component
 \begin{itemize}
 \item 2 train tracks
 \item 2 crossing roads
@@ -18,6 +19,7 @@
 \section{System Configuration}
 TODO: insert schematic image
 \section{Sequence}
+As any other railway crossing system, the sequential operation in which the barriers will be closed and opened is the following:
 
 \subsection{Barriers closing}
 \begin{enumerate}
@@ -34,6 +36,8 @@ TODO: insert schematic image
 \item Bells stops ringing
 \item Lights stop blinking
 \end{enumerate}
+
+In order to function this way, the system must have some constraints that are listed in the following section. 
 
 \section{System Requirements}
 The most obvious requirement is of course that the system has to prevent cars from driving on the crossing when there is a train coming.
