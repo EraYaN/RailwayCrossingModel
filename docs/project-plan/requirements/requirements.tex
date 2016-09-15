@@ -18,6 +18,7 @@ In this section, we will gather and describe the requirements of our railway cro
 \end{itemize}
 \section{System Configuration}
 TODO: insert schematic image
+
 \section{Sequence}
 As any other railway crossing system, the sequential operation in which the barriers will be closed and opened is the following:
 
@@ -44,37 +45,61 @@ The most obvious requirement is of course that the system has to prevent cars fr
 
 This means that the barriers have to be closed before a train enters the crossing and that they have to stay closed until the crossing is clear of trains.
 
-Besides this trivial requirement, there are a couple less trivial ones.
+Besides this trivial requirement, there are a couple other functional requirements for the system.
+
 \begin{enumerate}
 \item A train can arrive on both tracks from both directions.
 	\begin{enumerate}
-	\item When a train left the crossing and the barriers are opening again, a new train can retrigger the closing sequence again, which has priority over the opening sequence. %TODO: I wanted to write something there, but forgot what.
-	\item Theoretically, it would be possible for two trains to arrive from the same direction where one of the trains is significantly shorter than the other one. %TODO: = Challenging Cases?
+	\item When a train left the crossing and the barriers are opening again, a new train can retrigger the closing sequence again, which has priority over the opening sequence.
 	\end{enumerate}
 
 \item The beams, lights and bells on both sides of the track operate synchronously.
 \end{enumerate}
 
+\subsection{Definitions}
+By Lights ON means the actual lights are blinking but Lights is just a continuous signal for the hardware controller that is responsible for the blinking.
 
-\subsection{Challenging Cases}
+A train `on the track' means that a train is somewhere, either partially or completely, between the two outer train sensors of a train track.
+
+\subsection{Light}
 	\begin{enumerate}
-		\item Theoretically, it would be possible for two trains to arrive from the same direction where one of the trains is significantly shorter than the other one.
-
+		\item Lights always have to be on on when a train is on the tracks
+		\item Lights always have to be on on when the bell is on
+		\item Lights may only stop blinking when the barriers are open and the bell is off and no train is on the tracks
 	\end{enumerate}
 
+\subsection{Bells}
+	\begin{enumerate}
+		\item Bell may only stop ringing when the barriers are open and no train is on the tracks.
+		\item Bell have to turn on as soon as the lights are on.
+	\end{enumerate}
+
+\subsection{Barriers}
+	\begin{enumerate}
+		\item Barriers always have to be closed on when a train is on the tracks and both the lights and bell are on.
+		\item Barriers have to close as soon as the bells are on.
+		\item Barriers may only open when there is no train on the tracks.
+	\end{enumerate}
+
+\subsection{Sensors}
+	\begin{enumerate}
+		\item The Sensors node reads the three train sensors on a track.
+		\item The Sensors node decides whether a train is on the track or not.
+		\item The Sensors node indicates whether a train is on either of the tracks.
+	\end{enumerate}
+
+
 \section{Possible extensions}
-\begin{enumerate}
-\item Detect if Barriers are really closed (test feedback within the system)
-\item Car detector to detect if all cars left the crossing
-\item Add Signal Lights for trains to notify them the crossing is not clear
-\item Adding an train sensor closer to the crossing so the system sooner knows that the tracks are clear.
-\item 
-\end{enumerate}
+	\begin{enumerate}
+	\item Fault detection, recovery and signaling:
+		\begin{enumerate}
+			\item Bells: Detect if the Lights acted as they are supposed to and if not, recover the error and signal a operation fault.
+			\item Barriers: Detect if the Bells acted as they are supposed to and if not, recover the error and signal a operation fault.
+			\item Barriers: Detect if Barriers are really closed and if not, signal an operation fault.
+		\end{enumerate}
 
-
-
-\begin{enumerate}
-\item 
-\end{enumerate}
-
+	\item Extend the system with a Car detector to detect if all cars left the crossing.
+	\item Extend the system with a Signal light for trains to indicate if the crossing is safe to enter.
+	\item Adding an Sensor closer to the crossing so the system sooner knows that the tracks are clear.
+	\end{enumerate}
 \end{document}
