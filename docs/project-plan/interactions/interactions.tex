@@ -4,5 +4,22 @@
 \addbibresource{../../.library/bibliography.bib}
 \begin{document}
 \chapter{Interactions}
+The signals that make the interaction between the four systems described previously possible are the following:
+\section{Sensors}
+The sensor controller will have six input signals, one per sensor in the tracks, and those can be divided in two blocks: one for detecting an approaching or leaving train in the first track (T$_{1}$) and the other one for the second track (T$_{2}$).\\
+
+At the end, the controller should set to High the \textit{train$\_$on $\_$track} output signal if it detects a train on either track.
+
+\section{Lights}
+Lights should react to a \textit{train$\_$on $\_$track} High signal by setting to High an output signal \textit{set$\_$lights}, which would switch on the lights. It should only put the \textit{set$\_$lights} signal Low if \textit{train$\_$on $\_$track} is Low and \textit{set$\_$bell} is Low, being this last one the signal that indicates the state of the Bell (on/off).
+
+\section{Bell}
+As for the Bell, it should react to three different signals: \textit{set$\_$lights}, \textit{train$\_$on$\_$track} and \textit{set$\_$barrier}; being this last one the signal that indicates the state of the Barriers (opened/closed).\\
+
+When \textit{set$\_$lights} and \textit{train$\_$on$\_$track} are High, the output signal of this controller \textit{set$\_$bell} should be established to High, regardless of the state of the Barriers. As soon as the \textit{train$\_$on$\_$track} goes Low, \textit{set$\_$barrier} state will determine \textit{set$\_$bell}, deactivating the Bell when the Barriers are opened; that means \textit{set$\_$barrier} signal is Low.  
+
+\section{Barriers}
+According to the Barriers controller, it needs to know if the Bell is ringing and if there is a train on the track, so it should react to the \textit{set$\_$bell} and \textit{train$\_$on$\_$track} signals providing \textit{set$\_$barriers} signal as output. This way the Barriers should close when the bell is ringing and there is a train on the track, and open when the train has left, subsequently deactivating the Bell. 
+
 
 \end{document}
