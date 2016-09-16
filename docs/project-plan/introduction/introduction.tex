@@ -1,13 +1,26 @@
 %!TEX program = xelatex
+%!TEX spellcheck = en_GB
 \documentclass[final]{report}
 \input{../../.library/preamble.tex}
 \input{../../.library/style.tex}
 \addbibresource{../../.library/bibliography.bib}
 \begin{document}
 \chapter{Introduction}
-When an embedded systems engineer is working on a project he is always working towards a product that "works". But when can you say with certainty that a product works? Of course, once a system does what it is supposed to do one can call it day and ship the product. But can you be certain that it can do what is supposed to do, all of the time, without fail? There are plenty of embedded systems in this world where a failure to function or unexpected behaviour could have disastrous consequences. This is where the science of system validation comes in to play.
+When an embedded systems engineer is working on a project he is always working towards a product that works.
+But when can you say with certainty that a product works? Of course, once a system does what it is supposed to do one can call it day and ship the product.
+But can you be certain that it can do what is supposed to do, all of the time, without fail? There are plenty of embedded systems in this world where a failure to function or unexpected behaviour could have disastrous consequences.
+This is where the science of system validation comes in to play.
 
-In this project our team sets out to model the control of a typical Dutch railway crossing. Trains can come from both directions and are detected by sensors on the tracks. Once a train is detected a system of warning lights, bells and of course barriers is supposed to ensure no car is on the crossing when a train needs to pass. One important requirement is that the system needs to consist of at least 4 parallel components. No "god controller" can exist that knows all the states of the entire system. Once the model is completed, it needs to be validated to ensure that all the requirements are met. One can imagine that a fault in such a system could be fatal, so it is a good example of a scenario where improper validation is unacceptable.
+In this project our team sets out to model the control of a typical Dutch railway crossing.
+Trains can come from both directions and are detected by sensors on the tracks.
+Once a train is detected a system of warning lights, bells and of course barriers is supposed to ensure no car is on the crossing when a train needs to pass.
+One important requirement is that the system needs to consist of at least 4 parallel components.
+No god controller can exist that knows all the states of the entire system.
+Once the model is completed, it needs to be validated to ensure that all the requirements are met.
+One can imagine that a fault in such a system could be fatal, so it is a good example of a scenario where improper validation is unacceptable.
 
-In this first deliverable the requirements of the system and the basic architecture are explained. The requirements will have to be formulated in such a way that as little as possible doubt can exist about the intended functionality of the system (SMART formulation is key). The basic architecture laid out in this report will serve as a basis for the rest of the project. Once this architecture is properly modelled, optional extensions of the system (possible extra barriers, extra functionality for biking lanes, etc.) can be added.
+In this first deliverable the requirements of the system and the basic architecture are explained.
+The requirements will have to be formulated in such a way that as little as possible doubt can exist about the intended functionality of the system (SMART formulation is key).
+The basic architecture laid out in this report will serve as a basis for the rest of the project.
+Once this architecture is properly modelled, optional extensions of the system (possible extra barriers, extra functionality for biking lanes, etcetera) can be added.
 \end{document}

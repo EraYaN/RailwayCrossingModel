@@ -1,11 +1,15 @@
 %!TEX program = xelatex
+%!TEX spellcheck = en_GB
 \documentclass[final]{report} 
 \input{../../.library/preamble.tex}
 \input{../../.library/style.tex}
 \addbibresource{../../.library/bibliography.bib}
 \begin{document}
 \chapter{Requirements}
-In this section, we will gather and describe the requirements of our railway crossing system needed for the later design, modelling and validation. First of all, we will enumerate and name the components of our system; and then describe the sequence in which they actuate in a fixed situation. Finally, we will establish the requirements our system has to fulfil for its modelling. 
+In this section, we will gather and describe the requirements of our railway crossing system needed for the later design, modelling and validation.
+First of all, we will enumerate and name the components of our system; and then describe the sequence in which they actuate in a fixed situation.
+Finally, we will establish the requirements our system has to fulfil for its modelling.
+
 
 %TODO[e] Please include the main letter is the designations like $L_{1}$ instead of L$_{1}$, this creates more consistency and recognizability.
 \section{System Components} 
@@ -26,7 +30,8 @@ As any other railway crossing system, the sequential operation in which the barr
 \subsection{Barriers closing}
 \begin{enumerate}
 \item Lights start blinking
-\item wait a few blinks, so no one is scared by an instant bell. %TODO[c]: is this what we want?
+\item wait a few blinks, so no one is scared by an instant bell.
+%TODO[c]: is this what we want?
 \item Bells start ringing
 \item Wait for all the cars to drive off of the intersection and give them time to brake/react.
 \item Barriers close
@@ -39,7 +44,8 @@ As any other railway crossing system, the sequential operation in which the barr
 \item Lights stop blinking
 \end{enumerate}
 
-In order to function this way, the system must have some constraints that are listed in the following section. 
+In order to function this way, the system must have some constraints that are listed in the following section.
+
 
 \section{System Requirements}
 The most obvious requirement is of course that the system has to prevent cars from driving on the crossing when there is a train coming.
@@ -102,6 +108,7 @@ A train `on the track' means that a train is somewhere, either partially or comp
 	\item Extend the system with a Car detector to detect if all cars left the crossing.
 	\item Extend the system with a Signal light for trains to indicate if the crossing is safe to enter.
 	\item Adding an Sensor closer to the crossing so the system sooner knows that the tracks are clear.
-	\item Double the output signals of each controller and add user access signal, so that if any output signal shows a discrepancy such as being the lights on and off at the same time, it can be manually corrected. 
+	\item Double the output signals of each controller and add user access signal, so that if any output signal shows a discrepancy such as being the lights on and off at the same time, it can be manually corrected.
+
 	\end{enumerate}
 \end{document}
