@@ -6,10 +6,14 @@
 \addbibresource{../../.library/bibliography.bib}
 \begin{document}
 \chapter{Architecture}
-The system will be divided in several separate entities.
-These are listed below.
-In figure ref{} a diagram is show of the functional layout for the system, and in figure ref{} a simple top-down view is shown.
-%TODO[e] Put figures in. Casper?
+The system will be divided in several separate entities, in \cref{fig:system-architecture} a simple schematic view is shown.
+
+\begin{figure}[H]
+	\centering
+	\subimport{resources/}{system-architecture.tikz}
+	\caption{System Architecture}
+	\label{fig:system-architecture}
+\end{figure}
 
 \section{Track Sensor Controller}
 Track is the entity that contains the sensors $S_{n,w}$, $S_{n,m}$, $S_{n,e}$ (where $n = 1,2,3,..$).

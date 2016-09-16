@@ -1,0 +1,38 @@
+\begin{tikzpicture}[
+	system/.style={draw,thick,minimum width = 2cm,minimum height = 2cm,text width=2cm,align=center},
+	or/.style={draw,thick,minimum size = 0.75cm},
+	signal/.style={node distance = 0.5cm,inner sep=0pt,outer sep=0pt,minimum width=0.6cm}]
+
+
+	\node[system] (sensors) {Track Sensor \\ Controller};
+	\node[or,right = 0.5cm of sensors] (or) {$||$};
+	\node[system,right = 2.5cm of or] (lights) {Light \\ Controller};
+	\node[system,below = 0.5cm of lights] (bells) {Bell \\ Controller};
+	\node[system,below = 0.5cm of bells] (barriers) {Barrier \\ Controller};
+
+
+	\node[signal, left=0.2cm of sensors] (sm) {$S_m$};
+	\node[signal, above of=sm] (se) {$S_e$};
+	\node[signal, below of=sm] (sw) {$S_w$};
+
+
+	\draw[->] (sm) -- (sensors);
+
+	\path[] let \p1=(se)    in coordinate (sensor_input_e)    at (sensors.west|- 52,\y1);
+	\path[] let \p1=(sw)    in coordinate (sensor_input_w)    at (sensors.west|- 52,\y1);
+
+	\draw[->] (se) -- (sensor_input_e);
+	\draw[->] (sw) -- (sensor_input_w);
+
+
+	\draw[->,double,thin] (sensors) -- node [midway,text width=1.5cm,label={below:$n$}] {} (or);
+	\draw[->] (or) -- node [midway,label={above:$train\_detected$}] {}(lights);
+	\draw[->] ($(lights.south)-(0.5,0)$) --node [midway,label={left:$light\_status$}] {} ($(bells.north)-(0.5,0)$);
+	\draw[->] ($(bells.north)+(0.5,0)$) --node [midway,label={right:$bell\_status$}] {} ($(lights.south)+(0.5,0)$);
+	\draw[->] ($(bells.south)-(0.5,0)$) --node [midway,label={left:$bell\_status$}] {} ($(barriers.north)-(0.5,0)$);
+	\draw[->] ($(barriers.north)+(0.5,0)$) --node [midway,label={right:$barrier\_status$}] {} ($(bells.south)+(0.5,0)$);
+
+	%\path coordinate (vector) at ($(sensors.north east)+(1,1)$);
+	\node[signal] at ($(sensors.north east)+(0.5,0.2)$) (bottom2) {$n = \{1,2\}$};
+
+\end{tikzpicture}

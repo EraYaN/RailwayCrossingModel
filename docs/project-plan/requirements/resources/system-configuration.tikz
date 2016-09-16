@@ -1,0 +1,42 @@
+
+\tikzstyle{track}=[
+]
+
+\begin{tikzpicture}[
+	track/.style={
+		postaction={draw=gray,densely dashed,line width=14pt},
+		postaction={draw=black,double distance=8pt,line width=2pt},
+		postaction={draw=gray,densely dashed,line width=8pt}},
+	road/.style={double=black,double distance=1.1cm,postaction={draw=white,line width=1mm, loosely dashed}},
+	sensor/.style={fill=blue,circle,inner sep=2pt,minimum size=0.1cm},
+	light/.style={draw=red,rectangle,inner sep=2pt,minimum size=0.5cm},
+	bell/.style={draw=red,circle,inner sep=2pt,minimum size=0.5cm},
+	barrier/.style={fill=red,rectangle,inner sep=2pt,minimum width=1.5cm,minimum height=0.5cm}]
+
+	\draw[road] (-1,-5) to (-1,5);
+	\draw[road] (1,-5) to (1,5);
+
+	\draw[track] (-5,1) to (5,1);
+	\draw[track] (-5,-1) to (5,-1);
+
+	\node[sensor,label=below:{$S_{1,w}$}] at (-4,1) {};
+	\node[sensor,label=below:{$S_{1,m}$}] at (0,1) {};
+	\node[sensor,label=below:{$S_{1,e}$}] at (4,1) {};
+
+	\node[sensor,label=above:{$S_{2,w}$}] at (-4,-1) {};
+	\node[sensor,label=above:{$S_{2,m}$}] at (0,-1) {};
+	\node[sensor,label=above:{$S_{2,e}$}] at (4,-1) {};
+	
+
+	\node[light] at (-2.5,3) {$L_{1}$};
+	\node[light] at (2.5,-3) {$L_{2}$};
+
+	\node[bell] at (-3,2) {$Be_{1}$};
+	\node[bell] at (3,-2) {$Be_{2}$};
+
+	\node[barrier,label={[shift={(-0.3,-0.5)}]$Ba_{1}$}] at (-1.25,2) {};
+	\node[barrier,label={[shift={(0.3,-0.5)}]$Ba_{2}$}] at (1.25,-2) {};
+
+	\node[] at (5.5,1) {$T_{1}$};
+	\node[] at (5.5,-1) {$T_{2}$};
+\end{tikzpicture}
