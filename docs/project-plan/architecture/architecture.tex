@@ -18,26 +18,22 @@ It has one boolean output signal, $train\_on\_track$.
 
 Two units of this type will be in the system.
 Their outputs will be put through an OR gate.
-
 \section{Barrier Controller}
 This unit will control the barriers opening and closing.
-It will communicate with the Track Sensor Controller to see if there is any reason to change it's state.
-It will signal it's own state to the Bell Controller.
+It will communicate with the Track Sensor Controller to see if there is any reason to change it's state, it mainly reacts to $train\_on\_track$.
+It will signal it's own state to the Bell Controller, using signal $barriers_status$.
 
 One unit of this type will be in the system.
-
 \section{Light Controller}
 This unit will control the lights.
-It will orchestrate the blink controllers and communicate it's own status toward the Bell Controller.
+It will orchestrate the blink controllers and communicate it's own status toward the Bell Controller, using signal $lights_status$.
 
 One unit of this type will be in the system.
-
 \section{Blink Controller}
 This unit will control the blinking of the lights.
 This is put in a separate unit to keep each unit simpler.
 
 Each light set will have it's own blink controller, which for now is only one.
-
 \section{Bell Controller}
 This unit directly controls the bell.
 It gets information from both the Barrier Controller and the Light Controller.
