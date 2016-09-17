@@ -1,0 +1,77 @@
+%!TEX program=xelatex
+%!TEX spellcheck = en_GB
+\documentclass[final]{report}
+\input{../../.library/preamble.tex}
+\input{../../.library/style.tex}
+\addbibresource{../../.library/bibliography.bib}
+\begin{document}
+
+\chapter{Subsystems}
+
+\section{Sensor Controller}
+map $\{S_{w},S_{m},S_{e}\} \rightarrow T$
+
+	\begin{figure}[H]
+		\centering
+		\subimport{resources/}{fsm-sensor.tikz}
+		\caption{tls sensor}
+		\label{fig:tls-sensor}
+	\end{figure}
+
+\section{Light Controller}
+map $\{T,Be\} \rightarrow L$
+	\begin{figure}[H]
+		\centering
+			\begin{subfigure}[b]{0.4\textwidth}
+		\centering
+				\subimport{resources/}{fsm-light.tikz}
+				\caption{FSM light}
+				\label{fig:fsm-light}
+			\end{subfigure}
+			\begin{subfigure}[b]{0.4\textwidth}
+		\centering
+				\subimport{resources/}{tls-light.tikz}
+				\caption{tls light}
+				\label{fig:tls-light}
+			\end{subfigure}
+		\caption{tls}
+		\label{fig:light}
+	\end{figure}
+
+\section{Bell Controller}
+map $\{T,L,Ba\} \rightarrow T$
+	\begin{figure}[H]
+		\centering
+			\begin{subfigure}[b]{0.4\textwidth}
+				\subimport{resources/}{fsm-bell.tikz}
+				\caption{FSM bell}
+				\label{fig:fsm-bell}
+			\end{subfigure}
+			\begin{subfigure}[b]{0.4\textwidth}
+				\subimport{resources/}{tls-bell.tikz}
+				\caption{tls bell}
+				\label{fig:tls-bell}
+			\end{subfigure}
+		\caption{tls}
+		\label{fig:bell}
+	\end{figure}
+
+
+\section{Barrier Controller}
+map $\{T,Be\} \rightarrow T$
+	\begin{figure}[H]
+		\centering
+			\begin{subfigure}[b]{0.4\textwidth}
+				\subimport{resources/}{fsm-barrier.tikz}
+				\caption{FSM barrier}
+				\label{fig:fsm-barrier}
+			\end{subfigure}
+			\begin{subfigure}[b]{0.4\textwidth}
+				\subimport{resources/}{tls-barrier.tikz}
+				\caption{tls barrier}
+				\label{fig:tls-barrier}
+			\end{subfigure}
+		\caption{tls}
+		\label{fig:barrier}
+	\end{figure}
+\end{document}

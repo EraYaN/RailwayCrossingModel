@@ -1,0 +1,11 @@
+\begin{tikzpicture}
+\setpathasarrows
+
+\node[state,initial above]				(init)		{$0$};
+\node[state,below of=init]		(on)	{$1$};
+\node[state,below of=on]		(off)	{$0\checkmark$};
+
+\path[->](init) edge node {$T$} (on);
+\path[->](on) edge node {$T' \&\& Be'$} (off);
+
+\end{tikzpicture}

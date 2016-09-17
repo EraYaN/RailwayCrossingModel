@@ -44,6 +44,12 @@ smartlabels]{circuitikz}
 
 \usetikzlibrary{calc}
 \usetikzlibrary{positioning}
+\usetikzlibrary{automata}
+\usetikzlibrary{arrows.meta}
+
+\tikzstyle{every state}=[fill=tu-cyan,align=center,draw=black,line width=1pt,node distance=3cm,minimum width = 1.8cm]%for FSMs casper
+\tikzstyle{every initial by arrow}=[initial text={Reset}]
+\newcommand{\setpathasarrows}{\tikzstyle{every path}=[auto,line width=1.5pt,line cap=round,line join=round]}
 
 \pgfplotsset{compat=newest}
 \pgfplotsset{plot coordinates/math parser=false}
