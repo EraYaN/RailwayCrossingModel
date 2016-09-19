@@ -15,49 +15,36 @@ The system will be divided in several separate entities, in \cref{fig:system-arc
 	\label{fig:system-architecture}
 \end{figure}
 %TODO[c]: decide on final position of the triple 'train_detected' signal
-
 \section{Track Sensor Controller}
-Eacht Track has a Track Sensor Controller to interfaces with the sensors $S_{n,w}$, $S_{n,m}$, $S_{n,e}$ (where $n = 1,2,3,..$ for the number of the track).
+Each Track has a Track Sensor Controller to interface with the sensors $S_{n,w}$, $S_{n,m}$, $S_{n,e}$ (where $n = 1,2,3,..$ for the number of the track).
 This unit determines if there is a train on the track and whenever it is entering or leaving.
 It has one boolean output signal, $train\_on\_track$.
 
-Two units of this type will be in the system.
-<<<<<<< HEAD
-Their outputs will be put through an OR gate.
+Their outputs will be put through an OR gate resulting in the signal $train\_detected$.
 \section{Barrier Controller}
 This unit will control the barriers opening and closing.
 It will communicate with the Track Sensor Controller to see if there is any reason to change it's state, it mainly reacts to $train\_on\_track$.
 It will signal it's own state to the Bell Controller, using signal $barrier\_status$.
-=======
-Their outputs will be put through an OR gate resulting in the signal $train\_detected$.
->>>>>>> origin/project-plan
-
-\section{Light Controller}
-This unit will control the lights.
-<<<<<<< HEAD
-It will orchestrate the blink controllers and communicate it's own status toward the Bell Controller, using signal $light\_status$.
-=======
-It will decide when the lights have to blink and communicate it's own status toward the Bell Controller and the Blink Controller, using signal $light_status$.
->>>>>>> origin/project-plan
 
 One unit of this type will be in the system.
+\section{Light Controller}
+This unit will control the lights.Their outputs will be put through an OR gate resulting in the signal $train\_detected$.
+It will orchestrate the blink controllers and communicate it's own status toward the Bell Controller, using signal $light\_status$.
 
+One unit of this type will be in the system.
 \section{Blink Controller}
 This unit will control the blinking of the lights.
 This is put in a separate unit since it can be implemented in hardware at the lights.
 The hardware of the lights falls outside the scope of this project, so we will not discuss this any further.
-
 \section{Bell Controller}
 This unit directly controls the bells.
 It gets information from both the Barrier Controller, Light Controller and Track Sensor Controllers.
 It sends it's own status using $bell\_status$ toward the Light Controller and the Barrier Controller.
 
 One unit of this type will be in the system.
-
 \section{Barrier Controller}
 This unit will control the barriers opening and closing.
 It will communicate with the Track Sensor Controller to see if there is any reason to change it's state, it mainly reacts to $train\_detected$.
-It will signal it's own state to the Bell Controller, using signal $barrier_status$.
+It will signal it's own state to the Bell Controller, using signal $barrier\_status$.
 
-One unit of this type will be in the system.
 \end{document}
