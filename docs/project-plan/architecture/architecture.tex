@@ -22,11 +22,23 @@ This unit determines if there is a train on the track and whenever it is enterin
 It has one boolean output signal, $train\_on\_track$.
 
 Two units of this type will be in the system.
+<<<<<<< HEAD
+Their outputs will be put through an OR gate.
+\section{Barrier Controller}
+This unit will control the barriers opening and closing.
+It will communicate with the Track Sensor Controller to see if there is any reason to change it's state, it mainly reacts to $train\_on\_track$.
+It will signal it's own state to the Bell Controller, using signal $barrier\_status$.
+=======
 Their outputs will be put through an OR gate resulting in the signal $train\_detected$.
+>>>>>>> origin/project-plan
 
 \section{Light Controller}
 This unit will control the lights.
+<<<<<<< HEAD
+It will orchestrate the blink controllers and communicate it's own status toward the Bell Controller, using signal $light\_status$.
+=======
 It will decide when the lights have to blink and communicate it's own status toward the Bell Controller and the Blink Controller, using signal $light_status$.
+>>>>>>> origin/project-plan
 
 One unit of this type will be in the system.
 
