@@ -32,12 +32,12 @@
 	\draw[->] (sw) -- (sensor_input_w);
 
 	\draw[->,double,thin] (sensors) -- node [midway,text width=1.5cm,label={below:$n$}] {} (or);
-	\draw[->] (or) -- node [midway,label={above:$train\_detected$}] (mid) {}(lights);
+	\draw[->] (or) -- node [midway] (mid) {}(lights);
 	\draw[->] ($(lights.south)-(0.5,0)$) --node [midway,label={left:$light\_status$}] {} ($(bells.north)-(0.5,0)$);
 	\draw[->] ($(bells.north)+(0.5,0)$) --node [midway,label={right:$bell\_status$}] {} ($(lights.south)+(0.5,0)$);
 	\draw[->] ($(bells.south)-(0.5,0)$) --node [midway,label={left:$bell\_status$}] {} ($(barriers.north)-(0.5,0)$);
 	\draw[->] ($(barriers.north)+(0.5,0)$) --node [midway,label={right:$barrier\_status$}] {} ($(bells.south)+(0.5,0)$);
-	\draw[->] (mid.center) |- node[midway,label={left:$train\_detected$}] (bell_left) {} node[near start,label={left:$train\_detected$}] {} (bells.west);
+	\draw[->] (mid.center) |- node[midway,label={left:$train\_detected$}] (bell_left) {} node[near start] {} (bells.west);
 	\draw[->] (bell_left.center) |- (barriers.west);
 
 	%\path coordinate (vector) at ($(sensors.north east)+(1,1)$);
