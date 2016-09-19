@@ -1,7 +1,3 @@
-
-\tikzstyle{track}=[
-]
-
 \begin{tikzpicture}[
 	track/.style={
 		postaction={draw=gray,densely dashed,line width=14pt},
@@ -26,7 +22,6 @@
 	\node[sensor,label=above:{$S_{2,w}$}] at (-4,-1) {};
 	\node[sensor,label=above:{$S_{2,m}$}] at (0,-1) {};
 	\node[sensor,label=above:{$S_{2,e}$}] at (4,-1) {};
-	
 
 	\node[light] at (-2.5,3) {$L_{1}$};
 	\node[light] at (2.5,-3) {$L_{2}$};
@@ -37,6 +32,9 @@
 	\node[barrier,label={[shift={(-0.3,-0.5)}]$Ba_{1}$}] at (-1.25,2) {};
 	\node[barrier,label={[shift={(0.3,-0.5)}]$Ba_{2}$}] at (1.25,-2) {};
 
-	\node[] at (5.5,1) {$T_{1}$};
-	\node[] at (5.5,-1) {$T_{2}$};
+	\node[] at (-1,5.5) {$\downarrow R_{1}$};
+	\node[] at (1,5.5) {$\uparrow R_{2}$};
+
+	\node[] at (5.5,1) {$\leftrightarrow T_{1}$};
+	\node[] at (5.5,-1) {$\leftrightarrow T_{2}$};
 \end{tikzpicture}

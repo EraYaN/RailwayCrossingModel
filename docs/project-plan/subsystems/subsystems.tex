@@ -7,14 +7,14 @@
 \begin{document}
 
 \chapter{Subsystems}
+For each subsystem we made a LTS (some based on a simple FSM).
 
-\section{Sensor Controller}
-map $\{S_{w},S_{m},S_{e}\} \rightarrow T$
-
+\section{Track Sensor Controller}
+map $\{S_{n,w},S_{n,m},S_{n,e}\} \rightarrow T_{n}$
 	\begin{figure}[H]
 		\centering
 		\subimport{resources/}{fsm-sensor.tikz}
-		\caption{tls sensor}
+		\caption{TLS sensor}
 		\label{fig:tls-sensor}
 	\end{figure}
 
@@ -31,10 +31,10 @@ map $\{T,Be\} \rightarrow L$
 			\begin{subfigure}[b]{0.4\textwidth}
 		\centering
 				\subimport{resources/}{tls-light.tikz}
-				\caption{tls light}
+				\caption{TLS light}
 				\label{fig:tls-light}
 			\end{subfigure}
-		\caption{tls}
+		\caption{TLS}
 		\label{fig:light}
 	\end{figure}
 
@@ -49,10 +49,10 @@ map $\{T,L,Ba\} \rightarrow T$
 			\end{subfigure}
 			\begin{subfigure}[b]{0.4\textwidth}
 				\subimport{resources/}{tls-bell.tikz}
-				\caption{tls bell}
+				\caption{TLS bell}
 				\label{fig:tls-bell}
 			\end{subfigure}
-		\caption{tls}
+		\caption{TLS}
 		\label{fig:bell}
 	\end{figure}
 
@@ -68,10 +68,10 @@ map $\{T,Be\} \rightarrow T$
 			\end{subfigure}
 			\begin{subfigure}[b]{0.4\textwidth}
 				\subimport{resources/}{tls-barrier.tikz}
-				\caption{tls barrier}
+				\caption{TLS barrier}
 				\label{fig:tls-barrier}
 			\end{subfigure}
-		\caption{tls}
+		\caption{TLS}
 		\label{fig:barrier}
 	\end{figure}
 \end{document}
