@@ -1,0 +1,27 @@
+\begin{tikzpicture}
+\setpathasarrows
+
+\node[state,initial above]				(init)		{$0$};
+\node[state,below left of=init]		(se)	{$1$};
+\node[state,below right of=init]	(sw)	{$1$};
+
+\node[state,below of=se]			(se_m)	{$1$};
+\node[state,below of=sw]			(sw_m)	{$1$};
+
+\node[state,below of=se_m]			(se_m_w)	{$1$};
+\node[state,below of=sw_m]			(sw_m_e)	{$1$};
+
+\node[state,below of=se_m_w]		(se_m_w_wp)	{$0\checkmark$};
+\node[state,below of=sw_m_e]		(sw_m_e_ep)	{$0\checkmark$};
+
+\path[->](init) edge node {$S_{e}$} (se);
+\path[->](init) edge node {} (sw);
+\path[](sw) edge node {$S_{w}$} (init);
+\path[->](se) edge node {$S_{m}$} (se_m);
+\path[->](sw) edge node {$S_{m}$} (sw_m);
+\path[->](se_m) edge node {$S_{w}$} (se_m_w);
+\path[->](sw_m) edge node {$S_{e}$} (sw_m_e);
+\path[->](se_m_w) edge node {$S_{w}'$} (se_m_w_wp);
+\path[->](sw_m_e) edge node {$S_{e}'$} (sw_m_e_ep);
+
+\end{tikzpicture}

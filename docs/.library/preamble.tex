@@ -1,6 +1,6 @@
 % Include all project wide packages here.
 %\usepackage{fullpage}
-\usepackage[a4paper,margin=2.5cm,top=2cm]{geometry}
+\usepackage[a4paper,margin=4cm,top=2cm,bottom=3cm]{geometry}
 \usepackage{polyglossia}
 \setmainlanguage{english}
 \usepackage{csquotes}
@@ -26,7 +26,7 @@
 \usepackage{mathtools}
 \usepackage{unicode-math}
 \usepackage{rotating}
-\usepackage{titlesec}
+\usepackage[compact]{titlesec}
 \usepackage{titletoc}
 \usepackage{blindtext}
 \usepackage{color}
@@ -43,6 +43,13 @@ americaninductors,
 smartlabels]{circuitikz}
 
 \usetikzlibrary{calc}
+\usetikzlibrary{positioning}
+\usetikzlibrary{automata}
+\usetikzlibrary{arrows.meta}
+
+\tikzstyle{every state}=[fill=tu-cyan,align=center,draw=black,line width=1pt,node distance=3cm,minimum width = 1.8cm]%for FSMs casper
+\tikzstyle{every initial by arrow}=[initial text={Reset}]
+\newcommand{\setpathasarrows}{\tikzstyle{every path}=[auto,line width=1.5pt,line cap=round,line join=round]}
 
 \pgfplotsset{compat=newest}
 \pgfplotsset{plot coordinates/math parser=false}

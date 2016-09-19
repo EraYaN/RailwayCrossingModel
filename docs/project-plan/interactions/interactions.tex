@@ -1,0 +1,33 @@
+%!TEX program=xelatex
+%!TEX spellcheck = en_GB
+\documentclass[final]{report}
+\input{../../.library/preamble.tex}
+\input{../../.library/style.tex}
+\addbibresource{../../.library/bibliography.bib}
+\begin{document}
+\chapter{Interactions}
+This system implements four parallel elements that interact with the user and the environment in the following way:
+
+\section{Sensors}
+There are six sensors, three per track, which will detect a train approaching and leaving either from the East and from the West.
+The ones located in the extremes will detect whether a train is actually approaching or leaving, and consequently its direction.
+As for the middle sensor, it will detect when a train is in the middle of the track.
+
+\section{Lights}
+This system will have four lights divided in pairs, one pair facing each side of the road.
+Each light of the pair of lights will blink alternatively as soon as the system detects a train is approaching, warning the users of the road about the future barrier closing.
+
+On the contrary, when the lights switch off it will indicate the total clearance for the drivers to cross the road, as the last train has left and no train is approaching.
+
+\section{Bells}
+The system will have two bells as acoustic warning signals, one for each road side; that will start ringing some time after the lights switch on.
+These will warn the drivers about the imminent barrier closing.
+
+When the bells stop ringing it will mean that the road is about to be opened again.
+
+\section{Barriers}
+At last, the barriers will close indicating the imminent arrival of a train, totally interrupting the incoming traffic of the road, but leaving the exit free for those who where still at the intersection when the barriers closed.
+
+As soon as there is no train on the track the barriers will open, indicating that the normal use of the road is about to be restored.
+
+\end{document}
