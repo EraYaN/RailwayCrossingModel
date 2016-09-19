@@ -25,12 +25,11 @@
 
 	\draw[->] (sm) -- (sensors);
 
-	\path[] let \p1=(se)    in coordinate (sensor_input_e)    at (sensors.west|- 52,\y1);
-	\path[] let \p1=(sw)    in coordinate (sensor_input_w)    at (sensors.west|- 52,\y1);
+	\path[] let \p1=(se) in coordinate (sensor_input_e) at (sensors.west|- 52,\y1);
+	\path[] let \p1=(sw) in coordinate (sensor_input_w) at (sensors.west|- 52,\y1);
 
 	\draw[->] (se) -- (sensor_input_e);
 	\draw[->] (sw) -- (sensor_input_w);
-
 
 	\draw[->,double,thin] (sensors) -- node [midway,text width=1.5cm,label={below:$n$}] {} (or);
 	\draw[->] (or) -- node [midway,label={above:$train\_detected$}] (mid) {}(lights);
