@@ -38,7 +38,7 @@ This means that the barriers have to be closed before a train enters the crossin
 Besides this trivial requirement, there are a couple other functional requirements for the system.
 
 \begin{enumerate}
-\item A train can arrive on both tracks from both directions.
+\item The system has to be able to handle trains arriving on both tracks from both directions.
 	\begin{enumerate}
 	\item When a train left the crossing and the barriers are opening again, a new train can retrigger the closing sequence again, which has priority over the opening sequence.
 	\end{enumerate}
@@ -48,13 +48,16 @@ Besides this trivial requirement, there are a couple other functional requiremen
 
 \subsection{Definitions}
 Lights ON means the actual lights are blinking but Lights is just a continuous signal for the hardware controller that is responsible for the blinking.
+%TODO[TD]:'Lights is just a continuous signal'your lights controller should only support actions, however you can assume this action is picked up by some external controller, which will handle the blinking
 
 A train `on the track' means that a train is somewhere, either partially or completely, between the two outer train sensors of a train track.
 
 \subsection{Sensors}
 	\begin{enumerate}
 		\item The Sensors node reads the three train sensors on a track.
+		%TODO[TD]:sensors are not pollable, but generate actions
 		\item The Sensors node decides whether a train is on the track or not.
+		%TODO[TD]:is this a requirement?
 		\item The Sensors node indicates whether a train is on either of the tracks.
 	\end{enumerate}
 
@@ -68,6 +71,7 @@ A train `on the track' means that a train is somewhere, either partially or comp
 \subsection{Bells}
 	\begin{enumerate}
 		\item Bells have to turn on a set (to be determined) time after the lights turn on.
+		%TODO[TD]:time should not be modeled in this course
 		\item Bells may only stop ringing when the barriers are open and no train is on the tracks.
 	\end{enumerate}
 
@@ -87,6 +91,7 @@ One will be for opening the barriers when a train is arriving at the crossing an
 \begin{enumerate}
 \item Lights start blinking
 \item Wait a few blinks, so no one is scared by an instant bell
+		%TODO[TD]:time should not be modeled in this course
 \item Bells start ringing
 \item Wait for all the cars to drive off of the intersection and give them time to brake
 \item Barriers close
