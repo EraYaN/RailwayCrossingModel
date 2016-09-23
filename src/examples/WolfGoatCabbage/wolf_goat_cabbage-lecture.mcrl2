@@ -1,0 +1,42 @@
+% There are a man with a wolf, a goat and a cabbage standing
+% at one side of a river. He wants to cross and for this
+% purpose he has a small boat that can only contain him and
+% one item. If the wolf is left with the goat, the goat will
+% be eaten. If the goat is left with the cabbage, the cabbage
+% is consumed. The question is to find a strategy to bring the
+% man to the other shore without losing any of his items.
+
+% There are some holes in this file, that we will fill together.
+
+sort Item = struct wolf | goat | cabbage;
+     Position = struct left | right;
+     Shores = struct shores(Set(Item), Set(Item));
+
+map opp: Position -> Position;
+    items: Shores # Position -> Set(Item);
+    update: Shores # Position # Item -> Shores;
+
+var s,t: Set(Item);
+    i: Item;
+
+eqn opp(left) = right;
+    opp(right) = left;
+    items(shores(s,t), left) = s;
+    items(shores(s,t), right) = t;
+    update(shores(s,t), right, i) = shores(s - {i}, t + {i});
+    update(shores(s,t), left, i) = shores(s + {i}, t - {i});
+
+act is_eaten: Item;
+    move: Position;
+    move: Position # Item;
+    done;
+
+proc WGC(pos: Position, s: Shores) =
+  ({wolf, goat} <= items(s, opp(pos))) -> is_eaten(goat) . delta
+<>({cabbage, goat} <= items(s, opp(pos))) -> is_eaten(cabbage) . delta
+<>({wolf, goat, cabbage} <= items(s, right)) -> done . delta
+<> (move(opp(pos)) . WGC(opp(pos), s)
++ sum i: Item . (i in items(s, pos)) -> move(opp(pos), i) . WGC(opp(pos), update(s, opp(pos), i)));
+
+
+init WGC(left, shores({wolf, goat, cabbage}, {}));
