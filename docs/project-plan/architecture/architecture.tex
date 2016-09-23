@@ -22,13 +22,6 @@ It has one boolean output signal, $train\_on\_track$ (or abbreviated to $T$).
 
 Their outputs will be put through an OR gate resulting in the signal $train\_detected$.
 
-\section{Barrier Controller}
-This unit will control the barriers opening and closing.
-It will communicate with the Track Sensor Controller to see if there is any reason to change it's state, it mainly reacts to $train\_on\_track$.
-It will signal it's own state to the Bell Controller, using signal $barrier\_status$.
-
-One unit of this type will be in the system.
-
 \section{Light Controller}
 This unit will control the lights.
 It will orchestrate the blink controllers and communicate it's own status toward the Bell Controller, using signal $light\_status$.
@@ -51,6 +44,7 @@ One unit of this type will be in the system.
 This unit will control the barriers opening and closing.
 It will communicate with the Track Sensor Controller to see if there is any reason to change it's state, it mainly reacts to $train\_detected$.
 It will signal it's own state to the Bell Controller, using signal $barrier\_status$.
-%TODO[TD]: this whole section is already discussed?
+
+One unit of this type will be in the system.
 
 \end{document}
