@@ -1,0 +1,51 @@
+% Light Bell
+% Group 8
+
+sort State = struct on | off;
+	 Train = struct train | no_train;
+
+map opp: State -> State;
+
+var stateL,stateBe : State;
+	T: Train;
+
+eqn opp(on) = off;
+	opp(off) = on;
+
+act set_lights,get_lights,comm_lights: State;
+	set_bells,get_bells,comm_bells: State;
+	set_barriers,get_barriers,comm_barriers: State;
+	done;
+
+proc LIGHTS(stateL: State, T : Train) =
+ ((stateL == on ) && (T == train))    -> set_lights((stateL))	 . LIGHTS((stateL),T)%can be removed?
++((stateL == off) && (T == no_train)) -> set_lights((stateL))	 . LIGHTS((stateL),T)%can be removed?
++((stateL == on ) && (T == no_train))   -> set_lights(opp(stateL)) . LIGHTS(opp(stateL),T)
++((stateL == off) && (T == train))     -> set_lights(opp(stateL)) . LIGHTS(opp(stateL),T);
+%+ sum l: State . get_bells(l) . LIGHTS(stateBe=l);
+
+proc BELLS(stateBe: State,stateL: State, T : Train) =
+% ((stateBe == on ) && (stateL == on ) && (T == train))    -> set_bells((stateBe))     . BELLS((stateBe),T)
+%+((stateBe == off) && (stateL == on ) && (T == no_train)) -> set_bells((stateBe))     . BELLS((stateBe),T)
+ ((stateBe == on ) && (stateL == on ) && (T == no_train)) -> set_bells(opp(stateBe)) . BELLS(stateBe=opp(stateBe))
+ +((stateBe == off) && (stateL == on ) && (T == train))    -> set_bells(opp(stateBe)) . BELLS(stateBe=opp(stateBe))
+
+% ((stateBe == on ) && (stateL == off) && (T == train))    -> set_bells((stateBe))     . BELLS((stateBe),T)
+%+((stateBe == off) && (stateL == off) && (T == no_train)) -> set_bells((stateBe))      . BELLS((stateBe),T)
+ +((stateBe == on ) && (stateL == off) && (T == no_train)) -> set_bells(opp(stateBe)) . BELLS(stateBe=opp(stateBe)) %weird state
+% +((stateBe == off) && (stateL == off) && (T == train))    -> set_bells(stateBe=opp(stateBe)) . BELLS(stateBe=opp(stateBe),T);
+ + sum l: State . get_lights(l) . BELLS(stateL=l);
+
+
+
+
+%init LIGHTS(on,no_train);
+%init BELLS(on,on,no_train);
+%init LIGHTS(on,no_train) || BELLS(on,on,no_train);
+
+init allow({set_bells,comm_lights},
+		comm(
+			{set_lights|get_lights -> comm_lights},
+			LIGHTS(on,no_train) || BELLS(on,on,no_train)
+		)
+	);

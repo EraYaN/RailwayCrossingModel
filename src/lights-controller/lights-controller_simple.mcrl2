@@ -1,0 +1,20 @@
+% Light Controller
+% Group 8
+
+sort State = struct on | off;
+
+map opp: State -> State;
+
+var state: State;
+
+eqn opp(on) = off;
+    opp(off) = on;
+
+act set_lights: State;
+    done;
+
+proc LIGHTS(state: State) =
+(on == state) -> done . delta
+<>((off == state) -> set_lights(opp(state)) . LIGHTS(opp(state)));
+
+init LIGHTS(off);
