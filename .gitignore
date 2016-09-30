@@ -401,3 +401,5 @@ script/**/*.jpg
 *.lps
 *.lts
 *.pbes
+*.trc
+*.trc.txt
