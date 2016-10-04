@@ -6,32 +6,51 @@
 
 %NOTE: So in an error state, the system might still remain in the same state (do a loop back), but it might also try to correct the system.
 
-sort State = struct on | off;
+sort State = struct on | off | approaching | leaving | idle;
 	 Train = struct train | no_train;
+	Sensors = struct sensors_track(Set(State),Set(State));
 
 map opp: State -> State;
+	items: Sensors # Nat -> Set(State);
 
 var stateL,stateBe,stateBa : State;
 	T: Train;
+	track1, track2: Set(State); 
+	train1, train2: Set(State);
+	T_movement: State;
 
 eqn opp(on) = off;
 	opp(off) = on;
+	opp(approaching) = leaving; 
+	opp(leaving) = approaching;
+	items(sensors_track(track1, track2), 1) = track1;
+	items(sensors_track(track1, track2), 2) = track2;
 
 act set_lights,get_lights,comm_lights: State;
 	set_bells,get_bells,comm_bells: State;
 	set_barriers,get_barriers,comm_barriers: State;
+	set_sensors, get_sensors, comm_sensors: Train;
 	done;
 
-proc LIGHTS(stateL: State,stateBe: State,T : Train) =
- ((stateL == on ) && (stateBe == on ) && (T ==    train)) -> set_lights(   (stateL)) . LIGHTS(stateL=   (stateL))	%STAY_STATE
-+((stateL == on ) && (stateBe == on ) && (T == no_train)) -> set_lights(   (stateL)) . LIGHTS(stateL=   (stateL))	%STAY_STATE
-+((stateL == on ) && (stateBe == off) && (T ==    train)) -> set_lights(   (stateL)) . LIGHTS(stateL=   (stateL))	%STAY_STATE
+proc SENSORS( T_move: State, sensors_track: Sensors) = 
+sum i: State . (i in items(sensors_track, 1))-> (
+((i == on) && ( T_move == idle)) -> set_sensors(train).SENSORS(T_move = approaching )
+<> ((i == on) && ( T_move == approaching)) -> set_sensors(no_train).SENSORS(T_move = leaving )
+<> ((i == on) && ( T_move == leaving)) -> set_sensors(train).SENSORS(T_move = approaching )
+<> ((i == off) && ( T_move == leaving)) -> set_sensors(train).SENSORS(T_move = idle )
+);
+
+proc LIGHTS(stateL: State,stateBe: State,T : Train) = 
+((stateL == on ) && (stateBe == on ) && (T == train)) -> set_lights( (stateL)) . LIGHTS(stateL= (stateL)) %STAY_STATE
++((stateL == on ) && (stateBe == on ) && (T == no_train)) -> set_lights( (stateL)) . LIGHTS(stateL= (stateL)) %STAY_STATE
++((stateL == on ) && (stateBe == off) && (T == train)) -> set_lights( (stateL)) . LIGHTS(stateL= (stateL)) %STAY_STATE
 +((stateL == on ) && (stateBe == off) && (T == no_train)) -> set_lights(opp(stateL)) . LIGHTS(stateL=opp(stateL))
-+((stateL == off) && (stateBe == on ) && (T ==    train)) -> set_lights(opp(stateL)) . LIGHTS(stateL=opp(stateL))	%ERROR_STATE
-+((stateL == off) && (stateBe == on ) && (T == no_train)) -> set_lights(   (stateL)) . LIGHTS(stateL=   (stateL))	%ERROR_STATE
-+((stateL == off) && (stateBe == off) && (T ==    train)) -> set_lights(opp(stateL)) . LIGHTS(stateL=opp(stateL))
-+((stateL == off) && (stateBe == off) && (T == no_train)) -> set_lights(   (stateL)) . LIGHTS(stateL=   (stateL))	%STAY_STATE
-+ sum s: State . get_bells(s) . LIGHTS(stateBe=s);
++((stateL == off) && (stateBe == on ) && (T == train)) -> set_lights(opp(stateL)) . LIGHTS(stateL=opp(stateL)) %ERROR_STATE
++((stateL == off) && (stateBe == on ) && (T == no_train)) -> set_lights( (stateL)) . LIGHTS(stateL= (stateL)) %ERROR_STATE
++((stateL == off) && (stateBe == off) && (T == train)) -> set_lights(opp(stateL)) . LIGHTS(stateL=opp(stateL))
++((stateL == off) && (stateBe == off) && (T == no_train)) -> set_lights( (stateL)) . LIGHTS(stateL= (stateL)) %STAY_STATE
++ sum s: State . get_bells(s) . LIGHTS(stateBe=s)
++ sum t: Train . get_sensors(t) . LIGHTS(T = t);
 
 proc BELLS(stateBe: State,stateL: State,stateBa: State, T : Train) =
  ((stateBe == on ) && (stateL == on ) && (stateBa == on ) && (T ==    train)) -> set_bells(   (stateBe)) . BELLS(stateBe=   (stateBe))	%STAY_STATE
@@ -65,11 +84,14 @@ proc BARRIERS(stateBa: State,stateBe: State,T : Train) =
 +((stateBa == off) && (stateBe == off) && (T == no_train)) -> set_barriers(   (stateBa)) . BARRIERS(stateBa=   (stateBa))	%STAY_STATE
 + sum s: State . get_bells(s) . BARRIERS(stateBe=s);
 
-init allow({set_bells,comm_lights,comm_bells,comm_barriers},
+init hide({comm_lights,comm_bells,comm_barriers,comm_sensors,set_sensors},
+	allow({set_sensors,set_barriers,set_lights,set_bells,comm_lights,comm_bells,comm_barriers, comm_sensors},
 		comm(
 			{set_lights|get_lights -> comm_lights,
 			set_bells|get_bells -> comm_bells,
-			set_barriers|get_barriers -> comm_barriers},
-			LIGHTS(on,on,no_train) || BELLS(on,on,on,no_train) || BARRIERS(on,on,no_train) 
+			set_barriers|get_barriers -> comm_barriers,
+			set_sensors|get_sensors -> comm_sensors},
+			SENSORS( idle, sensors_track({on, off}, {off, off})) || LIGHTS(off,off, no_train) %|| BELLS(on,on,on,no_train) || BARRIERS(on,on,no_train) 
 		)
+	)
 	);
