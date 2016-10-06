@@ -32,13 +32,25 @@ act set_lights,get_lights,comm_lights: State;
 	set_sensors, get_sensors, comm_sensors: Train;
 	done;
 
-proc SENSORS( T_move: State, sensors_track: Sensors) = 
+proc SENSORS( T_move1: State, T_move2: State, middle_sensor1:State, middle_sensor2:State, sensors_track: Sensors) = 
 sum i: State . (i in items(sensors_track, 1))-> (
-((i == on) && ( T_move == idle)) -> set_sensors(train).SENSORS(T_move = approaching )
-<> ((i == on) && ( T_move == approaching)) -> set_sensors(no_train).SENSORS(T_move = leaving )
-<> ((i == on) && ( T_move == leaving)) -> set_sensors(train).SENSORS(T_move = approaching )
-<> ((i == off) && ( T_move == leaving)) -> set_sensors(train).SENSORS(T_move = idle )
-);
+((i == on) && ( T_move1 == idle)) -> set_sensors(train).SENSORS(T_move1 = approaching )
+<> ((i == on) && (middle_sensor1==off) && ( T_move1 == approaching)) -> set_sensors(no_train).SENSORS(T_move1 = leaving )
+<> ((i == on) && ( T_move1 == leaving)) -> set_sensors(train).SENSORS(T_move1 = approaching )
+<> ((i == off) && ( T_move1 == leaving)) -> set_sensors(train).SENSORS(T_move1 = idle )
+<> ((i == off) && ( T_move1 == idle)) -> set_sensors(no_train).SENSORS(T_move1 = idle )
+<> ((i == off) && ( T_move1 == approaching)) -> set_sensors(train).SENSORS(T_move1 = approaching )
+)
+<> sum j: State . (j in items(sensors_track, 2))-> (
+((j == on) && ( T_move2 == idle)) -> set_sensors(train).SENSORS(T_move2 = approaching )
+<> ((j == on) && (middle_sensor2==off) && ( T_move2 == approaching)) -> set_sensors(no_train).SENSORS(T_move2 = leaving )
+<> ((j == on) && ( T_move2 == leaving)) -> set_sensors(train).SENSORS(T_move2 = approaching )
+<> ((j == off) && ( T_move2 == leaving)) -> set_sensors(train).SENSORS(T_move2 = idle )
+<> ((j == off) && ( T_move2 == idle)) -> set_sensors(no_train).SENSORS(T_move2 = idle )
+<> ((j == off) && ( T_move2 == approaching)) -> set_sensors(train).SENSORS(T_move2 = approaching )
+)
+
+;
 
 proc LIGHTS(stateL: State,stateBe: State,T : Train) = 
 ((stateL == on ) && (stateBe == on ) && (T == train)) -> set_lights( (stateL)) . LIGHTS(stateL= (stateL)) %STAY_STATE
@@ -91,7 +103,7 @@ init hide({comm_lights,comm_bells,comm_barriers,comm_sensors,set_sensors},
 			set_bells|get_bells -> comm_bells,
 			set_barriers|get_barriers -> comm_barriers,
 			set_sensors|get_sensors -> comm_sensors},
-			SENSORS( idle, sensors_track({on, off}, {off, off})) || LIGHTS(off,off, no_train) %|| BELLS(on,on,on,no_train) || BARRIERS(on,on,no_train) 
+			SENSORS( idle, idle, off, off, sensors_track({on, off}, {off, off})) %|| LIGHTS(off,off, no_train) %|| BELLS(on,on,on,no_train) || BARRIERS(on,on,no_train) 
 		)
 	)
 	);
