@@ -6,6 +6,7 @@ param (
     [string]$TraceAction = "",
     [switch]$ShowGraph = $false,
 	[switch]$CleanupOnly = $false,
+	[switch]$Verify = $false,
 	[switch]$Verbose = $false
 )
 
@@ -31,32 +32,39 @@ if ( Test-Path "${Project}.pbes" ){
 Remove-Item "${Project}_trace_*.lts"
 if(!$CleanupOnly){
 	if(Test-Path "${Project}.mcrl2"){
-		Write-Host "Compiling to LPS" -ForegroundColor Green
+		Write-Host "Compiling to LPS" -ForegroundColor Cyan
 		cmd /C mcrl22lps.exe "${Project}.mcrl2" "${Project}.lps" --lin-method=regular --rewriter=jitty $ToolArguments
 	} else {
 		Write-Host "Did not compile to LPS, ${Project}.mcrl2 not found." -ForegroundColor Yellow
 	}
 	if(Test-Path "${Project}.lps"){
-		Write-Host "Compiling to LTS" -ForegroundColor Green
+		Write-Host "Compiling to LTS" -ForegroundColor Cyan
 		cmd /C lps2lts.exe "${Project}.lps" "${Project}.lts" --rewriter=jitty --strategy=breadth $ToolArguments
 	} else {
 		Write-Host "Did not compile to LTS, ${Project}.lps not found." -ForegroundColor Yellow
 	}
-	if((Test-Path "${Project}.mcf") -And (Test-Path "${Project}.lps")){
-		Write-Host "Compiling to PBES" -ForegroundColor Green
-		cmd /C lps2pbes.exe "${Project}.lps" "${Project}.pbes" --formula="${Project}.mcf" --out=pbes $ToolArguments
-	} else {
-		Write-Host "Did not compile to PBES, ${Project}.mcf or ${Project}.lps not found." -ForegroundColor Yellow
-	}
-	if(Test-Path "${Project}.pbes"){
-		Write-Host "Processing PBES" -ForegroundColor Green
-		cmd /C pbes2bool.exe "${Project}.pbes" --erase=none --rewriter=jitty --search=breadth-first --strategy=0 $ToolArguments
-	} else {
-		Write-Host "Did not process PBES, ${Project}.pbes not found." -ForegroundColor Yellow
+	if($Verify){
+		if((Test-Path "${Project}.mcf") -And (Test-Path "${Project}.lps")){
+			Write-Host "Compiling to PBES" -ForegroundColor Cyan
+			cmd /C lps2pbes.exe "${Project}.lps" "${Project}.pbes" --formula="${Project}.mcf" --out=pbes $ToolArguments
+		} else {
+			Write-Host "Did not compile to PBES, ${Project}.mcf or ${Project}.lps not found." -ForegroundColor Yellow
+		}
+		if(Test-Path "${Project}.pbes"){
+			Write-Host "Processing PBES" -ForegroundColor Cyan
+			$result = cmd /C pbes2bool.exe "${Project}.pbes" --erase=none --rewriter=jitty --search=breadth-first --strategy=0 $ToolArguments
+			if($result -eq "true"){
+				Write-Host "System verified sucessfully." -ForegroundColor Green
+			} else {
+				Write-Host "System did not pass verification." -ForegroundColor Red
+			}
+		} else {
+			Write-Host "Did not process PBES, ${Project}.pbes not found." -ForegroundColor Yellow
+		}
 	}
 
 	if($TraceAction){
-		Write-Host "Generating Traces" -ForegroundColor Green
+		Write-Host "Generating Traces" -ForegroundColor Cyan
 		cmd /C lps2lts.exe  "${Project}.lps" "${Project}_trace_${TraceAction}.lts" --action=$TraceAction --rewriter=jitty --strategy=breadth --trace
 		$traces = Get-ChildItem "${Project}.lps*.trc"
 		ForEach ($trace In $traces) {
@@ -70,10 +78,10 @@ if(!$CleanupOnly){
 			$i++;
 		}
 	}
-	Write-Host "Generation Done." -ForegroundColor Green
+	Write-Host "Generation Done." -ForegroundColor Cyan
 	if($ShowGraph){
 		if ( Test-Path "${Project}.lts" ){
-			Write-Host "Launching LTSGraph" -ForegroundColor Green
+			Write-Host "Launching LTSGraph" -ForegroundColor Cyan
 			cmd /C START ltsgraph.exe "${Project}.lts"
 		} else {
 			Write-Host "Could not launch LTSGraph, ${Project}.lts not found." -ForegroundColor Yellow
