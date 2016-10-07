@@ -6,14 +6,14 @@
 
 %NOTE: So in an error state, the system might still remain in the same state (do a loop back), but it might also try to correct the system.
 
-sort State = struct on | off | approaching | leaving | idle;
+sort State = struct on | off | approaching | leaving | idle;%L: isn't it nicer to have a State with on/off and a State_T with approaching, leaving, idle.
 	 Train = struct train | no_train;
 	Sensors = struct sensors_track(Set(State),Set(State));
 
 map opp: State -> State;
 	items: Sensors # Nat -> Set(State);
 
-var stateL,stateBe,stateBa : State;
+var stateL,stateBe,stateBa : State;		%L: Most of the things in Var don't do anything right?
 	T: Train;
 	track1, track2: Set(State); 
 	train1, train2: Set(State);
@@ -32,8 +32,8 @@ act set_lights,get_lights,comm_lights: State;
 	set_sensors, get_sensors, comm_sensors: Train;
 	done;
 
-proc SENSORS( T_move1: State, T_move2: State, middle_sensor1:State, middle_sensor2:State, sensors_track: Sensors) = 
-sum i: State . (i in items(sensors_track, 1))-> (
+proc SENSORS( T_move1: State, T_move2: State, middle_sensor1:State, middle_sensor2:State, sensors_track: Sensors) = %L: SENSORS lack a line where i==on and middle_sensor=on to start the leaving process.
+sum i: State . (i in items(sensors_track, 1))-> (						  %L: Doesn't a train need to clear the block for the opening process to start?
 ((i == on) && ( T_move1 == idle)) -> set_sensors(train).SENSORS(T_move1 = approaching )
 <> ((i == on) && (middle_sensor1==off) && ( T_move1 == approaching)) -> set_sensors(no_train).SENSORS(T_move1 = leaving )
 <> ((i == on) && ( T_move1 == leaving)) -> set_sensors(train).SENSORS(T_move1 = approaching )
@@ -99,7 +99,7 @@ proc BARRIERS(stateBa: State,stateBe: State,T : Train) =
 init hide({comm_lights,comm_bells,comm_barriers,comm_sensors,set_sensors},
 	allow({set_sensors,set_barriers,set_lights,set_bells,comm_lights,comm_bells,comm_barriers, comm_sensors},
 		comm(
-			{set_lights|get_lights -> comm_lights,
+			{set_lights|get_lights -> comm_lights, %L: Don't de communications still implicitly imply that an external signal has been send out?
 			set_bells|get_bells -> comm_bells,
 			set_barriers|get_barriers -> comm_barriers,
 			set_sensors|get_sensors -> comm_sensors},
