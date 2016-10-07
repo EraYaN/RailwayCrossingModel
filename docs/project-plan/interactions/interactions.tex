@@ -6,28 +6,88 @@
 \addbibresource{../../.library/bibliography.bib}
 \begin{document}
 \chapter{Interactions}
-This system implements four parallel elements that interact with the user and the environment in the following way:
+This system implements five parallel components that interact with each other and the environment. In this section the input and output signals of the different components are defined.
 
-\section{Sensors}
-There are six sensors, three per track, which will detect a train approaching and leaving either from the East and from the West.
-The ones located in the extremes will detect whether a train is actually approaching or leaving, and consequently its direction.
-As for the middle sensor, it will detect when a train is in the middle of the track.
+\section{Sensor controller}
+\begin{table}[h]
+\centering
+\begin{tabular}{|l|l|l|}
+\hline
+OutSensor1(t) & t=T1, T2 & Gives state of one of the outer sensors to the sensor controller  \\
+MiddleSensor(t) & t=T1, T2           & Gives state of middle
+ sensors to the sensor controller \\ 
+OutSensor2(t) & t=T1, T2 & Gives state of one of the outer sensors to the sensor controller  \\\hline
+tx\_sensors(Train) & Train=train, no\_train & Transmits presence of train on track to the other controllers.  \\\hline
+\end{tabular}
+\caption{Interactions of the sensor controller}
+\label{sensorSignals}
+\end{table}
 
-\section{Lights}
-This system will have four lights divided in pairs, one pair facing each side of the road.
-Each light of the pair of lights will blink alternatively as soon as the system detects a train is approaching, warning the users of the road about the future barrier closing.
+\cref{sensorSignals} shows the interactions of the sensorcontroller with other controllers and the sensors. In the interactions "t" defines on what track the sensor sending the signal is.
 
-On the contrary, when the lights switch off it will indicate the total clearance for the drivers to cross the road, as the last train has left and no train is approaching.
+\section{Lights controller}
+\begin{table}[h]
+\centering
+\begin{tabular}{|l|l|l|}
+\hline
+rx\_Sensor(Train)  & Train=train, no\_train & Receives presence of train on tracks from sensor controller \\
+rx\_Bells(state)   & state=on, off          & Receives state of bells from bells controller               \\ \hline
+act\_Lights(state) & state=on, off          & Turns lights on or off                                      \\
+tx\_Lights(state)  & state=on, off          & Transmits state of lights to bells controller               \\ \hline
+\end{tabular}
+\caption{Interactions of the lights controller}
+\label{lightsSignals}
+\end{table}
 
-\section{Bells}
-The system will have two bells as acoustic warning signals, one for each road side; that will start ringing some time after the lights switch on.
-These will warn the drivers about the imminent barrier closing.
+Todo
 
-When the bells stop ringing it will mean that the road is about to be opened again.
+\section{Bells controller}
+\begin{table}[h]
+\centering
+\begin{tabular}{|l|l|l|}
+\hline
+rx\_Sensor(Train)   & Train=train, no\_train & Receives presence of train on tracks from sensor controller           \\
+rx\_Lights(state)   & state=on, off          & Receives state of lights from lights controller                      \\
+rx\_Barriers(state) & state=on, off          & Receives state of barriers from barriers controller                  \\ \hline
+act\_Bells(state)   & state=on, off          & Turns bells on or off                                                \\
+tx\_Bells(state)    & state=on, off          & Transmits state of bells to bells controller and barriers controller\\ \hline
+\end{tabular}
+\caption{Interactions of the bells controller}
+\label{bellsSignals}
+\end{table}
 
-\section{Barriers}
-At last, the barriers will close indicating the imminent arrival of a train, totally interrupting the incoming traffic of the road, but leaving the exit free for those who where still at the intersection when the barriers closed.
+Todo
 
-As soon as there is no train on the track the barriers will open, indicating that the normal use of the road is about to be restored.
+\section{Barriers controller}
+\begin{table}[h]
+\centering
+\begin{tabular}{|l|l|l|}
+\hline
+rx\_Sensor(Train)    & Train=train, no\_train & Receives presence of train on tracks from sensor controller \\
+rx\_Bells(state)     & state=on, off          & Receives state of bells from bells controller               \\ \hline
+act\_Barriers(state) & state=on, off          & Closes or opens barrier(Todo, define states)                \\
+tx\_Barriers(state)  & state=on, off          & Transmits state of barriers to bells controller             \\ \hline
+\end{tabular}
+\caption{Interactions of the bells controller}
+\label{barriersSignals}
+\end{table}
+
+Todo
+
+\section{Communications}
+\begin{table}[h]
+\centering
+\begin{tabular}{|l|l|l|}
+\hline
+rx\_Sensor(Train)|tx\_Sensor(Train)     & Train=train, no\_train & comm\_Sensor(Train)   \\
+rx\_Lights(state)|tx\_Lights(state)     & state=on, off          & comm\_Lights(state)   \\
+rx\_Bells(state)|tx\_Bells(state)       & state=on, off          & comm\_Bells(state)    \\
+rx\_Barriers(state)|tx\_Barriers(state) & state=on, off          & comm\_Barriers(state) \\ \hline
+\end{tabular}
+\caption{Communications in the system}
+\label{communicationsTable}
+\end{table}
+
+todo
 
 \end{document}
