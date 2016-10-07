@@ -96,27 +96,43 @@ init hide(
 		comm_bells,
 		comm_barriers,
 		comm_sensors,
-		tx_sensors
+		comm_aggregatedsensors,
+		rx_sensors,
+		rx_aggregatedsensors,
+		rx_barriers,
+		rx_lights,
+		rx_bells,
+		tx_sensors,
+		tx_aggregatedsensors,
+		tx_barriers,
+		tx_lights,
+		tx_bells
 	},
 	allow(
 		{
 			tx_sensors,
+			tx_aggregatedsensors,
 			tx_barriers,
 			tx_lights,
-			tx_bells,comm_lights,
+			tx_bells,
+			comm_lights,
 			comm_bells,
 			comm_barriers,
-			comm_sensors
+			comm_sensors,
+			comm_aggregatedsensors
 		},
 		comm(
 			{tx_lights|rx_lights -> comm_lights,
 			tx_bells|rx_bells -> comm_bells,
 			tx_barriers|rx_barriers -> comm_barriers,
-			tx_sensors|rx_sensors -> comm_sensors},
+			tx_sensors|rx_sensors -> comm_sensors,
+			tx_aggregatedsensors|rx_aggregatedsensors -> comm_aggregatedsensors},
 			SENSORS(t1, idle, off, {on, off}) || 
 			SENSORS(t2, idle, off, {on, off}) ||
 			SENSORAGGREGATOR(no_train, no_train) ||
-			LIGHTS(off,off, no_train) || BELLS(on,on,on,no_train) || BARRIERS(on,on,no_train)
+			LIGHTS(off,off, no_train) || 
+			BELLS(on,on,on,no_train) || 
+			BARRIERS(on,on,no_train)
 		)
 	)
 );

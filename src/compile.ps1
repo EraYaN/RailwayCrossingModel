@@ -5,7 +5,8 @@ param (
     [string]$Project = "test",
     [string]$TraceAction = "",
     [switch]$ShowGraph = $false,
-	[switch]$CleanupOnly = $false
+	[switch]$CleanupOnly = $false,
+	[switch]$Verbose = $false
 )
 
 $mCRL2RegData = Get-Item -Path Registry::HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall\mCRL2
@@ -13,17 +14,46 @@ $mCRL2Path = Join-Path -Path $mCRL2RegData.GetValue('DisplayIcon') -ChildPath "b
 Write-Host "mCRL2 installed in: " $mCRL2Path -ForegroundColor Yellow
 $env:Path += ";$mCRL2Path"
 
+$ToolArguments = "";
+
+if($Verbose){
+$ToolArguments += "--verbose";
+}
+
 Write-Host "Cleaning Up" -ForegroundColor Green
 Remove-Item "${Project}*.lps*"
 if ( Test-Path "${Project}.lts" ){
 	Remove-Item "${Project}.lts"
 }
+if ( Test-Path "${Project}.pbes" ){
+	Remove-Item "${Project}.pbes"
+}
 Remove-Item "${Project}_trace_*.lts"
 if(!$CleanupOnly){
-	Write-Host "Compiling LPS" -ForegroundColor Green
-	cmd /C mcrl22lps.exe "${Project}.mcrl2" "${Project}.lps" --lin-method=regular --rewriter=jitty
-	Write-Host "Compiling LTS" -ForegroundColor Green
-	cmd /C lps2lts.exe "${Project}.lps" "${Project}.lts" --rewriter=jitty --strategy=breadth
+	if(Test-Path "${Project}.mcrl2"){
+		Write-Host "Compiling to LPS" -ForegroundColor Green
+		cmd /C mcrl22lps.exe "${Project}.mcrl2" "${Project}.lps" --lin-method=regular --rewriter=jitty $ToolArguments
+	} else {
+		Write-Host "Did not compile to LPS, ${Project}.mcrl2 not found." -ForegroundColor Yellow
+	}
+	if(Test-Path "${Project}.lps"){
+		Write-Host "Compiling to LTS" -ForegroundColor Green
+		cmd /C lps2lts.exe "${Project}.lps" "${Project}.lts" --rewriter=jitty --strategy=breadth $ToolArguments
+	} else {
+		Write-Host "Did not compile to LTS, ${Project}.lps not found." -ForegroundColor Yellow
+	}
+	if((Test-Path "${Project}.mcf") -And (Test-Path "${Project}.lps")){
+		Write-Host "Compiling to PBES" -ForegroundColor Green
+		cmd /C lps2pbes.exe "${Project}.lps" "${Project}.pbes" --formula="${Project}.mcf" --out=pbes $ToolArguments
+	} else {
+		Write-Host "Did not compile to PBES, ${Project}.mcf or ${Project}.lps not found." -ForegroundColor Yellow
+	}
+	if(Test-Path "${Project}.pbes"){
+		Write-Host "Processing PBES" -ForegroundColor Green
+		cmd /C pbes2bool.exe "${Project}.pbes" --erase=none --rewriter=jitty --search=breadth-first --strategy=0 $ToolArguments
+	} else {
+		Write-Host "Did not process PBES, ${Project}.pbes not found." -ForegroundColor Yellow
+	}
 
 	if($TraceAction){
 		Write-Host "Generating Traces" -ForegroundColor Green
