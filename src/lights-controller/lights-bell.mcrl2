@@ -9,11 +9,10 @@
 sort State = struct on | off;
 	 State_train = struct approaching |occupied | leaving | idle;
 	 Train = struct train | no_train;
-	 Sensors = struct sensors_track(Set(State),Set(State));
+	 Sensors = Set(State);
 
 map opp: State -> State;
 	opp: State_train -> State_train;
-	items: Sensors # Nat -> Set(State);
 
 var track1, track2: Set(State);
 
@@ -21,8 +20,7 @@ eqn opp(on) = off;
 	opp(off) = on;
 	opp(approaching) = leaving;
 	opp(leaving) = approaching;
-	items(sensors_track(track1, track2), 1) = track1;
-	items(sensors_track(track1, track2), 2) = track2;
+	
 
 act tx_lights,rx_lights,comm_lights: State;
 	tx_bells,rx_bells,comm_bells: State;
@@ -30,24 +28,15 @@ act tx_lights,rx_lights,comm_lights: State;
 	tx_sensors, rx_sensors, comm_sensors: Train;
 	done;
 
-proc SENSORS(train_state: State_train, T_move2: State_train, middle_sensor1:State, middle_sensor2:State, sensors_track: Sensors) =
-sum i: State . (i in items(sensors_track, 1))-> (
+proc SENSORS(id: Nat, train_state: State_train, middle_sensor:State, sensors_track: Sensors) =
+sum i: State . (i in sensors_track)-> (
 	   ((i == on ) && (train_state == idle))									-> tx_sensors(   train).SENSORS(train_state = approaching )
 	<> ((i == on ) && (train_state == leaving)) 								-> tx_sensors(   train).SENSORS(train_state = approaching )
-	<> ((i == off) && (train_state == approaching) && (middle_sensor1==on)) 	-> tx_sensors(no_train).SENSORS(train_state = occupied    )
-	<> ((i == off) && (train_state == occupied)    && (middle_sensor1==off)) 	-> tx_sensors(no_train).SENSORS(train_state = leaving     )
+	<> ((i == off) && (train_state == approaching) && (middle_sensor==on)) 	-> tx_sensors(no_train).SENSORS(train_state = occupied    )
+	<> ((i == off) && (train_state == occupied)    && (middle_sensor==off)) 	-> tx_sensors(no_train).SENSORS(train_state = leaving     )
 	<> ((i == off) && (train_state == leaving)) 								-> tx_sensors(   train).SENSORS(train_state = idle        )
 	<> ((i == off) && (train_state == idle))									-> tx_sensors(no_train).SENSORS(train_state = idle        )
 	<> ((i == off) && (train_state == approaching)) 							-> tx_sensors(   train).SENSORS(train_state = approaching )
-)
-<> sum j: State . (j in items(sensors_track, 2))-> (
-	   ((j == on ) && ( T_move2 == idle)) -> tx_sensors(train).SENSORS(T_move2 = approaching )
-	<> ((i == off) && (middle_sensor2==on) && ( T_move2 == approaching)) -> tx_sensors(no_train).SENSORS(T_move2 = occupied )
-	<> ((j == off) && (middle_sensor2==off) && ( T_move2 == approaching)) -> tx_sensors(no_train).SENSORS(T_move2 = leaving )
-	<> ((j == on ) && ( T_move2 == leaving)) -> tx_sensors(train).SENSORS(T_move2 = approaching )
-	<> ((j == off) && ( T_move2 == leaving)) -> tx_sensors(train).SENSORS(T_move2 = idle )
-	<> ((j == off) && ( T_move2 == idle)) -> tx_sensors(no_train).SENSORS(T_move2 = idle )
-	<> ((j == off) && ( T_move2 == approaching)) -> tx_sensors(train).SENSORS(T_move2 = approaching )
 );
 
 proc LIGHTS(stateL: State,stateBe: State,T : Train) =
@@ -117,7 +106,7 @@ init hide(
 			tx_bells|rx_bells -> comm_bells,
 			tx_barriers|rx_barriers -> comm_barriers,
 			tx_sensors|rx_sensors -> comm_sensors},
-			SENSORS(idle, idle, off, off, sensors_track({on, off}, {off, off})) || LIGHTS(off,off, no_train) || BELLS(on,on,on,no_train) || BARRIERS(on,on,no_train)
+			SENSORS(1, idle, off, {on, off}) || SENSORS(2, idle, off, {on, off}) || LIGHTS(off,off, no_train) || BELLS(on,on,on,no_train) || BARRIERS(on,on,no_train)
 		)
 	)
 );
