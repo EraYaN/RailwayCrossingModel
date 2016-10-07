@@ -9,12 +9,11 @@
 sort State = struct on | off;
 	 State_train = struct approaching |occupied | leaving | idle;
 	 Train = struct train | no_train;
+	 TrackID = struct t1 | t2;
 	 Sensors = Set(State);
 
 map opp: State -> State;
 	opp: State_train -> State_train;
-
-var track1, track2: Set(State);
 
 eqn opp(on) = off;
 	opp(off) = on;
@@ -25,19 +24,27 @@ eqn opp(on) = off;
 act tx_lights,rx_lights,comm_lights: State;
 	tx_bells,rx_bells,comm_bells: State;
 	tx_barriers,rx_barriers,comm_barriers: State;
-	tx_sensors, rx_sensors, comm_sensors: Train;
+	tx_sensors, rx_sensors, comm_sensors: Train # TrackID;
+	tx_aggregatedsensors, rx_aggregatedsensors, comm_aggregatedsensors: Train;
 	done;
 
-proc SENSORS(id: Nat, train_state: State_train, middle_sensor:State, sensors_track: Sensors) =
+proc SENSORS(track_id: TrackID, train_state: State_train, middle_sensor:State, sensors_track: Sensors) =
 sum i: State . (i in sensors_track)-> (
-	   ((i == on ) && (train_state == idle))									-> tx_sensors(   train).SENSORS(train_state = approaching )
-	<> ((i == on ) && (train_state == leaving)) 								-> tx_sensors(   train).SENSORS(train_state = approaching )
-	<> ((i == off) && (train_state == approaching) && (middle_sensor==on)) 	-> tx_sensors(no_train).SENSORS(train_state = occupied    )
-	<> ((i == off) && (train_state == occupied)    && (middle_sensor==off)) 	-> tx_sensors(no_train).SENSORS(train_state = leaving     )
-	<> ((i == off) && (train_state == leaving)) 								-> tx_sensors(   train).SENSORS(train_state = idle        )
-	<> ((i == off) && (train_state == idle))									-> tx_sensors(no_train).SENSORS(train_state = idle        )
-	<> ((i == off) && (train_state == approaching)) 							-> tx_sensors(   train).SENSORS(train_state = approaching )
+	   ((i == on ) && (train_state == idle))				-> tx_sensors(   train,track_id).SENSORS(train_state = approaching )
+	<> ((i == on ) && (train_state == leaving)) 				-> tx_sensors(   train,track_id).SENSORS(train_state = approaching )
+	<> ((i == off) && (train_state == approaching) && (middle_sensor==on)) 	-> tx_sensors(no_train,track_id).SENSORS(train_state = occupied    )
+	<> ((i == off) && (train_state == occupied)    && (middle_sensor==off)) 	-> tx_sensors(no_train,track_id).SENSORS(train_state = leaving     )
+	<> ((i == off) && (train_state == leaving)) 				-> tx_sensors(   train,track_id).SENSORS(train_state = idle        )
+	<> ((i == off) && (train_state == idle))				-> tx_sensors(no_train,track_id).SENSORS(train_state = idle        )
+	<> ((i == off) && (train_state == approaching)) 			-> tx_sensors(   train,track_id).SENSORS(train_state = approaching )
 );
+
+proc SENSORAGGREGATOR(track1:Train,track2:Train) =
+(((track1 == no_train ) && (track2 == no_train))	-> tx_aggregatedsensors(no_train).SENSORAGGREGATOR()
+<> tx_aggregatedsensors(train).SENSORAGGREGATOR()) 							
+
++ sum t: Train . rx_sensors(t,t1) . SENSORAGGREGATOR(track1 = t)
++ sum t: Train . rx_sensors(t,t2) . SENSORAGGREGATOR(track2 = t);
 
 proc LIGHTS(stateL: State,stateBe: State,T : Train) =
  ((stateL == on ) && (stateBe == on ) && (T ==    train)) -> tx_lights(   (stateL)) . LIGHTS(stateL=   (stateL))		%STAY_STATE
@@ -49,7 +56,7 @@ proc LIGHTS(stateL: State,stateBe: State,T : Train) =
 +((stateL == off) && (stateBe == off) && (T ==    train)) -> tx_lights(opp(stateL)) . LIGHTS(stateL=opp(stateL))
 +((stateL == off) && (stateBe == off) && (T == no_train)) -> tx_lights(   (stateL)) . LIGHTS(stateL=   (stateL))		%STAY_STATE
 + sum s: State . rx_bells(s) . LIGHTS(stateBe=s)
-+ sum t: Train . rx_sensors(t) . LIGHTS(T = t);
++ sum t: Train . rx_aggregatedsensors(t) . LIGHTS(T = t);
 
 proc BELLS(stateBe: State,stateL: State,stateBa: State, T : Train) =
  ((stateBe == on ) && (stateL == on ) && (stateBa == on ) && (T ==    train)) -> tx_bells(   (stateBe)) . BELLS(stateBe=   (stateBe))	%STAY_STATE
@@ -106,7 +113,10 @@ init hide(
 			tx_bells|rx_bells -> comm_bells,
 			tx_barriers|rx_barriers -> comm_barriers,
 			tx_sensors|rx_sensors -> comm_sensors},
-			SENSORS(1, idle, off, {on, off}) || SENSORS(2, idle, off, {on, off}) || LIGHTS(off,off, no_train) || BELLS(on,on,on,no_train) || BARRIERS(on,on,no_train)
+			SENSORS(t1, idle, off, {on, off}) || 
+			SENSORS(t2, idle, off, {on, off}) ||
+			SENSORAGGREGATOR(no_train, no_train) ||
+			LIGHTS(off,off, no_train) || BELLS(on,on,on,no_train) || BARRIERS(on,on,no_train)
 		)
 	)
 );

@@ -14,8 +14,11 @@ Write-Host "mCRL2 installed in: " $mCRL2Path -ForegroundColor Yellow
 $env:Path += ";$mCRL2Path"
 
 Write-Host "Cleaning Up" -ForegroundColor Green
-Remove-Item "${Project}.lps*"
-Remove-Item "${Project}.lts"
+Remove-Item "${Project}*.lps*"
+if ( Test-Path "${Project}.lts" ){
+	Remove-Item "${Project}.lts"
+}
+Remove-Item "${Project}_trace_*.lts"
 if(!$CleanupOnly){
 	Write-Host "Compiling LPS" -ForegroundColor Green
 	cmd /C mcrl22lps.exe "${Project}.mcrl2" "${Project}.lps" --lin-method=regular --rewriter=jitty
