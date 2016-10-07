@@ -72,8 +72,12 @@ if(!$CleanupOnly){
 	}
 	Write-Host "Generation Done." -ForegroundColor Green
 	if($ShowGraph){
-		Write-Host "Launching LTSGraph" -ForegroundColor Green
-		cmd /C START ltsgraph.exe "${Project}.lts"
+		if ( Test-Path "${Project}.lts" ){
+			Write-Host "Launching LTSGraph" -ForegroundColor Green
+			cmd /C START ltsgraph.exe "${Project}.lts"
+		} else {
+			Write-Host "Could not launch LTSGraph, ${Project}.lts not found." -ForegroundColor Yellow
+		}
 	}
 }
 Write-Host "Done." -ForegroundColor Green
