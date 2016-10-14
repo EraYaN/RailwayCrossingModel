@@ -1,3 +1,6 @@
+﻿#
+# PowerShellBuild.ps1
+#
 # mCRL2 Compile script by EraYaN
 # 2016-09-23
 # v0.1
@@ -89,3 +92,4 @@ if(!$CleanupOnly){
 	}
 }
 Write-Host "Done." -ForegroundColor Green
+
