@@ -1,1 +1,5 @@
 [true*]<true>true % Free of deadlocks
+&&
+[true*][error]false % Never error
+&&
+[true*]<turnoff_lights>true

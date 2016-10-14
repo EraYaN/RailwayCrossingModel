@@ -8,7 +8,12 @@
     <RootNamespace>MyApplication</RootNamespace>
     <AssemblyName>MyApplication</AssemblyName>
     <Name>PowerShellBuild</Name>
-    <DebugArguments>-Project ../../full-system/full-system</DebugArguments>
+    <DebugArguments>-Project F:\Users\Erwin\Documents\GitHub\RailwayCrossingModel\src\full-system\full-system -TraceAction "error" -Verify -Verbose</DebugArguments>
+    <Author>Erwin de Haan</Author>
+    <CompanyName />
+    <Copyright>© 2016 Erwin de Haan All rights reservd.</Copyright>
+    <Description />
+    <Guid>9c64e9c1-84b2-46e1-bd1b-3fb8954edf72</Guid>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>

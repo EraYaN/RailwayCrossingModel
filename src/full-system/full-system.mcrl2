@@ -22,7 +22,12 @@ act tx_lights,rx_lights,comm_lights: State;
 	tx_barriers,rx_barriers,comm_barriers: State;
 	tx_sensors, rx_sensors, comm_sensors: TrackID # Train;
 	tx_sensors_agg, rx_sensors_agg, comm_sensors_agg: Train;
-	done;
+	done, error;
+
+% Global Outside Actions
+act turnon_lights, turnoff_lights,
+	turnon_bells, turnoff_bells,
+	lower_barriers, raise_barriers;
 
 proc SENSORS(id: TrackID, train_state: State_train, s1: State, s2: State, s3: State) =
 %train from left to right
@@ -52,10 +57,10 @@ proc LIGHTS(stateL: State,stateBe: State,T : Train) =
 %STAY_STATE ((stateL == on ) && (stateBe == on ) && (T ==    train)) -> tx_lights(   (stateL)) . LIGHTS(stateL=   (stateL))						%STAY_STATE
 %STAY_STATE+((stateL == on ) && (stateBe == on ) && (T == no_train)) -> tx_lights(   (stateL)) . LIGHTS(stateL=   (stateL))						%STAY_STATE
 %STAY_STATE+((stateL == on ) && (stateBe == off) && (T ==    train)) -> tx_lights(   (stateL)) . LIGHTS(stateL=   (stateL))						%STAY_STATE
- ((stateL == on ) && (stateBe == off) && (T == no_train)) -> tx_lights(opp(stateL)) . LIGHTS(stateL=opp(stateL))
-+((stateL == off) && (stateBe == on ) && (T ==    train)) -> tx_lights(opp(stateL)) . LIGHTS(stateL=opp(stateL))						%ERROR_STATE
-+((stateL == off) && (stateBe == on ) && (T == no_train)) -> tx_lights(   (stateL)) . LIGHTS(stateL=   (stateL))						%ERROR_STATE
-+((stateL == off) && (stateBe == off) && (T ==    train)) -> tx_lights(opp(stateL)) . LIGHTS(stateL=opp(stateL))
+ ((stateL == on ) && (stateBe == off) && (T == no_train)) -> tx_lights(opp(stateL)) . turnoff_lights . done . LIGHTS(stateL=opp(stateL))
++((stateL == off) && (stateBe == on ) && (T ==    train)) -> tx_lights(opp(stateL)) . error . delta%LIGHTS(stateL=opp(stateL))						%ERROR_STATE
++((stateL == off) && (stateBe == on ) && (T == no_train)) -> tx_lights(   (stateL)) . error . delta%LIGHTS(stateL=   (stateL))						%ERROR_STATE
++((stateL == off) && (stateBe == off) && (T ==    train)) -> tx_lights(opp(stateL)) . turnon_lights . LIGHTS(stateL=opp(stateL))
 %STAY_STATE+((stateL == off) && (stateBe == off) && (T == no_train)) -> tx_lights(   (stateL)) . LIGHTS(stateL=   (stateL))						%STAY_STATE
 + sum s: State . rx_bells(s) . LIGHTS(stateBe=s)
 + sum t: Train . rx_sensors_agg(t) . LIGHTS(T = t);
@@ -64,18 +69,18 @@ proc BELLS(stateBe: State,stateL: State,stateBa: State, T : Train) =
 %STAY_STATE ((stateBe == on ) && (stateL == on ) && (stateBa == on ) && (T ==    train)) -> tx_bells(   (stateBe)) . BELLS(stateBe=   (stateBe))	%STAY_STATE
 %STAY_STATE+((stateBe == on ) && (stateL == on ) && (stateBa == on ) && (T == no_train)) -> tx_bells(   (stateBe)) . BELLS(stateBe=   (stateBe))	%STAY_STATE
 %STAY_STATE+((stateBe == on ) && (stateL == on ) && (stateBa == off) && (T ==    train)) -> tx_bells(   (stateBe)) . BELLS(stateBe=   (stateBe))	%STAY_STATE
- ((stateBe == on ) && (stateL == on ) && (stateBa == off) && (T == no_train)) -> tx_bells(opp(stateBe)) . BELLS(stateBe=opp(stateBe))
-+((stateBe == on ) && (stateL == off) && (stateBa == on ) && (T ==    train)) -> tx_bells(   (stateBe)) . BELLS(stateBe=   (stateBe))	%ERROR_STATE
-+((stateBe == on ) && (stateL == off) && (stateBa == on ) && (T == no_train)) -> tx_bells(   (stateBe)) . BELLS(stateBe=   (stateBe))	%ERROR_STATE
-+((stateBe == on ) && (stateL == off) && (stateBa == off) && (T ==    train)) -> tx_bells(   (stateBe)) . BELLS(stateBe=   (stateBe))	%ERROR_STATE
-+((stateBe == on ) && (stateL == off) && (stateBa == off) && (T == no_train)) -> tx_bells(opp(stateBe)) . BELLS(stateBe=opp(stateBe))	%ERROR_STATE
+ ((stateBe == on ) && (stateL == on ) && (stateBa == off) && (T == no_train)) -> tx_bells(opp(stateBe)) . turnoff_bells . BELLS(stateBe=opp(stateBe))
++((stateBe == on ) && (stateL == off) && (stateBa == on ) && (T ==    train)) -> tx_bells(   (stateBe)) . error . delta%BELLS(stateBe=   (stateBe))	%ERROR_STATE
++((stateBe == on ) && (stateL == off) && (stateBa == on ) && (T == no_train)) -> tx_bells(   (stateBe)) . error . delta%BELLS(stateBe=   (stateBe))	%ERROR_STATE
++((stateBe == on ) && (stateL == off) && (stateBa == off) && (T ==    train)) -> tx_bells(   (stateBe)) . error . delta%BELLS(stateBe=   (stateBe))	%ERROR_STATE
++((stateBe == on ) && (stateL == off) && (stateBa == off) && (T == no_train)) -> tx_bells(opp(stateBe)) . error . delta%BELLS(stateBe=opp(stateBe))	%ERROR_STATE
 
-+((stateBe == off) && (stateL == on ) && (stateBa == on ) && (T ==    train)) -> tx_bells(opp(stateBe)) . BELLS(stateBe=opp(stateBe))	%ERROR_STATE
-+((stateBe == off) && (stateL == on ) && (stateBa == on ) && (T == no_train)) -> tx_bells(   (stateBe)) . BELLS(stateBe=   (stateBe))	%ERROR_STATE
-+((stateBe == off) && (stateL == on ) && (stateBa == off) && (T ==    train)) -> tx_bells(opp(stateBe)) . BELLS(stateBe=opp(stateBe))
++((stateBe == off) && (stateL == on ) && (stateBa == on ) && (T ==    train)) -> tx_bells(opp(stateBe)) . error . delta%BELLS(stateBe=opp(stateBe))	%ERROR_STATE
++((stateBe == off) && (stateL == on ) && (stateBa == on ) && (T == no_train)) -> tx_bells(   (stateBe)) . error . delta%BELLS(stateBe=   (stateBe))	%ERROR_STATE
++((stateBe == off) && (stateL == on ) && (stateBa == off) && (T ==    train)) -> tx_bells(opp(stateBe)) . turnon_bells . BELLS(stateBe=opp(stateBe))
 %STAY_STATE+((stateBe == off) && (stateL == on ) && (stateBa == off) && (T == no_train)) -> tx_bells(   (stateBe)) . BELLS(stateBe=   (stateBe))	%STAY_STATE
-+((stateBe == off) && (stateL == off) && (stateBa == on ) && (T ==    train)) -> tx_bells(   (stateBe)) . BELLS(stateBe=   (stateBe))	%ERROR_STATE
-+((stateBe == off) && (stateL == off) && (stateBa == on ) && (T == no_train)) -> tx_bells(   (stateBe)) . BELLS(stateBe=   (stateBe))	%ERROR_STATE
++((stateBe == off) && (stateL == off) && (stateBa == on ) && (T ==    train)) -> tx_bells(   (stateBe)) . error . delta%BELLS(stateBe=   (stateBe))	%ERROR_STATE
++((stateBe == off) && (stateL == off) && (stateBa == on ) && (T == no_train)) -> tx_bells(   (stateBe)) . error . delta%BELLS(stateBe=   (stateBe))	%ERROR_STATE
 %STAY_STATE+((stateBe == off) && (stateL == off) && (stateBa == off) && (T ==    train)) -> tx_bells(   (stateBe)) . BELLS(stateBe=   (stateBe))	%STAY_STATE
 %STAY_STATE+((stateBe == off) && (stateL == off) && (stateBa == off) && (T == no_train)) -> tx_bells(   (stateBe)) . BELLS(stateBe=   (stateBe))	%STAY_STATE
 + sum s: State . rx_lights(s) . BELLS(stateL=s)
@@ -84,10 +89,10 @@ proc BELLS(stateBe: State,stateL: State,stateBa: State, T : Train) =
 
 proc BARRIERS(stateBa: State,stateBe: State,T : Train) =
 %STAY_STATE ((stateBa == on ) && (stateBe == on ) && (T ==    train)) -> tx_barriers(   (stateBa)) . BARRIERS(stateBa=   (stateBa))				%STAY_STATE
- ((stateBa == on ) && (stateBe == on ) && (T == no_train)) -> tx_barriers(opp(stateBa)) . BARRIERS(stateBa=opp(stateBa))
-+((stateBa == on ) && (stateBe == off) && (T ==    train)) -> tx_barriers(   (stateBa)) . BARRIERS(stateBa=   (stateBa))				%ERROR_STATE
-+((stateBa == on ) && (stateBe == off) && (T == no_train)) -> tx_barriers(opp(stateBa)) . BARRIERS(stateBa=opp(stateBa))				%ERROR_STATE
-+((stateBa == off) && (stateBe == on ) && (T ==    train)) -> tx_barriers(opp(stateBa)) . BARRIERS(stateBa=opp(stateBa))
+ ((stateBa == on ) && (stateBe == on ) && (T == no_train)) -> tx_barriers(opp(stateBa)) . raise_barriers . BARRIERS(stateBa=opp(stateBa))
++((stateBa == on ) && (stateBe == off) && (T ==    train)) -> tx_barriers(   (stateBa)) . error . delta%BARRIERS(stateBa=   (stateBa))				%ERROR_STATE
++((stateBa == on ) && (stateBe == off) && (T == no_train)) -> tx_barriers(opp(stateBa)) . error . delta%BARRIERS(stateBa=opp(stateBa))				%ERROR_STATE
++((stateBa == off) && (stateBe == on ) && (T ==    train)) -> tx_barriers(opp(stateBa)) . lower_barriers . BARRIERS(stateBa=opp(stateBa))
 %STAY_STATE+((stateBa == off) && (stateBe == on ) && (T == no_train)) -> tx_barriers(   (stateBa)) . BARRIERS(stateBa=   (stateBa))				%STAY_STATE
 %STAY_STATE+((stateBa == off) && (stateBe == off) && (T ==    train)) -> tx_barriers(   (stateBa)) . BARRIERS(stateBa=   (stateBa))				%STAY_STATE
 %STAY_STATE+((stateBa == off) && (stateBe == off) && (T == no_train)) -> tx_barriers(   (stateBa)) . BARRIERS(stateBa=   (stateBa))				%STAY_STATE
@@ -123,7 +128,15 @@ init hide(
 			comm_bells,
 			comm_barriers,
 			comm_sensors,
-			comm_sensors_agg
+			comm_sensors_agg,
+			turnon_lights,
+			turnoff_lights,
+			turnon_bells,
+			turnoff_bells,
+			lower_barriers,
+			raise_barriers,
+			done,
+			error
 		},
 		comm(
 			{tx_lights|rx_lights -> comm_lights,
@@ -131,8 +144,8 @@ init hide(
 			tx_barriers|rx_barriers -> comm_barriers,
 			tx_sensors|rx_sensors -> comm_sensors,
 			tx_sensors_agg|rx_sensors_agg -> comm_sensors_agg},
-			SENSORS(t1, idle, off, on, off) ||
-			SENSORS(t2, idle, off, on, off) ||
+			SENSORS(t1, exit_ltr, off, off, off) ||
+			SENSORS(t2, idle, off, off, off) ||
 			SENSORAGGREGATOR(no_train, no_train) ||
 			LIGHTS(off,off, no_train) ||
 			BELLS(on,on,on,no_train) ||
