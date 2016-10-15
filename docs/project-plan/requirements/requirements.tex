@@ -6,7 +6,7 @@
 \addbibresource{../../.library/bibliography.bib}
 \begin{document}
 \chapter{Requirements}
-In this section, we will gather and describe the requirements of our railway crossing system needed for the later design, modelling and validation.
+In this section, the requirements for the railway crossing system needed for the later design, modelling and validation will be gathered and described.
 First of all, we will enumerate and name the components of our system; and then describe the sequence in which they actuate in a fixed situation.
 Finally, we will establish the requirements our system has to fulfil for its modelling.
 
@@ -22,7 +22,7 @@ The system has to control or interface with the components listed below.
 \end{itemize}
 
 \section{System Configuration}
-Below a scetch shows the basic configuration of all the system components and their position.
+Below a sketch shows the basic configuration of all the system components and their position.
 \begin{figure}[H]
 	\centering
 	\subimport{resources/}{system-configuration.tikz}
@@ -30,11 +30,9 @@ Below a scetch shows the basic configuration of all the system components and th
 	\label{fig:system-configuration}
 \end{figure}
 
-\section{System Requirements}\label{sec:requirements}plan
+\section{System Functionality}\label{sec:requirements}
 The most obvious requirement is of course that the system has to prevent cars from driving on the crossing when there is a train coming.
-
-This means that the barriers have to be closed before a train enters the crossing and that they have to stay closed until the crossing is clear of trains.
-
+This means that the barriers have to be closed with the lights and bells being on before a train enters the crossing and that they have to stay closed until the crossing is clear of trains.
 Besides this trivial requirement, there are a couple other functional requirements for the system.
 
 \begin{enumerate}
@@ -46,56 +44,64 @@ Besides this trivial requirement, there are a couple other functional requiremen
 \item The beams, lights and bells on both sides of the track operate synchronously.
 \end{enumerate}
 
-\subsection{Definitions}
-Lights ON means the actual lights are blinking but Lights only gives an action to an external blinking controller which is not part of this project scope.
 
-A train `on the track' means that a train is somewhere, either partially or completely, between the two outer train sensors of a train track.
+\subsection{Sequence}
+Two sequences can be described for the system.
+One will be for closing the crossing when a train needs to pass. The other one is for opening the crossing when the train has passed.
 
-\subsection{Sensors}
-	\begin{enumerate}
-		\item The Sensors node handles the actions of the three train sensors on a track.
-		\item The Sensors node decides whether a train is on the track or not based on the actions it receives.
-		\item The Sensors node indicates whether a train is on either of the tracks.
-	\end{enumerate}
-
-\subsection{Light}
-	\begin{enumerate}
-		\item Lights always have to be on on when a train is on the tracks.
-		\item Lights always have to be on on when the bell is on.
-		\item Lights may only stop blinking when the barriers are open and the bell is off and no train is on the tracks.
-	\end{enumerate}
-
-\subsection{Bells}
-	\begin{enumerate}
-		\item Bells have to turn on, after the lights turn on.
-		\item Bells may only stop ringing when the barriers are open and no train is on the tracks.
-	\end{enumerate}
-
-\subsection{Barriers}
-	\begin{enumerate}
-		\item Barriers always have to be closed when a train is on the tracks and both the lights and bells are on.
-		\item Barriers have to close a set (to be determined) time after the bells start ringing.
-		\item Barriers may only open when there is no train on the tracks.
-	\end{enumerate}
-
-
-\section{Sequence}
-According to the \nameref{sec:requirements}, two sequences can be described for the system.
-One will be for opening the barriers when a train is arriving at the crossing and the other one is for opening the barriers when the train passed by.
-
-\subsection{Barriers closing}
+Crossing closing:
 \begin{enumerate}
 \item Lights start blinking
 \item Bells start ringing
 \item Barriers close
 \end{enumerate}
 
-\subsection{Barriers opening}
+Crossing opening:
 \begin{enumerate}
 \item Barriers open
-\item Bells stops ringing
+\item Bells stop ringing
 \item Lights stop blinking
 \end{enumerate}
+
+\section{Requirements defined}
+Lights ON means the actual lights are blinking but Lights only gives an action to an external blinking controller which is not part of this project scope.
+A train `on the track' means that a train is somewhere, either partially or completely, between the two outer train sensors of a train track.
+
+\subsection{Sensors}
+%TODO[L]: These are still the old requirements
+	\begin{enumerate}
+		\item The sensors node handles the actions of the three train sensors on a track.
+		\item The sensors node decides whether a train is on the track or not based on the actions it receives.
+		\item The sensors node indicates whether a train is on either of the tracks.
+	\end{enumerate}
+
+\subsection{Light}
+	\begin{enumerate}
+		\item The lights cannot turn on when there is no train on the tracks.
+		\item The lights cannot turn off as long as there is a train on the tracks.
+		\item The lights cannot turn off as long as the bells are on.
+	\end{enumerate}
+
+\subsection{Bells}
+	\begin{enumerate}
+		\item The bells cannot turn on if the lights are off.
+		\item The bells cannot turn on if there is no train on the track.
+		\item The bells cannot turn off if the barriers are lowered.
+		\item The bells cannot turn off if there is a train on the track.
+	\end{enumerate}
+
+\subsection{Barriers}
+	\begin{enumerate}
+		\item The barriers cannot be raised when there is a train on the tracks.
+		\item The barriers cannot be lowered if there is no train on the tracks.
+		\item The barriers cannot be lowered if the bells are off.
+	\end{enumerate}
+	
+\subsection{General}
+	\begin{enumerate}
+	\item From any state, the crossing needs to be able to be closed.
+	\item From any state, the crossing needs to be able to be opened.
+	\end{enumerate}
 
 
 \section{Possible extensions}
