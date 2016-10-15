@@ -64,8 +64,12 @@ Crossing opening:
 \end{enumerate}
 
 \section{Requirements defined}
+%TODO[]:Define a transition state between approaching and occupied
 Lights ON means the actual lights are blinking but Lights only gives an action to an external blinking controller which is not part of this project scope.
 A train `on the track' means that a train is somewhere, either partially or completely, between the two outer train sensors of a train track.
+A train is `approaching' when it triggers one of the external sensors for the first time, while it is `exiting' the track when it triggers the other external sensor.
+When the middle sensor is triggered, we consider the track `occupied'.
+As for the transition states, a train is `traversing' when it is moving from `approaching' to `occupied' and it is `leaving' when it is moving between `occupied' and `exit' states.
 
 \subsection{Sensors}
 %TODO[L]: These are still the old requirements
