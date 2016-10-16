@@ -72,11 +72,16 @@ When the middle sensor is triggered, we consider the track `occupied'.
 As for the transition states, a train is `traversing' when it is moving from `approaching' to `occupied' and it is `leaving' when it is moving between `occupied' and `exit' states.
 
 \subsection{Sensors}
-%TODO[L]: These are still the old requirements
+These requirements should be considered either for a train that it is moving from West to East and from East to West. 
+The sensors are considered to generate an action whenever their state has suffered a change, that way we will only be able to know if a sensor is on, if its previous state was off and vice versa. 
+Whenever an output signal from the sensor controller stating a train has been detected should be sent, we will refer it as a train signal, while we will refer a no-train signal otherwise.
 	\begin{enumerate}
-		\item The sensors node handles the actions of the three train sensors on a track.
-		\item The sensors node decides whether a train is on the track or not based on the actions it receives.
-		\item The sensors node indicates whether a train is on either of the tracks.
+		\item There cannot be a no-train signal if a train is approaching.
+		\item There cannot be a no-train signal if the train is transiting.
+		\item There cannot be a no-train signal if the train is in the middle of the tracks.
+		\item There cannot be a train signal as soon as the central part of the track is cleared.
+		\item There cannot be a train signal if the train is exiting.
+		\item There cannot be a train signal if the tracks are empty and there is no train approaching.
 	\end{enumerate}
 
 \subsection{Light}
