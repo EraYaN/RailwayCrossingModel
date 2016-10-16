@@ -10,6 +10,7 @@ if __name__ == '__main__':
     parser = ap.ArgumentParser(prog='SystemValidationmCRL2',description='mCRL2 System Validation Build System')
     parser.add_argument('--verify', action="store_true", help='Verify the system')
     parser.add_argument('--show-graph', action="store_true", help='Show the LTS graph')
+    parser.add_argument('--disable-lts-compile', action="store_true", help='Skip everything for the LTS compile.')
     #TODO report making
     #parser.add_argument('--output-dir', action="store", help='Output directory',default="../../../docs/lab2")
     parser.add_argument('--trace-action', action="store", help='Project root directory name',default=None)
@@ -29,12 +30,15 @@ if __name__ == '__main__':
 
         system = mCRL2System(install_dir,project_dir,True)
 
-        print("Compiling mCRL2 to LPS...")
-        returncode = system.mcrl22lps("{0}.mcrl2".format(project_name),"{0}.lps".format(project_name))
+        returncode = True
 
-        if returncode:
-            print("Compiling LPS to LTS...")
-            returncode = system.lps2lts("{0}.lps".format(project_name),"{0}.lts".format(project_name))
+        if not opts.disable_lts_compile:
+            print("Compiling mCRL2 to LPS...")
+            returncode = system.mcrl22lps("{0}.mcrl2".format(project_name),"{0}.lps".format(project_name))
+
+            if returncode:
+                print("Compiling LPS to LTS...")
+                returncode = system.lps2lts("{0}.lps".format(project_name),"{0}.lts".format(project_name))
 
         if opts.verify:
             if returncode:
