@@ -1,0 +1,53 @@
+\documentclass[final]{report}
+\input{../../.library/preamble.tex}
+\input{../../.library/style.tex}
+\addbibresource{../../.library/bibliography.bib}
+\begin{document}
+\chapter{Translated Requirements}
+After having described the system and it's requirements in natural language it's time to formulate them as $\mu$-calculus formulae that can be used for verification. In \cref{ch:interactions} all the actions in the model that will be used in the formulae in this chapter were described.
+
+\section{Sensors}
+
+\section{Lights}
+\begin{enumerate}
+\item The lights cannot turn on when there is no train on the tracks.\\
+\textit{[true*][trainoff.!trainon*.turnon\_lights]false}
+
+\item The lights cannot turn off as long as there is a train on the tracks.\\
+\textit{[true*][trainon.!trainoff*.turnoff\_lights]false}
+
+\item The lights cannot turn off as long as the bells are on.\\
+\textit{[true*][turnon\_bells.!turnoff\_bells*.turnoff\_lights]false}
+\end{enumerate}
+
+\section{Bells}
+\begin{enumerate}
+\item The bells cannot turn on if the lights are off\\
+\textit{[true*][turnoff\_lights.!turnon\_lights*.turnoff\_bells]false}
+\item The bells cannot turn on if there is no train on the track\\
+\textit{[true*][trainoff.!trainon*.turnon\_bells]false}
+\item The bells cannot turn off if the barriers are lowered\\
+\textit{[true*][lower\_barriers.!raise\_barriers*.turnoff\_bells]false}
+\item The bells cannot turn off if there is a train on the track\\
+\textit{[true*][trainon.!trainoff*.turnoff\_bells]false}
+\end{enumerate}
+
+\section{Barriers}
+\begin{enumerate}
+\item The barriers cannot be raised when there is a train on the tracks\\
+\textit{[true*][trainon.!trainoff*.raise\_barriers]false}
+\item The barriers cannot be lowered if there is no train on the tracks\\
+\textit{[true*][trainoff.!trainon*.lower\_barriers]false}
+\item The barriers cannot be lowered if the bells are off\\
+\textit{[true*][turnoff\_bells.!turnon\_bells*.lower\_barriers]false}
+\end{enumerate}
+
+\section{General}
+\begin{enumerate}
+\item From every state, the crossing needs to be able to be closed (barriers lowered, lights and bells on).\\
+\textit{[true*]<true*.lower\_barriers>true}
+\item From every state, the crossing needs to be able to be opened(lights and bells off, barriers raised).\\
+\textit{[true*]<true*.turnoff\_lights>true}
+\end{enumerate}
+
+\end{document}
