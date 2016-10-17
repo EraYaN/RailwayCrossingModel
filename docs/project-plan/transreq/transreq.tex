@@ -35,16 +35,16 @@ OFF & OFF & OFF & no-train & no-train \\
 Based on this, the following translated requirements may be formulated: 
 \begin{enumerate}
 \item There cannot be a no-train signal if a train is approaching.
-\begin{itemize}
-\item \textit{[true*][tx\_sensors\_agg(no\_train).(!tx\_sensors\_agg(train)*).set\_sensors(s$_{w}$, on).tx\_sensors\_agg(no\_train)]false}
-\item \textit{[true*][tx\_sensors\_agg(no\_train).(!tx\_sensors\_agg(train)*).set\_sensors(s$_{e}$, on).tx\_sensors\_agg(no\_train)]false} 
-\end{itemize}
+
+\textit{[true*][tx\_sensors\_agg(no\_train).(!tx\_sensors\_agg(train)*).set\_sensors(s$_{w}$, on).tx\_sensors\_agg(no\_train)]false}\\
+\textit{[true*][tx\_sensors\_agg(no\_train).(!tx\_sensors\_agg(train)*).set\_sensors(s$_{e}$, on).tx\_sensors\_agg(no\_train)]false} 
+
 
 \item There cannot be a no-train signal if the train is transiting.
-\begin{itemize}
-\item \textit{[true*][tx\_sensors\_agg(train).(!tx\_sensors\_agg(no\_train)*).set\_sensors(s$_{w}$, off).tx\_sensors\_agg(no\_train)]false}
-\item \textit{[true*][tx\_sensors\_agg(train).(!tx\_sensors\_agg(no\_train)*).set\_sensors(s$_{e}$, off).tx\_sensors\_agg(no\_train)]false}
-\end{itemize}
+
+\textit{[true*][tx\_sensors\_agg(train).(!tx\_sensors\_agg(no\_train)*).set\_sensors(s$_{w}$, off).tx\_sensors\_agg(no\_train)]false}\\
+\textit{[true*][tx\_sensors\_agg(train).(!tx\_sensors\_agg(no\_train)*).set\_sensors(s$_{e}$, off).tx\_sensors\_agg(no\_train)]false}
+
 
 \item There cannot be a no-train signal if the train is in the middle of the tracks.\\
 \textit{[true*][set\_sensors(s$_{m}$, on).(!set\_sensors(s$_{m}$, off)*).tx\_sensors\_agg(no\_train)]false}
@@ -54,16 +54,16 @@ Based on this, the following translated requirements may be formulated:
 }
 
 \item There cannot be a train signal if the train is exiting.
-\begin{itemize}
-\item \textit{[true*][set\_sensors(s$_{m}$, off).(!tx\_sensors\_agg(train)*).set\_sensorss(s$_{e}$, on).tx\_sensors\_agg(train)]false}
-\item \textit{[true*][set\_sensors(s$_{m}$, off).(!tx\_sensors\_agg(train)*).set\_sensors(s$_{w}$, on).tx\_sensors\_agg(train)]false}
-\end{itemize}
+
+\textit{[true*][set\_sensors(s$_{m}$, off).(!tx\_sensors\_agg(train)*).set\_sensorss(s$_{e}$, on).tx\_sensors\_agg(train)]false}\\
+\textit{[true*][set\_sensors(s$_{m}$, off).(!tx\_sensors\_agg(train)*).set\_sensors(s$_{w}$, on).tx\_sensors\_agg(train)]false}
+
 
 \item There cannot be a train signal if the tracks are empty and there is no train approaching.
-\begin{itemize}
-\item \textit{[true*][tx\_sensors\_agg(no\_train).(!set\_sensors(s$_{e}$, on)*).tx\_sensors\_agg(train)]false}
-\item \textit{[true*][tx\_sensors\_agg(no\_train).(!set\_sensors(s$_{w}$, on)*).tx\_sensors\_agg(train)]false}
-\end{itemize}
+
+\textit{[true*][tx\_sensors\_agg(no\_train).(!set\_sensors(s$_{e}$, on)*).tx\_sensors\_agg(train)]false}\\
+\textit{[true*][tx\_sensors\_agg(no\_train).(!set\_sensors(s$_{w}$, on)*).tx\_sensors\_agg(train)]false}
+
 
 \end{enumerate}
 \section{Lights}
