@@ -64,13 +64,13 @@ proc SENSORS(id: TrackID, train_state: State_train, sens1: State, sens2: State, 
 %Left to Right only
 
 + ((train_state == idle))        ->  set_sensors(s1,on) . SENSORS(sens1=on)
-+ ((train_state == approaching_ltr))        ->  set_sensors(s1,off) . SENSORS(sens1=off)
+%+ ((train_state == approaching_ltr))        ->  set_sensors(s1,off) . SENSORS(sens1=off)
 
-+ ((train_state == approaching_ltr))        -> set_sensors(s2,on) . SENSORS(sens2=on)
-+ ((train_state == occupied_ltr))        ->  set_sensors(s2,off) . SENSORS(sens2=off)
+%+ ((train_state == approaching_ltr))        -> set_sensors(s2,on) . SENSORS(sens2=on)
+%+ ((train_state == occupied_ltr))        ->  set_sensors(s2,off) . SENSORS(sens2=off)
 
-+ ((train_state == leaving_ltr))        ->  set_sensors(s3,on) . SENSORS(sens3=on)
-+ ((train_state == exit_ltr))        ->  set_sensors(s3,off) . SENSORS(sens3=off)
+%+ ((train_state == leaving_ltr))        ->  set_sensors(s3,on) . SENSORS(sens3=on)
+%+ ((train_state == exit_ltr))        ->  set_sensors(s3,off) . SENSORS(sens3=off)
 ;
 
 
