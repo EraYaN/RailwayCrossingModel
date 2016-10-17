@@ -1,29 +1,77 @@
-[true*][comm_sensors(t1,no_train).(!comm_sensors(t1,train)*).set_sensors(s3,on).comm_sensors(t1,no_train)]false
+[true*][tx_sensors_agg(no_train).(!tx_sensors_agg(train)*).set_sensors(s_w,on).tx_sensors_agg(no_train)]false
 &&
-[true*][comm_sensors(t1,no_train).(!comm_sensors(t1,train)*).set_sensors(s1,on).comm_sensors(t1,no_train)]false
-
-&&
-
-[true*][comm_sensors(t1,train).(!comm_sensors(t1,no_train)*).set_sensors(s3,off).comm_sensors(t1,no_train)]false
-&&
-[true*][comm_sensors(t1,train).(!comm_sensors(t1,no_train)*).set_sensors(s1,off).comm_sensors(t1,no_train)]false
+[true*][tx_sensors_agg(no_train).(!tx_sensors_agg(train)*).set_sensors(s_e,on).tx_sensors_agg(no_train)]false
 
 &&
 
-[true*][set_sensors(s2,on).(!set_sensors(s2,off)*).comm_sensors(t1,no_train)]false  
+[true*][tx_sensors_agg(train).(!tx_sensors_agg(no_train)*).set_sensors(s_name_w,off).tx_sensors_agg(no_train)]false
+&&
+[true*][tx_sensors_agg(train).(!tx_sensors_agg(no_train)*).set_sensors(s_e,off).tx_sensors_agg(no_train)]false
 
 &&
 
-[true*][set_sensors(s2,off).(!set_sensors(s2,on)*).comm_sensors(t1,train)]false
+[true*][set_sensors(s_m,on).(!set_sensors(s_m,off)*).tx_sensors_agg(no_train)]false
 
 &&
 
-[true*][set_sensors(s2,off).(!comm_sensors(t1,train)*).set_sensors(s3,on).comm_sensors(t1,train)]false
-&&
-[true*][set_sensors(s2,off).(!comm_sensors(t1,train)*).set_sensors(s1,on).comm_sensors(t1,train)]false
+[true*][set_sensors(s_m,off).(!set_sensors(s_m,on)*).tx_sensors_agg(train)]false
 
 &&
 
-[true*][comm_sensors(t1,no_train).(!set_sensors(s3,on)*).comm_sensors(t1,train)]false
+[true*][set_sensors(s_m,off).(!tx_sensors_agg(train)*).set_sensorss(s_e,on).tx_sensors_agg(train)]false
 &&
-[true*][comm_sensors(t1,no_train).(!set_sensors(s1,on)*).comm_sensors(t1,train)]false
+[true*][set_sensors(s_m,off).(!tx_sensors_agg(train)*).set_sensors(s_w,on).tx_sensors_agg(train)]false
+
+&&
+
+[true*][tx_sensors_agg(no_train).(!set_sensors(s_e,on)*).tx_sensors_agg(train)]false
+&&
+[true*][tx_sensors_agg(no_train).(!set_sensors(s_w,on)*).tx_sensors_agg(train)]false
+
+&&
+
+[true*][tx_sensors_agg(no_train).!tx_sensors_agg(train)*.turnon_lights]false
+
+&&
+
+[true*][tx_sensors_agg(train).!tx_sensors_agg(no_train)*.turnoff_lights]false
+
+&&
+
+[true*][turnon_bells.!turnoff_bells*.turnoff_lights]false
+
+&&
+
+[true*][turnoff_lights.!turnon_lights*.turnoff_bells]false
+
+&&
+
+[true*][tx_sensors_agg(no_train).!tx_sensors_agg(train)*.turnon_bells]false
+
+&&
+
+[true*][lower_barriers.!raise_barriers*.turnoff_bells]false
+
+&&
+
+[true*][tx_sensors_agg(train).!tx_sensors_agg(no_train)*.turnoff_bells]false
+
+&&
+
+[true*][tx_sensors_agg(train).!tx_sensors_agg(no_train)*.raise_barriers]false
+
+&&
+
+[true*][tx_sensors_agg(no_train).!tx_sensors_agg(train)*.lower_barriers]false
+
+&&
+
+[true*][turnoff_bells.!turnon_bells*.lower_barriers]false
+
+&&
+
+[true*]<true*.lower_barriers>true
+
+&&
+
+[true*]<true*.turnoff_lights>true
