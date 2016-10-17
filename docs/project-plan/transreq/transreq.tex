@@ -10,33 +10,33 @@ After having described the system and it's requirements in natural language it's
 \begin{enumerate}
 \item There cannot be a no-train signal if a train is approaching.
 \begin{itemize}
-\item \textit{[true*][comm\_sensors(no\_train).(!comm\_sensors(train)*).set\_sensors(s$_{1}$, on).comm\_sensors(no\_train)]false}
-\item \textit{[true*][comm\_sensors(no\_train).(!comm\_sensors(train)*).set\_sensors(s$_{3}$, on).comm\_sensors(no\_train)]false} 
+\item \textit{[true*][comm\_sensors(no\_train).(!comm\_sensors(train)*).set\_sensors(s$_{w}$, on).comm\_sensors(no\_train)]false}
+\item \textit{[true*][comm\_sensors(no\_train).(!comm\_sensors(train)*).set\_sensors(s$_{e}$, on).comm\_sensors(no\_train)]false} 
 \end{itemize}
 
 \item There cannot be a no-train signal if the train is transiting.
 \begin{itemize}
-\item \textit{[true*][comm\_sensors(train).(!comm\_sensors(no\_train)*).set\_sensors(s$_{1}$, off).comm\_sensors(no\_train)]false}
-\item \textit{[true*][comm\_sensors(train).(!comm\_sensors(no\_train)*).set\_sensors(s$_{3}$, off).comm\_sensors(no\_train)]false}
+\item \textit{[true*][comm\_sensors(train).(!comm\_sensors(no\_train)*).set\_sensors(s$_{w}$, off).comm\_sensors(no\_train)]false}
+\item \textit{[true*][comm\_sensors(train).(!comm\_sensors(no\_train)*).set\_sensors(s$_{e}$, off).comm\_sensors(no\_train)]false}
 \end{itemize}
 
 \item There cannot be a no-train signal if the train is in the middle of the tracks.\\
-\textit{[true*][set\_sensors(s$_{2}$, on).(!set\_sensors(s$_{2}$, off)*).comm\_sensors(no\_train)]false}
+\textit{[true*][set\_sensors(s$_{m}$, on).(!set\_sensors(s$_{m}$, off)*).comm\_sensors(no\_train)]false}
 
 \item There cannot be a train signal as soon as the central part of the track is cleared.\\
-\textit{[true*][set\_sensors(s$_{2}$, off).(!set\_sensors(s$_{2}$, on)*).comm\_sensors(train)]false
+\textit{[true*][set\_sensors(s$_{m}$, off).(!set\_sensors(s$_{m}$, on)*).comm\_sensors(train)]false
 }
 
 \item There cannot be a train signal if the train is exiting.
 \begin{itemize}
-\item \textit{[true*][set\_sensors(s$_{2}$, off).(!comm\_sensors(train)*).set\_sensorss(s$_{3}$, on).comm\_sensors(train)]false}
-\item \textit{[true*][set\_sensors(s$_{2}$, off).(!comm\_sensors(train)*).set\_sensors(s$_{1}$, on).comm\_sensors(train)]false}
+\item \textit{[true*][set\_sensors(s$_{m}$, off).(!comm\_sensors(train)*).set\_sensorss(s$_{e}$, on).comm\_sensors(train)]false}
+\item \textit{[true*][set\_sensors(s$_{m}$, off).(!comm\_sensors(train)*).set\_sensors(s$_{w}$, on).comm\_sensors(train)]false}
 \end{itemize}
 
 \item There cannot be a train signal if the tracks are empty and there is no train approaching.
 \begin{itemize}
-\item \textit{[true*][comm\_sensors(no\_train).(!set\_sensors(s$_{3}$, on)*).comm\_sensors(train)]false}
-\item \textit{[true*][comm\_sensors(no\_train).(!set\_sensors(s$_{1}$, on)*).comm\_sensors(train)]false}
+\item \textit{[true*][comm\_sensors(no\_train).(!set\_sensors(s$_{e}$, on)*).comm\_sensors(train)]false}
+\item \textit{[true*][comm\_sensors(no\_train).(!set\_sensors(s$_{w}$, on)*).comm\_sensors(train)]false}
 \end{itemize}
 
 \end{enumerate}
