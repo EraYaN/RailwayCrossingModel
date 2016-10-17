@@ -118,9 +118,10 @@ proc BELLS(stateBe: State,stateL: State,stateBa: State, T : Train) =
 
 proc BARRIERS(stateBa: State,stateBe: State,T : Train) =
 %STAY_STATE ((stateBa == on ) && (stateBe == on ) && (T ==    train)) -> tx_barriers(   (stateBa)) . BARRIERS(stateBa=   (stateBa))				%STAY_STATE
- ((stateBa == on ) && (stateBe == on ) && (T == no_train)) -> tx_barriers(opp(stateBa)) . raise_barriers . BARRIERS(stateBa=opp(stateBa))
-+((stateBa == on ) && (stateBe == off) && (T ==    train)) -> error . delta%tx_barriers(   (stateBa)) . BARRIERS(stateBa=   (stateBa))				%ERROR_STATE
-+((stateBa == on ) && (stateBe == off) && (T == no_train)) -> error . delta%tx_barriers(opp(stateBa)) . BARRIERS(stateBa=opp(stateBa))				%ERROR_STATE
+												% ((stateBa == on ) && (stateBe == on ) && (T == no_train)) -> tx_barriers(opp(stateBa)) . raise_barriers . BARRIERS(stateBa=opp(stateBa))
+ ((stateBa == on ) && (stateBe == on ) && (T == no_train)) -> (change_state_barrier) . BARRIERS(stateBa=opp(stateBa))
++((stateBa == on ) && (stateBe == off) && (T ==    train)) -> tx_barriers(   (stateBa)) . error . delta%BARRIERS(stateBa=   (stateBa))				%ERROR_STATE
++((stateBa == on ) && (stateBe == off) && (T == no_train)) -> tx_barriers(opp(stateBa)) . error . delta%BARRIERS(stateBa=opp(stateBa))				%ERROR_STATE
 +((stateBa == off) && (stateBe == on ) && (T ==    train)) -> tx_barriers(opp(stateBa)) . lower_barriers . BARRIERS(stateBa=opp(stateBa))
 %STAY_STATE+((stateBa == off) && (stateBe == on ) && (T == no_train)) -> tx_barriers(   (stateBa)) . BARRIERS(stateBa=   (stateBa))				%STAY_STATE
 %STAY_STATE+((stateBa == off) && (stateBe == off) && (T ==    train)) -> tx_barriers(   (stateBa)) . BARRIERS(stateBa=   (stateBa))				%STAY_STATE
