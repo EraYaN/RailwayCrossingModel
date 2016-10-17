@@ -28,7 +28,7 @@ if __name__ == '__main__':
 
         print(install_dir)
 
-        system = mCRL2System(install_dir,project_dir,True)
+        system = mCRL2System(install_dir,project_dir,False)
 
         returncode = True
 
@@ -42,16 +42,37 @@ if __name__ == '__main__':
 
         if opts.verify:
             if returncode:
-                print("Compiling LTS to PBES...")
-                returncode = system.lts2pbes("{0}.lts".format(project_name),"{0}.pbes".format(project_name),"{0}.mcf".format(project_name))
-            if returncode:
-                print("Converting PBES to bool...")
-                verified = system.pbes2bool("{0}.pbes".format(project_name))
+                print("Preprocessing PRE.MCF...")
+                mcf_rules = []
+                with open(os.path.join(project_dir,"{0}.pre.mcf".format(project_name)),'r') as mcf_file:
+                    for line in mcf_file:
+                        line = line.strip()
+                        if line == "&&":
+                            continue;
+                        if line == "":
+                            continue;
+                        mcf_rules.append({"rule":line,"result":None})
 
-            if verified:
-                print("System verified succesfully.")
-            else:
-                print("System could not be verified.")
+                mcf_rule_count = len(mcf_rules)
+                print("Found {0} MCF rules...".format(mcf_rule_count))
+                current_rule = 0
+                for rule in mcf_rules:
+                    with open(os.path.join(project_dir,"{0}.{1}.tmp.mcf".format(project_name,current_rule)),'w') as mcf_out_file:
+                        mcf_out_file.write(rule['rule'])
+
+                    if returncode:
+                        print("Compiling LTS to PBES ({0} of {1})...".format(current_rule+1,mcf_rule_count))
+                        returncode = system.lts2pbes("{0}.lts".format(project_name),"{0}.pbes".format(project_name),"{0}.{1}.tmp.mcf".format(project_name,current_rule))
+                    if returncode:
+                        print("Converting PBES to bool ({0} of {1})...".format(current_rule,mcf_rule_count))
+                        verified = system.pbes2bool("{0}.pbes".format(project_name))
+                        rule['result'] = verified
+                        if verified:
+                            print("Rule {0} verified succesfully.".format(current_rule))
+                        else:
+                            print("Rule {0} could not be verified.".format(current_rule))
+
+                        current_rule += 1
 
         if returncode and opts.trace_action:
             print("Generating Traces...")

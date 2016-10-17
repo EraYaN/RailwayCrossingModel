@@ -20,10 +20,10 @@ set\_sensors(s, state) & s=s1, s2, s3; state=on, off & Gives state of sensors to
 tx\_sensors(Train) & Train=train, no\_train & Transmits presence of train to the sensor aggregator.\\ \hline
 \end{tabular}
 \caption{Interactions of the sensor controller}
-\label{tb:sensorSignals}
+\label{tab:sensorSignals}
 \end{table}
 
-\cref{tb:sensorSignals} shows the interactions of the sensor controller with the sensor aggregator and the sensors.
+\cref{tab:sensorSignals} shows the interactions of the sensor controller with the sensor aggregator and the sensors.
 The only job of the individual sensor controllers is to tell the sensor aggregator if there is a train on \textit{their} track so the aggregator can then send a signal to the other controllers if there is a train on \textit{any} track.
 
 \section{Sensor aggregator}
@@ -33,14 +33,14 @@ The only job of the individual sensor controllers is to tell the sensor aggregat
 \hline
 rx\_sensors(t, Train) & t=t1, t2; Train=train, no\_train & Receives status of tracks from the sensor controllers\\ \hline
 tx\_sensors\_agg(Train) & Train=train, no\_train & Transmits status of tracks to the other controllers.\\
-trainon & & Debug signal meaning a train is on the tracks \\
-trainoff & & Debug signal meaning there is no train on the tracks\\\hline
+rx\_sensors(t, Train) & t=t1, t2; Train=train, no\_train & Receives status of tracks from the sensor controllers\\ \hline
+tx\_sensors\_agg(Train) & Train=train, no\_train & Transmits status of tracks to the other controllers.\\ \hline
 \end{tabular}
 \caption{Interactions of the sensor aggregator}
-\label{tb:sensorAggSignals}
+\label{tab:sensorAggSignals}
 \end{table}
 
-In \cref{tb:sensorAggSignals} the interactions of the sensor aggregator with the other controllers are shown.
+In \cref{tab:sensorAggSignals} the interactions of the sensor aggregator with the other controllers are shown.
 Apart from the normal communication signals the presence of two debug signals should be noted.
 These were necessary to verify the requirements of the sensor controller.
 
@@ -56,10 +56,10 @@ turnoff\_lights & & Turns off lights\\
 tx\_Lights(state)  & state=on, off          & Transmits state of lights to bells controller               \\ \hline
 \end{tabular}
 \caption{Interactions of the lights controller}
-\label{tb:lightsSignals}
+\label{tab:lightsSignals}
 \end{table}
 
-In \cref{tb:lightsSignals} the interactions of the lights controller with the other controllers and the lights are shown.
+In \cref{tab:lightsSignals} the interactions of the lights controller with the other controllers and the lights are shown.
 Most of the interactions are communications with the other controllers with the actions \textit{turnon\_lights} and \textit{turnoff\_lights} being responsible for actually controlling the lights.
 
 \section{Bell controller}
@@ -75,10 +75,10 @@ turnoff\_bells   &          & Turns bells off                                   
 tx\_bells(state)    & state=on, off          & Transmits state of bells to bells controller and barriers controller\\ \hline
 \end{tabular}
 \caption{Interactions of the bells controller}
-\label{tb:bellsSignals}
+\label{tab:bellsSignals}
 \end{table}
 
-The interactions of the bells controller shown in \cref{tb:bellsSignals} look a lot like those of the lights controller and require no further explanation.
+The interactions of the bells controller shown in \cref{tab:bellsSignals} look a lot like those of the lights controller and require no further explanation.
 
 \section{Barrier controller}
 \begin{table}[H]
@@ -92,10 +92,10 @@ raise\_barriers &  & Raises the barriers                \\
 tx\_barriers(state)  & state=on, off          & Transmits state of barriers to bells controller             \\ \hline
 \end{tabular}
 \caption{Interactions of the bells controller}
-\label{tb:barriersSignals}
+\label{tab:barriersSignals}
 \end{table}
 
-Once again the interactions show in \cref{tb:barriersSignals} follow the same template as earlier discussed controllers and require no further explanation.
+Once again the interactions show in \cref{tab:barriersSignals} follow the same template as earlier discussed controllers and require no further explanation.
 
 \section{Communications}
 \begin{table}[H]
@@ -109,9 +109,9 @@ rx\_bells(state)|tx\_bells(state)       & state=on, off          & comm\_bells(s
 rx\_barriers(state)|tx\_barriers(state) & state=on, off          & comm\_barriers(state) \\ \hline
 \end{tabular}
 \caption{Communications in the system}
-\label{tb:communicationsTable}
+\label{tab:communicationsTable}
 \end{table}
 
-\cref{tb:communicationsTable} shows the communications defined in the model.
+\cref{tab:communicationsTable} shows the communications defined in the model.
 
 \end{document}

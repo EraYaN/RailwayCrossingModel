@@ -13,7 +13,7 @@
     <Name>PythonBuild</Name>
     <RootNamespace>PythonBuild</RootNamespace>
     <LaunchProvider>Standard Python launcher</LaunchProvider>
-    <CommandLineArguments>--project-root=../../full-system --project-name=full-system --show-graph --verify --trace-action done</CommandLineArguments>
+    <CommandLineArguments>--project-root=../../full-system --project-name=full-system --verify</CommandLineArguments>
     <EnableNativeCodeDebugging>False</EnableNativeCodeDebugging>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
