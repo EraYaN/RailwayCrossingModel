@@ -30,15 +30,13 @@ tx\_sensors(Train) & Train=train, no\_train & Transmits presence of train to the
 \begin{tabular}{|l|l|l|}
 \hline
 rx\_sensors(t, Train) & t=t1, t2; Train=train, no\_train & Receives status of tracks from the sensor controllers  \\\hline
-tx\_sensors\_agg(Train) & Train=train, no\_train & Transmits status of tracks to the other controllers.  \\
-trainon & & Debug signal meaning a train is on the tracks \\
-trainoff & & Debug signal meaning there is no train on the tracks\\\hline
+tx\_sensors\_agg(Train) & Train=train, no\_train & Transmits status of tracks to the other controllers.  \\\hline
 \end{tabular}
 \caption{Interactions of the sensor aggregator}
 \label{tb:sensorAggSignals}
 \end{table}
 
-In \cref{tb:sensorAggSignals} the interactions of the sensor aggregator with the other controllers are shown. Apart from the normal communication signals the presence of two debug signals should be noted. These were necessary to verify the requirements of the sensor controller.
+In \cref{tb:sensorAggSignals} the interactions of the sensor aggregator with the other controllers are shown. Only two signals are needed for this component to do it's job. It doesn't need to communicate with any external components.
 
 \section{Lights controller}
 \begin{table}[H]
