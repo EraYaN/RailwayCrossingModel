@@ -4,7 +4,7 @@
 
 &&
 
-[true*][tx_sensors_agg(train).(!tx_sensors_agg(no_train)*).set_sensors(s_name_w,off).tx_sensors_agg(no_train)]false
+[true*][tx_sensors_agg(train).(!tx_sensors_agg(no_train)*).set_sensors(s_w,off).tx_sensors_agg(no_train)]false
 &&
 [true*][tx_sensors_agg(train).(!tx_sensors_agg(no_train)*).set_sensors(s_e,off).tx_sensors_agg(no_train)]false
 
@@ -18,7 +18,7 @@
 
 &&
 
-[true*][set_sensors(s_m,off).(!tx_sensors_agg(train)*).set_sensorss(s_e,on).tx_sensors_agg(train)]false
+[true*][set_sensors(s_m,off).(!tx_sensors_agg(train)*).set_sensors(s_e,on).tx_sensors_agg(train)]false
 &&
 [true*][set_sensors(s_m,off).(!tx_sensors_agg(train)*).set_sensors(s_w,on).tx_sensors_agg(train)]false
 
