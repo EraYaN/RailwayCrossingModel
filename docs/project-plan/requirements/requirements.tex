@@ -65,16 +65,16 @@ Crossing opening:
 
 \section{Requirements defined}
 %TODO[]:Define a transition state between approaching and occupied
-Lights ON means the actual lights are blinking but Lights only gives an action to an external blinking controller which is not part of this project scope.
 A train `on the track' means that a train is somewhere, either partially or completely, between the two outer train sensors of a train track.
 A train is `approaching' when it triggers one of the external sensors for the first time, while it is `exiting' the track when it triggers the other external sensor.
 When the middle sensor is triggered, we consider the track `occupied'.
-As for the transition states, a train is `traversing' when it is moving from `approaching' to `occupied' and it is `leaving' when it is moving between `occupied' and `exit' states.
+As for the transition states, a train is `traversing' when it is moving from `approaching' to `occupied' and it is `leaving' when it is moving between `occupied' and `exit' states.\\
+Regarding the lights, Lights ON means the actual lights are blinking but Lights only gives an action to an external blinking controller which is not part of this project scope.
 
 \subsection{Sensors}
 These requirements should be considered either for a train that it is moving from West to East and from East to West. 
-The sensors are considered to generate an action whenever their state has suffered a change, that way we will only be able to know if a sensor is on, if its previous state was off and vice versa. 
-Whenever an output signal from the sensor controller stating a train has been detected should be sent, we will refer it as a train signal, while we will refer a no-train signal otherwise.
+The sensors are considered to generate an action whenever their state has suffered a change, that way, we will only be able to know if a sensor is on, if its previous state was off and vice versa. 
+Whenever an output signal from the sensor controller stating a train has been detected should be sent, we will refer it as a train signal, while we will refer a no-train signal otherwise. The requirements for the sensors are the following:
 	\begin{enumerate}
 		\item There cannot be a no-train signal if a train is approaching.
 		\item There cannot be a no-train signal if the train is transiting.
