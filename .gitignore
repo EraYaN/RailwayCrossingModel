@@ -403,3 +403,4 @@ script/**/*.jpg
 *.pbes
 *.trc
 *.trc.txt
+*.tmp.mcf
