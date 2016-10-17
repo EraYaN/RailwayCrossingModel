@@ -52,18 +52,18 @@ proc SENSORS(id: TrackID, train_state: State_train, sens_w: State, sens_m: State
 
 %Full
 
-%+ ((train_state == idle)||(train_state == leaving_rtl))        ->  set_sensors(s_w,on) . SENSORS(sens_w=on)
-%+ ((train_state == approaching_ltr)||(train_state == exit_rtl))        ->  set_sensors(s_w,off) . SENSORS(sens_w=off)
++ ((train_state == idle)||(train_state == leaving_rtl))        ->  set_sensors(s_w,on) . SENSORS(sens_w=on)
++ ((train_state == approaching_ltr)||(train_state == exit_rtl))        ->  set_sensors(s_w,off) . SENSORS(sens_w=off)
 
-%+ ((train_state == approaching_rtl)||(train_state == approaching_ltr))        -> set_sensors(s_m,on) . SENSORS(sens_m=on)
-%+ ((train_state == occupied_rtl)||(train_state == occupied_ltr))        ->  set_sensors(s_m,off) . SENSORS(sens_m=off)
++ ((train_state == approaching_rtl)||(train_state == approaching_ltr))        -> set_sensors(s_m,on) . SENSORS(sens_m=on)
++ ((train_state == occupied_rtl)||(train_state == occupied_ltr))        ->  set_sensors(s_m,off) . SENSORS(sens_m=off)
 
-%+ ((train_state == idle)||(train_state == leaving_ltr))        ->  set_sensors(s_e,on) . SENSORS(sens_e=on)
-%+ ((train_state == approaching_rtl)||(train_state == exit_ltr))        ->  set_sensors(s_e,off) . SENSORS(sens_e=off)
++ ((train_state == idle)||(train_state == leaving_ltr))        ->  set_sensors(s_e,on) . SENSORS(sens_e=on)
++ ((train_state == approaching_rtl)||(train_state == exit_ltr))        ->  set_sensors(s_e,off) . SENSORS(sens_e=off)
 
 %Left to Right only
 
-+ ((train_state == idle))        ->  set_sensors(s_w,on) . SENSORS(sens_w=on)
+%+ ((train_state == idle))        ->  set_sensors(s_w,on) . SENSORS(sens_w=on)
 %+ ((train_state == approaching_ltr))        ->  set_sensors(s_w,off) . SENSORS(sens_w=off)
 
 %+ ((train_state == approaching_ltr))        -> set_sensors(s_m,on) . SENSORS(sens_m=on)
@@ -181,9 +181,9 @@ init %hide(
 			SENSORS(t1, idle, off, off, off) ||
 			SENSORS(t2, idle, off, off, off) ||
 			SENSORAGGREGATOR(no_train, no_train) ||
-			LIGHTS(on,on,no_train) ||
-			BELLS(on,on,on,no_train) ||
-			BARRIERS(on,on,no_train)
+			LIGHTS(off,off,no_train) ||
+			BELLS(off,off,off,no_train) ||
+			BARRIERS(off,off,no_train)
 		)
 	%)
 );
