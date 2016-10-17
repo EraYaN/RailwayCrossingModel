@@ -14,13 +14,13 @@ In this section the interactions of the different components are defined per com
 \section{Sensor controllers}
 \begin{table}[H]
 \centering
-\begin{tabular}{|l|l|l|}
-\hline
-set\_sensors(s, state) & s=s1, s2, s3; state=on, off & Gives state of sensors to the sensor controller\\ \hline
-tx\_sensors(Train) & Train=train, no\_train & Transmits presence of train to the sensor aggregator.\\ \hline
-\end{tabular}
-\caption{Interactions of the sensor controller}
-\label{tab:sensorSignals}
+    \begin{tabular}{|l|l|l|}
+    \hline
+    \texttt{set\_sensors(s, state)} & \texttt{s=s1, s2, s3; state=on, off}  & Gives state of sensors to the sensor controller      \\ \hline
+    \texttt{tx\_sensors(Train)}     & \texttt{Train=train, no\_train}       & Transmits presence of train to the sensor aggregator \\ \hline
+    \end{tabular}
+    \caption{Interactions of the sensor controller}
+    \label{tab:sensorSignals}
 \end{table}
 
 \cref{tab:sensorSignals} shows the interactions of the sensor controller with the sensor aggregator and the sensors.
@@ -29,13 +29,13 @@ The only job of the individual sensor controllers is to tell the sensor aggregat
 \section{Sensor aggregator}
 \begin{table}[H]
 \centering
-\begin{tabular}{|l|l|l|}
-\hline
-rx\_sensors(t, Train) & t=t1, t2; Train=train, no\_train & Receives status of tracks from the sensor controllers\\ \hline
-tx\_sensors\_agg(Train) & Train=train, no\_train & Transmits status of tracks to the other controllers.\\
-rx\_sensors(t, Train) & t=t1, t2; Train=train, no\_train & Receives status of tracks from the sensor controllers\\ \hline
-tx\_sensors\_agg(Train) & Train=train, no\_train & Transmits status of tracks to the other controllers.\\ \hline
-\end{tabular}
+    \begin{tabular}{|l|l|l|}
+    \hline
+    \texttt{rx\_sensors(t, Train)}   & \texttt{t=t1, t2; Train=train, no\_train} & Receives status of tracks from the sensor controllers \\ \hline
+    \texttt{tx\_sensors\_agg(Train)} & \texttt{Train=train, no\_train}           & Transmits status of tracks to the other controllers   \\
+    \texttt{rx\_sensors(t, Train)}   & \texttt{t=t1, t2; Train=train, no\_train} & Receives status of tracks from the sensor controllers \\ \hline
+    \texttt{tx\_sensors\_agg(Train)} & \texttt{Train=train, no\_train}           & Transmits status of tracks to the other controllers   \\ \hline
+    \end{tabular}
 \caption{Interactions of the sensor aggregator}
 \label{tab:sensorAggSignals}
 \end{table}
@@ -47,14 +47,14 @@ These were necessary to verify the requirements of the sensor controller.
 \section{Light ontroller}
 \begin{table}[H]
 \centering
-\begin{tabular}{|l|l|l|}
-\hline
-rx\_sensors\_agg(Train)  & Train=train, no\_train & Receives status of tracks from sensor controller \\
-rx\_bells(state)   & state=on, off          & Receives state of bells from bells controller               \\ \hline
-turnon\_lights &         & Turns on lights                                     \\
-turnoff\_lights & & Turns off lights\\
-tx\_Lights(state)  & state=on, off          & Transmits state of lights to bells controller               \\ \hline
-\end{tabular}
+    \begin{tabular}{|l|l|l|}
+    \hline
+    \texttt{rx\_sensors\_agg(Train)} & \texttt{Train=train, no\_train} & Receives status of tracks from sensor controller \\
+    \texttt{rx\_bells(state)}        & \texttt{state=on, off}          & Receives state of bells from bells controller    \\ \hline
+    \texttt{turnon\_lights}          &                                 & Turns on lights                                  \\
+    \texttt{turnoff\_lights}         &                                 & Turns off lights                                 \\
+    \texttt{tx\_Lights(state)}       & \texttt{state=on, off}          & Transmits state of lights to bells controller    \\ \hline
+    \end{tabular}
 \caption{Interactions of the lights controller}
 \label{tab:lightsSignals}
 \end{table}
@@ -65,15 +65,15 @@ Most of the interactions are communications with the other controllers with the 
 \section{Bell controller}
 \begin{table}[H]
 \centering
-\begin{tabular}{|l|l|l|}
-\hline
-rx\_sensors\_agg(Train)   & Train=train, no\_train & Receives status of tracks from sensor controller           \\
-rx\_lights(state)   & state=on, off          & Receives state of lights from lights controller                      \\
-rx\_barriers(state) & state=on, off          & Receives state of barriers from barriers controller                  \\ \hline
-turnon\_bells   &          & Turns bells on                                              \\
-turnoff\_bells   &          & Turns bells off                                              \\
-tx\_bells(state)    & state=on, off          & Transmits state of bells to bells controller and barriers controller\\ \hline
-\end{tabular}
+    \begin{tabular}{|l|l|l|}
+    \hline
+    \texttt{rx\_sensors\_agg(Train)} & \texttt{Train=train, no\_train} & Receives status of tracks from sensor controller                     \\
+    \texttt{rx\_lights(state)}       & \texttt{state=on, off}          & Receives state of lights from lights controller                      \\
+    \texttt{rx\_barriers(state)}     & \texttt{state=on, off}          & Receives state of barriers from barriers controller                  \\ \hline
+    \texttt{turnon\_bells}           &                                 & Turns bells on                                                       \\
+    \texttt{turnoff\_bells}          &                                 & Turns bells off                                                      \\
+    \texttt{tx\_bells(state)}        & \texttt{state=on, off}          & Transmits state of bells to bells controller and barriers controller \\ \hline
+    \end{tabular}
 \caption{Interactions of the bells controller}
 \label{tab:bellsSignals}
 \end{table}
@@ -83,14 +83,19 @@ The interactions of the bells controller shown in \cref{tab:bellsSignals} look a
 \section{Barrier controller}
 \begin{table}[H]
 \centering
-\begin{tabular}{|l|l|l|}
-\hline
-rx\_sensors\_agg(Train)    & Train=train, no\_train & Receives status of tracks from sensor controller \\
-rx\_bells(state)     & state=on, off          & Receives state of bells from bells controller               \\ \hline
-lower\_barriers &  & Lowers the barriers                \\
-raise\_barriers &  & Raises the barriers                \\
-tx\_barriers(state)  & state=on, off          & Transmits state of barriers to bells controller             \\ \hline
-\end{tabular}
+    \begin{tabular}{|l|l|}
+    \hline
+    \texttt{rx\_sensors\_agg(Train)} & \texttt{Train=train, no\_train}                  \\
+                                     & Receives status of tracks from sensor controller \\
+    \texttt{rx\_bells(state)}        & \texttt{state=on, off}                           \\
+                                     & Receives state of bells from bells controller    \\ \hline
+    \texttt{lower\_barriers}         &                                                  \\
+                                     & Lowers the barriers                              \\
+    \texttt{raise\_barriers}         &                                                  \\
+                                     & Raises the barriers                              \\
+    \texttt{tx\_barriers(state)}     & \texttt{state=on, off}                           \\
+                                     & Transmits state of barriers to bells controller  \\ \hline
+    \end{tabular}
 \caption{Interactions of the bells controller}
 \label{tab:barriersSignals}
 \end{table}
@@ -102,16 +107,16 @@ Once again the interactions show in \cref{tab:barriersSignals} follow the same t
 \centering
 \begin{tabular}{|l|l|l|}
 \hline
-rx\_sensors(Train)|tx\_sensors(Train)     & Train=train, no\_train & comm\_sensors(Train)   \\
-rx\_sensors\_agg(Train)|tx\_sensors\_agg(Train)     & Train=train, no\_train & comm\_sensors\_agg(Train)   \\
-rx\_lights(state)|tx\_lights(state)     & state=on, off          & comm\_lights(state)   \\
-rx\_bells(state)|tx\_bells(state)       & state=on, off          & comm\_bells(state)    \\
-rx\_barriers(state)|tx\_barriers(state) & state=on, off          & comm\_barriers(state) \\ \hline
+\texttt{rx\_sensors(Train)|tx\_sensors(Train)}               & \texttt{Train=train, no\_train} & \texttt{comm\_sensors(Train)}      \\
+\texttt{rx\_sensors\_agg(Train)|tx\_sensors\_agg(Train)}     & \texttt{Train=train, no\_train} & \texttt{comm\_sensors\_agg(Train)} \\
+\texttt{rx\_lights(state)|tx\_lights(state)}                 & \texttt{state=on, off}          & \texttt{comm\_lights(state)}       \\
+\texttt{rx\_bells(state)|tx\_bells(state)}                   & \texttt{state=on, off}          & \texttt{comm\_bells(state)}        \\
+\texttt{rx\_barriers(state)|tx\_barriers(state)}             & \texttt{state=on, off}          & \texttt{comm\_barriers(state)}      \\ \hline
 \end{tabular}
 \caption{Communications in the system}
 \label{tab:communicationsTable}
 \end{table}
 
 \cref{tab:communicationsTable} shows the communications defined in the model.
-
+%TODO[c]: this sentence is useless, since the caption of the tab should already cover this.
 \end{document}

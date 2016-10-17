@@ -2,113 +2,113 @@
 \input{../../.library/preamble.tex}
 \input{../../.library/style.tex}
 \addbibresource{../../.library/bibliography.bib}
+
 \begin{document}
 \chapter{Translated Requirements}
-Now that the system and its requirements are described in natural language, they have to be formulated into $\mu$-calculus formulae that can be used for verification.
+After having described the system and it's requirements in natural language it's time to formulate them as $\mu$-calculus formulae that can be used for verification. In \cref{ch:interactions} all the actions in the model that will be used in the formulae in this chapter were described.
 
 \section{Sensors}
-In \cref{tab:sensors_transitions} the sensors' states and the consequent \texttt{    train} or \texttt{no\_train} action are displayed when a train is moving from East to West and from West to East.
+In \cref{tab:sensors_transitions} the sensors' states and the consequent \texttt{    train} or \texttt{no\_train} output signal are displayed when a train is moving from East to West and from West to East.
 
 \begin{table}[H]
 \centering
-	\begin{tabular}{|c|c|c|c|c|}
-	\hline 
-	$S_{w}$ & $S_{m}$ & $S_{e}$ & East to West & West to East \\ \hline 
-	OFF & OFF & OFF & \texttt{no\_train} & \texttt{no\_train} \\ \hline 
-	ON  & OFF & OFF & \texttt{    train} & \texttt{no\_train} \\ \hline 
-	OFF & OFF & OFF & \texttt{    train} & \texttt{no\_train} \\ \hline 
-	OFF & ON  & OFF & \texttt{    train} & \texttt{    train} \\ \hline 
-	OFF & OFF & OFF & \texttt{no\_train} & \texttt{    train} \\ \hline 
-	OFF & OFF & ON  & \texttt{no\_train} & \texttt{    train} \\ \hline 
-	OFF & OFF & OFF & \texttt{no\_train} & \texttt{no\_train} \\ \hline 
-	\end{tabular}
-	\caption{Sensors states and sensor controller output signal for a train moving in either possible direction.}
-	\label{tab:sensors_transitions}
+    \begin{tabular}{|c|c|c|c|c|}
+    \hline 
+    $S_{w}$ & $S_{m}$ & $S_{e}$ & East to West       & West to East       \\ \hline 
+    OFF     & OFF     & OFF     & \texttt{no\_train} & \texttt{no\_train} \\ \hline 
+    ON      & OFF     & OFF     & \texttt{    train} & \texttt{no\_train} \\ \hline 
+    OFF     & OFF     & OFF     & \texttt{    train} & \texttt{no\_train} \\ \hline 
+    OFF     & ON      & OFF     & \texttt{    train} & \texttt{    train} \\ \hline 
+    OFF     & OFF     & OFF     & \texttt{no\_train} & \texttt{    train} \\ \hline 
+    OFF     & OFF     & ON      & \texttt{no\_train} & \texttt{    train} \\ \hline 
+    OFF     & OFF     & OFF     & \texttt{no\_train} & \texttt{no\_train} \\ \hline 
+    \end{tabular}
+    \caption{Sensors states and sensor controller output signal for a train moving in either possible direction.}
+    \label{tab:sensors_transitions}
 \end{table}
 
 Based on this, the following translated requirements may be formulated: 
 
 \begin{enumerate}
-\item There cannot be a no-train signal if a train is approaching.
-	\begin{enumerate}[label=\roman*]
-		\item \texttt{[true*][trainoff.(!trainon*).set\_sensors($S_{w}$, on).trainoff]false}
-		\item \texttt{[true*][trainoff.(!trainon*).set\_sensors($S_{e}$, on).trainoff]false} 
-	\end{enumerate}
+\item There cannot be a no-train signal if a train is approaching:\\
+    \texttt{[true*][tx\_sensors\_agg(no\_train).(\notbar{tx\_sensors\_agg(train)}*).set\_sensors(s\_w, on).tx\_sensors\_agg(no\_train)]false}\\
+    \texttt{[true*][tx\_sensors\_agg(no\_train).(\notbar{tx\_sensors\_agg(train)}*).set\_sensors(s\_e, on).tx\_sensors\_agg(no\_train)]false} 
 
-\item There cannot be a no-train signal if the train is transiting.
-	\begin{enumerate}[label=\roman*]
-		\item \texttt{[true*][trainon.(!trainoff*).set\_sensors($S_{w}$, off).trainoff]false}
-		\item \texttt{[true*][trainon.(!trainoff*).set\_sensors($S_{e}$, off).trainoff]false}
-	\end{enumerate}
+\item There cannot be a no-train signal if the train is transiting:\\
+    \texttt{[true*][tx\_sensors\_agg(train).(\notbar{tx\_sensors\_agg(no\_train)}*).set\_sensors(s\_name\_w, off).tx\_sensors\_agg(no\_train)]false}\\
+    \texttt{[true*][tx\_sensors\_agg(train).(\notbar{tx\_sensors\_agg(no\_train)}*).set\_sensors(s\_e, off).tx\_sensors\_agg(no\_train)]false}
 
-\item There cannot be a no-train signal if the train is in the middle of the tracks.\\
-	\texttt{[true*][set\_sensors($S_{m}$, on).(!set\_sensors($S_{m}$, off)*).trainoff]false}
 
-\item There cannot be a train signal as soon as the central part of the track is cleared.\\
-	\texttt{[true*][set\_sensors($S_{m}$, off).(!set\_sensors($S_{m}$, on)*).trainon]false}
+\item There cannot be a no-train signal if the train is in the middle of the tracks:\\
+    \texttt{[true*][set\_sensors(s\_m, on).(\notbar{set\_sensors(s\_m, off)}*).tx\_sensors\_agg(no\_train)]false}
 
-\item There cannot be a train signal if the train is exiting.
-	\begin{enumerate}[label=\roman*]
-		\item \texttt{[true*][set\_sensors($S_{m}$, off).(!trainon*).set\_sensorss($S_{e}$, on).trainon]false}
-		\item \texttt{[true*][set\_sensors($S_{m}$, off).(!trainon*).set\_sensors($S_{w}$, on).trainon]false}
-	\end{enumerate}
+\item There cannot be a train signal as soon as the central part of the track is cleared:\\
+    \texttt{[true*][set\_sensors(s\_m, off).(\notbar{set\_sensors(s\_m, on)}*).tx\_sensors\_agg(train)]false}
 
-\item There cannot be a train signal if the tracks are empty and there is no train approaching.
-	\begin{enumerate}[label=\roman*]
-		\item \texttt{[true*][trainoff.(!set\_sensors($S_{e}$, on)*).trainon]false}
-		\item \texttt{[true*][trainoff.(!set\_sensors($S_{w}$, on)*).trainon]false}
-	\end{enumerate}
+\item There cannot be a train signal if the train is exiting:\\.
+    \texttt{[true*][set\_sensors(s\_m, off).(\notbar{tx\_sensors\_agg(train)}*).set\_sensorss(s\_e, on).tx\_sensors\_agg(train)]false}\\
+    \texttt{[true*][set\_sensors(s\_m, off).(\notbar{tx\_sensors\_agg(train)}*).set\_sensors(s\_w, on).tx\_sensors\_agg(train)]false}
 
+
+\item There cannot be a train signal if the tracks are empty and there is no train approaching:\\
+    \texttt{[true*][tx\_sensors\_agg(no\_train).(\notbar{set\_sensors(s\_e, on)}*).tx\_sensors\_agg(train)]false}\\
+    \texttt{[true*][tx\_sensors\_agg(no\_train).(\notbar{set\_sensors(s\_w, on)}*).tx\_sensors\_agg(train)]false}
 \end{enumerate}
 
 
 \section{Lights}
 
 \begin{enumerate}
-	\item The lights cannot turn on when there is no train on the tracks.\\
-		\texttt{[true*][trainoff.!trainon*.turnon\_lights]false}
+    \item The lights cannot turn on when there is no train on the tracks:\\
+        \texttt{[true*][tx\_sensors\_agg(no\_train).\notbar{tx\_sensors\_agg(train)}*.turnon\_lights]false}
 
-	\item The lights cannot turn off as long as there is a train on the tracks.\\
-		\texttt{[true*][trainon.!trainoff*.turnoff\_lights]false}
+    \item The lights cannot turn off as long as there is a train on the tracks:\\
+        \texttt{[true*][tx\_sensors\_agg(train).\notbar{tx\_sensors\_agg(no\_train)}*.turnoff\_lights]false}
 
-	\item The lights cannot turn off as long as the bells are on.\\
-		\texttt{[true*][turnon\_bells.!turnoff\_bells*.turnoff\_lights]false}
+    \item The lights cannot turn off as long as the bells are on:\\
+        \texttt{[true*][turnon\_bells.\notbar{turnoff\_bells}*.turnoff\_lights]false}
 \end{enumerate}
 
 
 \section{Bells}
 
 \begin{enumerate}
-	\item The bells cannot turn on if the lights are off\\
-		\texttt{[true*][turnoff\_lights.!turnon\_lights*.turnoff\_bells]false}
-	\item The bells cannot turn on if there is no train on the track\\
-		\texttt{[true*][trainoff.!trainon*.turnon\_bells]false}
-	\item The bells cannot turn off if the barriers are lowered\\
-		\texttt{[true*][lower\_barriers.!raise\_barriers*.turnoff\_bells]false}
-	\item The bells cannot turn off if there is a train on the track\\
-		\texttt{[true*][trainon.!trainoff*.turnoff\_bells]false}
+    \item The bells cannot turn on if the lights are off:\\
+        \texttt{[true*][turnoff\_lights.\notbar{turnon\_lights}*.turnoff\_bells]false}
+
+    \item The bells cannot turn on if there is no train on the track:\\
+        \texttt{[true*][tx\_sensors\_agg(no\_train).\notbar{tx\_sensors\_agg(train)}*.turnon\_bells]false}
+
+    \item The bells cannot turn off if the barriers are lowered:\\
+        \texttt{[true*][lower\_barriers.\notbar{raise\_barriers}*.turnoff\_bells]false}
+
+    \item The bells cannot turn off if there is a train on the track:\\
+        \texttt{[true*][tx\_sensors\_agg(train).\notbar{tx\_sensors\_agg(no\_train)}*.turnoff\_bells]false}
 \end{enumerate}
 
 
 \section{Barriers}
 
 \begin{enumerate}
-	\item The barriers cannot be raised when there is a train on the tracks\\
-		\texttt{[true*][trainon.!trainoff*.raise\_barriers]false}
-	\item The barriers cannot be lowered if there is no train on the tracks\\
-		\texttt{[true*][trainoff.!trainon*.lower\_barriers]false}
-	\item The barriers cannot be lowered if the bells are off\\
-		\texttt{[true*][turnoff\_bells.!turnon\_bells*.lower\_barriers]false}
+    \item The barriers cannot be raised when there is a train on the tracks:\\
+        \texttt{[true*][tx\_sensors\_agg(train).\notbar{tx\_sensors\_agg(no\_train)}*.raise\_barriers]false}
+
+    \item The barriers cannot be lowered if there is no train on the tracks:\\
+        \texttt{[true*][tx\_sensors\_agg(no\_train).\notbar{tx\_sensors\_agg(train)}*.lower\_barriers]false}
+
+    \item The barriers cannot be lowered if the bells are off:\\
+        \texttt{[true*][turnoff\_bells.\notbar{turnon\_bells}*.lower\_barriers]false}
 \end{enumerate}
 
 
 \section{General}
 
 \begin{enumerate}
-	\item From every state, the crossing needs to be able to be closed (barriers lowered, lights and bells on).\\
-		\texttt{[true*]<true*.lower\_barriers>true}
-	\item From every state, the crossing needs to be able to be opened(lights and bells off, barriers raised).\\
-		\texttt{[true*]<true*.turnoff\_lights>true}
+    \item From every state, the crossing needs to be able to be closed (barriers lowered, lights and bells on):\\
+        \texttt{[true*]<true*.lower\_barriers>true}
+
+    \item From every state, the crossing needs to be able to be opened(lights and bells off, barriers raised):\\
+        \texttt{[true*]<true*.turnoff\_lights>true}
 \end{enumerate}
 
 \end{document}
