@@ -105,10 +105,10 @@ proc BARRIERS(stateBa: State,stateBe: State,T : Train) =
 ;
 
 proc tx_bells(s : State)
-	= tx_bells_to_lights(s) . tx_bells_to_barriers(s);
+	= tx_bells_to_lights(s) | tx_bells_to_barriers(s);
 
 proc tx_sensors_agg (T : Train)
-	= tx_sensors_agg_to_lights(T) . tx_sensors_agg_to_bells(T) . tx_sensors_agg_to_barriers(T);
+	= tx_sensors_agg_to_lights(T) | tx_sensors_agg_to_bells(T) | tx_sensors_agg_to_barriers(T);
 
 init %hide(
 	%{
