@@ -6,7 +6,7 @@
 \addbibresource{../../.library/bibliography.bib}
 \begin{document}
 \chapter{Requirements}
-In this section, the requirements for the railway crossing system needed for the later design, modelling and validation will be gathered and described.
+In this section the requirements for the railway crossing system will be gathered and described.
 First of all, we will enumerate and name the components of our system; and then describe the sequence in which they actuate in a fixed situation.
 Finally, we will establish the requirements our system has to fulfil for its modelling.
 
@@ -47,7 +47,8 @@ Besides this trivial requirement, there are a couple other functional requiremen
 
 \subsection{Sequence}
 Two sequences can be described for the system.
-One will be for closing the crossing when a train needs to pass. The other one is for opening the crossing when the train has passed.
+One will be for closing the crossing when a train needs to pass.
+The other one is for opening the crossing when the train has passed.
 
 Crossing closing:
 \begin{enumerate}
@@ -69,12 +70,13 @@ A train `on the track' means that a train is somewhere, either partially or comp
 A train is `approaching' when it triggers one of the external sensors for the first time, while it is `exiting' the track when it triggers the other external sensor.
 When the middle sensor is triggered, we consider the track `occupied'.
 As for the transition states, a train is `traversing' when it is moving from `approaching' to `occupied' and it is `leaving' when it is moving between `occupied' and `exit' states.\\
-Regarding the lights, Lights ON means the actual lights are blinking but Lights only gives an action to an external blinking controller which is not part of this project scope.
+Regarding the lights, \texttt{Lights ON} means the actual lights are blinking but the Light Controller only gives an action to an external blinking controller which is not part of this project scope.
 
 \subsection{Sensors}
-These requirements should be considered either for a train that it is moving from West to East and from East to West. 
-The sensors are considered to generate an action whenever their state has suffered a change, that way, we will only be able to know if a sensor is on, if its previous state was off and vice versa. 
-Whenever an output signal from the sensor controller stating a train has been detected should be sent, we will refer it as a train signal, while we will refer a no-train signal otherwise. The requirements for the sensors are the following:
+These requirements should be considered either for a train that it is moving from West to East and from East to West.
+The sensors are considered to generate an action whenever their state has suffered a change, that way, we will only be able to know if a sensor is on, if its previous state was off and vice versa.
+Whenever an output signal from the sensor controller stating a train has been detected should be sent, we will refer it as a train signal, while we will refer a no-train signal otherwise.
+The requirements for the sensors are the following:
 	\begin{enumerate}
 		\item There cannot be a no-train signal if a train is approaching.
 		\item There cannot be a no-train signal if the train is transiting.

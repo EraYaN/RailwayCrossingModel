@@ -183,9 +183,9 @@ init %hide(
 			SENSORS(t1, idle, off, off, off) ||
 			SENSORS(t2, idle, off, off, off) ||
 			SENSORAGGREGATOR(no_train, no_train) ||
-			LIGHTS(on,on,no_train) ||
-			BELLS(on,on,on,no_train) ||
-			BARRIERS(on,on,no_train)
+			LIGHTS(off,off,no_train) ||
+			BELLS(off,off,off,no_train) ||
+			BARRIERS(off,off,no_train)
 		)
 	%)
 );

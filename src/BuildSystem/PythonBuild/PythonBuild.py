@@ -1,10 +1,16 @@
 import os
+import glob
 import sys
 import argparse as ap
 import subprocess
 from mCRL2Bindings import mCRL2System, mCRL2Tools
 
+import colorama
+colorama.init(autoreset=True)
 
+C_RED = colorama.Fore.RED+colorama.Style.BRIGHT
+C_GREEN = colorama.Fore.GREEN+colorama.Style.BRIGHT
+C_CYAN = colorama.Fore.CYAN+colorama.Style.BRIGHT
 
 if __name__ == '__main__':
     parser = ap.ArgumentParser(prog='SystemValidationmCRL2',description='mCRL2 System Validation Build System')
@@ -28,7 +34,7 @@ if __name__ == '__main__':
 
         print(install_dir)
 
-        system = mCRL2System(install_dir,project_dir,False)
+        system = mCRL2System(install_dir,project_dir,True)
 
         returncode = True
 
@@ -39,7 +45,7 @@ if __name__ == '__main__':
             if returncode:
                 print("Compiling LPS to LTS...")
                 returncode = system.lps2lts("{0}.lps".format(project_name),"{0}.lts".format(project_name))
-
+        
         if opts.verify:
             if returncode:
                 print("Preprocessing PRE.MCF...")
@@ -54,7 +60,7 @@ if __name__ == '__main__':
                         mcf_rules.append({"rule":line,"result":None})
 
                 mcf_rule_count = len(mcf_rules)
-                print("Found {0} MCF rules...".format(mcf_rule_count))
+                print(C_CYAN+"Found {0} MCF rules...".format(mcf_rule_count))
                 current_rule = 0
                 for rule in mcf_rules:
                     with open(os.path.join(project_dir,"{0}.{1}.tmp.mcf".format(project_name,current_rule)),'w') as mcf_out_file:
@@ -64,19 +70,32 @@ if __name__ == '__main__':
                         print("Compiling LTS to PBES ({0} of {1})...".format(current_rule+1,mcf_rule_count))
                         returncode = system.lts2pbes("{0}.lts".format(project_name),"{0}.pbes".format(project_name),"{0}.{1}.tmp.mcf".format(project_name,current_rule))
                     if returncode:
-                        print("Converting PBES to bool ({0} of {1})...".format(current_rule,mcf_rule_count))
+                        print("Converting PBES to bool ({0} of {1})...".format(current_rule+1,mcf_rule_count))
                         verified = system.pbes2bool("{0}.pbes".format(project_name))
                         rule['result'] = verified
                         if verified:
-                            print("Rule {0} verified succesfully.".format(current_rule))
+                            print(C_GREEN+"Rule {0} verified succesfully.".format(current_rule+1))
                         else:
-                            print("Rule {0} could not be verified.".format(current_rule))
+                            print(C_RED+"Rule {0} could not be verified.".format(current_rule+1))
 
                         current_rule += 1
 
         if returncode and opts.trace_action:
             print("Generating Traces...")
-            returncode = system.lps2lts("{0}.lps".format(project_name),"{0}.lts".format(project_name))
+            returncode = system.lps2lts_trace("{0}.lps".format(project_name),"{0}.lts".format(project_name),opts.trace_action)
+            if returncode:
+                files = glob.glob(os.path.join(project_dir,"{0}*{1}.trc".format(project_name,opts.trace_action)))
+                files_count = len(files)
+                print(C_CYAN+"Found {0} Traces...".format(files_count))
+
+                current_trace = 0
+                for file in files:
+                    returncode = system.tracepp(file,"{0}.txt".format(file))
+                    if returncode:
+                        print("Processed trace {0}...".format(current_trace+1))
+
+                    current_trace += 1
+
 
         if returncode and opts.show_graph:
             system.ltsgraph("{0}.lts".format(project_name))
