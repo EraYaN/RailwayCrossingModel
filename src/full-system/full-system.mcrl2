@@ -20,8 +20,6 @@ act set_sensors: SensorID # State;
 
 act tx_lights,rx_lights,comm_lights: State;
 	tx_bells,rx_bells,comm_bells: State;
-	tx_bellsl,rx_bellsl,comm_bellsl: State;
-	tx_bellsba,rx_bellsba,comm_bellsba: State;
 	tx_barriers,rx_barriers,comm_barriers: State;
 	tx_sensors, rx_sensors, comm_sensors: TrackID # Train;
 	tx_sensors_agg, rx_sensors_agg, comm_sensors_agg: Train;
@@ -103,7 +101,6 @@ proc BARRIERS(stateBa: State,stateBe: State,T : Train) =
 + sum t: Train . rx_sensors_agg(t) . BARRIERS(T = t)
 ;
 
-proc change_state_bells = tx_bellsl(off) . tx_bellsba(off);
 init %hide(
 	%{
 		%comm_lights,
@@ -130,8 +127,6 @@ init %hide(
 			%tx_lights,
 			%tx_bells,
 			comm_lights,
-			comm_bellsl,
-			comm_bellsba,
 			comm_barriers,
 			comm_sensors,
 			comm_sensors_agg,
@@ -148,8 +143,6 @@ init %hide(
 		comm(
 			{tx_lights|rx_lights -> comm_lights,
 			tx_bellsl|rx_bellsl -> comm_bellsl,
-			tx_bellsba|rx_bellsba -> comm_bellsba,
-			tx_barriers|rx_barriers -> comm_barriers,
 			tx_sensors|rx_sensors -> comm_sensors,
 			tx_sensors_agg|rx_sensors_agg -> comm_sensors_agg},
 			SENSORS(t1, idle, off, off, off) ||
