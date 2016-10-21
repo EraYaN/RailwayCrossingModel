@@ -34,7 +34,7 @@ if __name__ == '__main__':
 
         print(install_dir)
 
-        system = mCRL2System(install_dir,project_dir,True)
+        system = mCRL2System(install_dir,project_dir,False)
 
         returncode = True
 
@@ -53,11 +53,18 @@ if __name__ == '__main__':
                 with open(os.path.join(project_dir,"{0}.pre.mcf".format(project_name)),'r') as mcf_file:
                     for line in mcf_file:
                         line = line.strip()
+                        splitted_line = line.split("%")
+                        name = ''
+                        if len(splitted_line)>1:
+                            name = splitted_line[1].strip()
+                        
+                        line = splitted_line[0].strip()
                         if line == "&&":
                             continue;
                         if line == "":
                             continue;
-                        mcf_rules.append({"rule":line,"result":None})
+                       
+                        mcf_rules.append({"rule":splitted_line[0],"name":name,"result":None})
 
                 mcf_rule_count = len(mcf_rules)
                 print(C_CYAN+"Found {0} MCF rules...".format(mcf_rule_count))
@@ -74,9 +81,9 @@ if __name__ == '__main__':
                         verified = system.pbes2bool("{0}.pbes".format(project_name))
                         rule['result'] = verified
                         if verified:
-                            print(C_GREEN+"Rule {0} verified succesfully.".format(current_rule+1))
+                            print(C_GREEN+"Rule #{0} \"{1}\" verified succesfully.".format(current_rule+1,rule['name']))
                         else:
-                            print(C_RED+"Rule {0} could not be verified.".format(current_rule+1))
+                            print(C_RED+"Rule #{0} \"{1}\" could not be verified.".format(current_rule+1,rule['name']))
 
                         current_rule += 1
 

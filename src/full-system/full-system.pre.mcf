@@ -84,3 +84,4 @@ raised)
 
 &&
 [true*.turnoff_lights]<true*.lower_barriers>true % From the open state, the closed state needs to be possible to reach.
+
