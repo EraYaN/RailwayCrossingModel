@@ -14,4 +14,5 @@ lps2lts "${Project}.lps" "${Project}.lts" --rewriter=jitty --strategy=breadth &&
 lps2pbes "${Project}.lps" "${Project}.pbes" --formula="${Project}.mcf" --out=pbes $ToolArguments 
 pbes2bool "${Project}.pbes" --erase=none --rewriter=jitty --search=breadth-first --strategy=0 $ToolArguments 
  
-ltsgraph ${Project}.lts
+# ltsgraph ${Project}.lts
+ltsview ${Project}.lts
