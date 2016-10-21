@@ -13,6 +13,6 @@ def findInstallPath():
 
         return os.path.join(value,'bin')
     elif os.name == 'posix':
-        return ''
+        return '/usr/bin'
     else:
         return ''
