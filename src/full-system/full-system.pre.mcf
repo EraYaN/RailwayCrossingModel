@@ -30,7 +30,7 @@
 
 &&
 
-[true*][comm_sensors_agg(no_train).!comm_sensors_agg(train)*.turnon_lights]false
+[true*][comm_sensors_agg(no_train).!comm_sensors_agg(train)*.turnon_lights]false % 
 
 &&
 
@@ -66,12 +66,12 @@
 
 &&
 
-[true*][turnoff_bells.!turnon_bells*.lower_barriers]false
+[true*][turnoff_bells.!turnon_bells*.lower_barriers]false % barriers can't be lowered when the bells are not turned on
 
 &&
 
-[true*]<true*.lower_barriers>true
+[true*]<true*.lower_barriers>true % liveness reachablity of lower_barriers
 
 &&
 
-[true*]<true*.turnoff_lights>true
+[true*]<true*.turnoff_lights>true % liveness reachablity of turnoff_lights

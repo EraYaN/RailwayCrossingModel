@@ -62,7 +62,7 @@ class mCRL2System:
         if self.verbose:
             cmd.append("--verbose")
         result = subprocess.run(cmd,cwd=self.projectPath,stdout=subprocess.PIPE,universal_newlines=True)
-        return result.stdout == 'true'
+        return result.stdout.strip() == 'true'
 
     def ltsgraph(self,inputFile):
         cmd = [self.bin_ltsgraph,inputFile]
