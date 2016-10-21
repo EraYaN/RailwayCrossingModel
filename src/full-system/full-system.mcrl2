@@ -95,11 +95,11 @@ proc BELLS(stateBe: State,stateL: State,stateBa: State, T : Train) =
 ;
 
 proc BARRIERS(stateBa: State,stateBe: State,T : Train) =
- ((stateBa == on ) && (stateBe == on ) && (T == no_train)) -> tx_barriers(opp(stateBa)) . BARRIERS(stateBa=opp(stateBa))
+ ((stateBa == on ) && (stateBe == on ) && (T == no_train)) -> tx_barriers(opp(stateBa)) . raise_barriers . BARRIERS(stateBa=opp(stateBa))
 +((stateBa == on ) && (stateBe == off) && (T ==    train)) -> error . delta
 +((stateBa == on ) && (stateBe == off) && (T == no_train)) -> error . delta
 +((stateBa == off) && (stateBe == on ) && (T ==    train)) -> tx_barriers(opp(stateBa)) . lower_barriers . BARRIERS(stateBa=opp(stateBa))
-+ sum s: State . rx_bellsba(s)     . BARRIERS(stateBe=s)
++ sum s: State . rx_bellsba(s)     . BARRIERS(stateBe = s)
 + sum t: Train . rx_sensors_agg(t) . BARRIERS(T = t)
 ;
 
