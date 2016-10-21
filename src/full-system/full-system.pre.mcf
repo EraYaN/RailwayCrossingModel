@@ -1,4 +1,13 @@
+[true*]<true>true % Deadlock free
+
+&&
+
+[error]false % No error states
+
+&&
+
 [true*][comm_sensors_agg(no_train).(!comm_sensors_agg(train)*).set_sensors(s_w,on).!set_sensors(s_w,off)*.comm_sensors_agg(no_train)]false %There cannot be a no-train signal if a train is approaching (w->e)
+
 &&
 [true*][comm_sensors_agg(no_train).(!comm_sensors_agg(train)*).set_sensors(s_e,on).!set_sensors(s_e,off)*.comm_sensors_agg(no_train)]false %There cannot be a no-train signal if a train is approaching (e->w)
 
