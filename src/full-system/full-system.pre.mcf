@@ -70,13 +70,11 @@
 
 &&
 
-[true*]<true*.lower_barriers>true %From every state, the crossing needs to be able to be closed (barriers lowered, lights
-and bells on)
+[true*]<true*.lower_barriers>true %From every state, the crossing needs to be able to be closed
 
 &&
 
-[true*]<true*.turnoff_lights>true %From every state, the crossing needs to be able to be opened(lights and bells off, barriers
-raised)
+[true*]<true*.turnoff_lights>true %From every state, the crossing needs to be able to be opened
 
 &&
 
