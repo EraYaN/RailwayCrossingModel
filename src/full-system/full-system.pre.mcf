@@ -51,7 +51,7 @@
 
 &&
 
-[true*][turnoff_lights.!turnon_lights*.turnoff_bells]false %The bells cannot turn on if the lights are off
+[true*][turnoff_lights.!turnon_lights*.turnon_bells]false %The bells cannot turn on if the lights are off
 
 &&
 
