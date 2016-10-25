@@ -4,38 +4,17 @@
 
 [error]false % No error states
 
-&&
-
-[true*][comm_sensors_agg_to_lights(no_train).(!comm_sensors_agg_to_lights(train)*).set_sensors(s_w,on).!set_sensors(s_w,off)*.comm_sensors_agg_to_lights(no_train)]false %There cannot be a no-train signal if a train is approaching (w->e)
 
 &&
-[true*][comm_sensors_agg_to_lights(no_train).(!comm_sensors_agg_to_lights(train)*).set_sensors(s_e,on).!set_sensors(s_e,off)*.comm_sensors_agg_to_lights(no_train)]false %There cannot be a no-train signal if a train is approaching (e->w)
+[true*][(set_sensors(t1,s_e,off)||set_sensors(t1,s_w,off)).!(set_sensors(t1,s_m,on)||set_sensors(t1,s_e,on)||set_sensors(t1,s_w,on))*.(set_sensors(t1,s_e,on)||set_sensors(t1,s_w,on)).!set_sensors(t1,s_m,on)*.comm_sensors_agg_to_lights(no_train)]false %If a train enters the track a no_train signal can not be given until a train has passed the crossing.
+
 
 &&
-
-[true*][comm_sensors_agg_to_lights(train).(!comm_sensors_agg_to_lights(no_train)*).set_sensors(s_w,off).!set_sensors(s_m,on)*.comm_sensors_agg_to_lights(no_train)]false %There cannot be a no-train signal if the train is transitting. (w->e)
-&&
-[true*][comm_sensors_agg_to_lights(train).(!comm_sensors_agg_to_lights(no_train)*).set_sensors(s_e,off).!set_sensors(s_m,on)*.comm_sensors_agg_to_lights(no_train)]false %There cannot be a no-train signal if the train is transitting. (e->w)
+[true*][(set_sensors(t1,s_e,off)||set_sensors(t1,s_w,off)).!(set_sensors(t1,s_w,on)||set_sensors(t1,s_e,on))*.set_sensors(t1,s_m,off).!(set_sensors(t1,s_e,off)||set_sensors(t1,s_w,off))*.comm_sensors_agg_to_lights(train)]false %.There cannot be a train signal when a train has passed the crossing but hasn't passed the track.
 
 &&
 
-[true*][set_sensors(s_m,on).(!set_sensors(s_m,off)*).comm_sensors_agg_to_lights(no_train)]false %There cannot be a no-train signal if the train is in the middle of the tracks
-
-&&
-
-[true*][set_sensors(s_m,off).!(set_sensors(s_e,on) || set_sensors(s_w,on))*.comm_sensors_agg_to_lights(train)]false %There cannot be a train signal as soon as the central part of the track is cleared and it hasn't reached either of the outer sensors.
-
-&&
-
-[true*][set_sensors(s_m,off).(!comm_sensors_agg_to_lights(train)*).set_sensors(s_e,on).comm_sensors_agg_to_lights(train)]false %There cannot be a train signal if the train is exiting (w->e)
-&&
-[true*][set_sensors(s_m,off).(!comm_sensors_agg_to_lights(train)*).set_sensors(s_w,on).comm_sensors_agg_to_lights(train)]false %There cannot be a train signal if the train is exiting (e->w)
-
-&&
-
-[true*][comm_sensors_agg_to_lights(no_train).(!set_sensors(s_e,on)*).comm_sensors_agg_to_lights(train)]false %There cannot be a train signal if the tracks are empty and there is no train approaching (e)
-&&
-[true*][comm_sensors_agg_to_lights(no_train).(!set_sensors(s_w,on)*).comm_sensors_agg_to_lights(train)]false %There cannot be a train signal if the tracks are empty and there is no train approaching (w)
+[true*][set_sensors(t1,s_m,off).!(set_sensors(t1,s_e,off)||set_sensors(t1,s_w,off))*.(set_sensors(t1,s_e,off)||set_sensors(t1,s_w,off)).!(set_sensors(t1,s_e,on)||set_sensors(t1,s_w,on))*.comm_sensors_agg_to_lights(train)]false %There cannot be a train signal when there is no train on the tracks.
 
 &&
 
