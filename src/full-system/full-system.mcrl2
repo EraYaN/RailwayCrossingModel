@@ -51,14 +51,14 @@ proc SENSORS(id: TrackID, train_state: State_train, sens_w: State, sens_m: State
 +((sens_w == off) && (sens_m == off) && (sens_e == off) && (train_state ==        exit_rtl)) -> tx_sensors(id,no_train) . SENSORS(train_state =            idle)
 
 %trigger sensors
-+ (((train_state == idle && sens_e == off) ||(train_state ==    leaving_rtl)) && sens_w == off) -> set_sensors(id,s_w,on ) . SENSORS(sens_w=on )
-+ (((train_state == approaching_ltr)      ||(train_state ==       exit_rtl)) && sens_w == off) -> set_sensors(id,s_w,off) . SENSORS(sens_w=off)
++(((train_state == idle && sens_e == off) ||(train_state ==    leaving_rtl)) && sens_w == off) -> set_sensors(id,s_w,on ) . SENSORS(sens_w=on )
++(((train_state == approaching_ltr)       ||(train_state ==       exit_rtl)) && sens_w == off) -> set_sensors(id,s_w,off) . SENSORS(sens_w=off)
 
-+ (((train_state == traversing_rtl)       ||(train_state == traversing_ltr)) && sens_m == off) -> set_sensors(id,s_m,on ) . SENSORS(sens_m=on )
-+ (((train_state ==   occupied_rtl)       ||(train_state ==   occupied_ltr)) && sens_m == off) -> set_sensors(id,s_m,off) . SENSORS(sens_m=off)
++(((train_state == traversing_rtl)        ||(train_state == traversing_ltr)) && sens_m == off) -> set_sensors(id,s_m,on ) . SENSORS(sens_m=on )
++(((train_state ==   occupied_rtl)        ||(train_state ==   occupied_ltr)) && sens_m == off) -> set_sensors(id,s_m,off) . SENSORS(sens_m=off)
 
-+ (((train_state == idle && sens_w == off) ||(train_state ==    leaving_ltr)) && sens_e == off) -> set_sensors(id,s_e,on ) . SENSORS(sens_e=on )
-+ (((train_state == approaching_rtl)      ||(train_state ==       exit_ltr)) && sens_e == off) -> set_sensors(id,s_e,off) . SENSORS(sens_e=off)
++(((train_state == idle && sens_w == off) ||(train_state ==    leaving_ltr)) && sens_e == off) -> set_sensors(id,s_e,on ) . SENSORS(sens_e=on )
++(((train_state == approaching_rtl)       ||(train_state ==       exit_ltr)) && sens_e == off) -> set_sensors(id,s_e,off) . SENSORS(sens_e=off)
 ;
 
 
@@ -132,11 +132,6 @@ init %hide(
 	%},
 	allow(
 		{
-			%tx_sensors,
-			%tx_sensors_agg,
-			%tx_barriers,
-			%tx_lights,
-			%tx_bells,
 			comm_lights,
 			comm_bells_to_lights,
 			comm_bells_to_barriers,
