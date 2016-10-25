@@ -18,15 +18,21 @@ if __name__ == '__main__':
     parser.add_argument('--show-graph', action="store_true", help='Show the LTS graph')
     parser.add_argument('--disable-lts-compile', action="store_true", help='Skip everything for the LTS compile.')
     #TODO report making
-    #parser.add_argument('--output-dir', action="store", help='Output directory',default="../../../docs/lab2")
+    parser.add_argument('--output-dir', action="store", help='Output subdirectory',default="out")
     parser.add_argument('--trace-action', action="store", help='Project root directory name',default=None)
     parser.add_argument('--project-root', action="store", help='Project root directory name',default="./full-system/full-system")
     parser.add_argument('--project-name', action="store", help='Project base name',default="full-system")
     try:
         verified = False
         opts = parser.parse_args(sys.argv[1:])
-        project_dir = opts.project_root
+        project_dir = os.path.abspath(opts.project_root)
         project_name = opts.project_name
+        output_dir = opts.output_dir
+
+        
+        if not os.path.exists(os.path.join(project_dir,output_dir)):
+            print("Creating output directory {0}".format(os.path.join(project_dir,output_dir)))
+            os.makedirs(os.path.join(project_dir,output_dir))
 
         project_dir = os.path.abspath(project_dir)
 
@@ -40,11 +46,11 @@ if __name__ == '__main__':
 
         if not opts.disable_lts_compile:
             print("Compiling mCRL2 to LPS...")
-            returncode = system.mcrl22lps("{0}.mcrl2".format(project_name),"{0}.lps".format(project_name))
+            returncode = system.mcrl22lps("{0}.mcrl2".format(project_name),os.path.join(output_dir,"{0}.lps".format(project_name)))
 
             if returncode:
                 print("Compiling LPS to LTS...")
-                returncode = system.lps2lts("{0}.lps".format(project_name),"{0}.lts".format(project_name))
+                returncode = system.lps2lts(os.path.join(output_dir,"{0}.lps".format(project_name)),os.path.join(output_dir,"{0}.lts".format(project_name)))
         
         if opts.verify:
             if returncode:
@@ -70,15 +76,15 @@ if __name__ == '__main__':
                 print(C_CYAN+"Found {0} MCF rules...".format(mcf_rule_count))
                 current_rule = 0
                 for rule in mcf_rules:
-                    with open(os.path.join(project_dir,"{0}.{1}.tmp.mcf".format(project_name,current_rule)),'w') as mcf_out_file:
+                    with open(os.path.join(project_dir,output_dir,"{0}.{1}.tmp.mcf".format(project_name,current_rule)),'w') as mcf_out_file:
                         mcf_out_file.write(rule['rule'])
 
                     if returncode:
                         print("Compiling LTS to PBES ({0} of {1})...".format(current_rule+1,mcf_rule_count))
-                        returncode = system.lts2pbes("{0}.lts".format(project_name),"{0}.pbes".format(project_name),"{0}.{1}.tmp.mcf".format(project_name,current_rule))
+                        returncode = system.lts2pbes(os.path.join(output_dir,"{0}.lts".format(project_name)),os.path.join(output_dir,"{0}.pbes".format(project_name)),os.path.join(output_dir,"{0}.{1}.tmp.mcf".format(project_name,current_rule)))
                     if returncode:
                         print("Converting PBES to bool ({0} of {1})...".format(current_rule+1,mcf_rule_count))
-                        verified = system.pbes2bool("{0}.pbes".format(project_name))
+                        verified = system.pbes2bool(os.path.join(output_dir,"{0}.pbes".format(project_name)))
                         rule['result'] = verified
                         if verified:
                             print(C_GREEN+"Rule #{0} \"{1}\" verified succesfully.".format(current_rule+1,rule['name']))
@@ -89,15 +95,15 @@ if __name__ == '__main__':
 
         if returncode and opts.trace_action:
             print("Generating Traces...")
-            returncode = system.lps2lts_trace("{0}.lps".format(project_name),"{0}.lts".format(project_name),opts.trace_action)
+            returncode = system.lps2lts_trace(os.path.join(output_dir,"{0}.lps".format(project_name)),os.path.join(output_dir,"{0}.lts".format(project_name)),opts.trace_action)
             if returncode:
-                files = glob.glob(os.path.join(project_dir,"{0}*{1}.trc".format(project_name,opts.trace_action)))
+                files = glob.glob(os.path.join(project_dir,output_dir,"{0}*{1}.trc".format(project_name,opts.trace_action)))
                 files_count = len(files)
                 print(C_CYAN+"Found {0} Traces...".format(files_count))
 
                 current_trace = 0
                 for file in files:
-                    returncode = system.tracepp(file,"{0}.txt".format(file))
+                    returncode = system.tracepp(file,os.path.join(output_dir,"{0}.txt".format(file)))
                     if returncode:
                         print("Processed trace {0}...".format(current_trace+1))
 
