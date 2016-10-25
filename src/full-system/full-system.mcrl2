@@ -104,12 +104,13 @@ proc BARRIERS(stateBa: State,stateBe: State,T : Train) =
 + sum t: Train . rx_sensors_agg_to_barriers(t) . BARRIERS(T = t)
 ;
 
-%TODO: do not use proc but implement comm
+%TODO[2016-10-21 Fri]: do not use proc but implement comm
+%TODO[2016-10-26 Wed,C]: at least made it working better by just using . instead of |
 proc tx_bells(s : State)
-	= tx_bells_to_lights(s) | tx_bells_to_barriers(s);
+	= tx_bells_to_lights(s) . tx_bells_to_barriers(s);
 
 proc tx_sensors_agg (T : Train)
-	= tx_sensors_agg_to_lights(T) | tx_sensors_agg_to_bells(T) | tx_sensors_agg_to_barriers(T);
+	= tx_sensors_agg_to_lights(T) . tx_sensors_agg_to_bells(T) . tx_sensors_agg_to_barriers(T);
 
 init %hide(
 	%{
