@@ -1,0 +1,65 @@
+Group 8
+
+
+
+Requirements:
+
+* Some requirements are not verifiable.
+
+* Most requirements are appropriate and SMART>
+
+* The requirements cover the functionality of the system.
+
+* Liveness requirements are present.
+
+* Possible extensions are described.
+
+
+
+Interactions:
+
+* It is not clear what interactions are internal, and which are external.
+
+* There is no consistency between the interactions in section 4, and the architecture in section 3.
+
+* The interactions seem too coarse: it looks like all lights are turned on at once, instead of turning on individual lights; likewise for barriers.
+
+
+
+Architecture:
+
+* The architecture consists of 4 components (or 5, if I look at the description in 3.1?)
+
+* The external interactions are not mapped onto the links in the architecture.
+
+* I do not understand the component where the track sensor controller sends its information.
+
+
+
+Requirements in terms of interactions:
+
+* Most of the requirements have been translated correctly into the mu-calculus.
+
+* Some are not correctly translated; especially when considering the sensors.
+
+
+
+Model:
+
+* Not described in the report
+
+* The model consists of 6 parallel components, which is not consistent with the architecture, at least the way I read it.
+
+
+
+Verification:
+
+* Not described in the report
+
+
+
+Quality of the report:
+
+* The report is incomplete, but the part that is present is generally well-written.
+
+* Verification is not yet reproducible.

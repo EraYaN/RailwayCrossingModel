@@ -6,6 +6,7 @@
 
 
 &&
+
 [true*][set_sensors(t1,s_w,off).!(set_sensors(t1,s_m,on)||set_sensors(t1,s_e,on)||set_sensors(t1,s_w,on))*.set_sensors(t1,s_w,on).!set_sensors(t1,s_m,off)*.comm_sensors(t1, no_train)]false %If a train enters the track a no_train signal can not be given until a train has passed the crossing. e->w, w->e
 
 &&
