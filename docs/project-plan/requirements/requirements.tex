@@ -81,12 +81,12 @@ The requirements for the sensors are the following:
 %TODO[jeroen]:I would expect everything up to this point to be part of the introduction.
 %TODO[c]: this whole part is old anyways (based on the old shitty model), I think we have to rewrite this whole part, and make it short as if it could be an introductionary part-thingy
 	\begin{enumerate}
-		\item There cannot be a no-train signal if a train is approaching.
-		\item There cannot be a no-train signal if the train is transiting.
-		\item There cannot be a no-train signal if the train is in the middle of the tracks.
-		\item There cannot be a train signal as soon as the central part of the track is cleared.
-		\item There cannot be a train signal if the train is exiting.
-		\item There cannot be a train signal if the tracks are empty and there is no train approaching.
+		\item There cannot be a \texttt{no\_train} signal after a train has triggered an ON in any outer sensor for the first time (i.e a train has entered the tracks) and has not triggered an 
+an OFF in the middle sensor.
+		\item There cannot be a \texttt{train} signal after a train has triggered an OFF in the middle sensor and has not triggered an OFF in any outer sensor (i.e. a train is leaving the
+tracks).
+		\item There cannot be a \texttt{train} signal if after a train has triggered an OFF in any outer sensor and not triggered an ON in the middle sensor (i.e a train has exit
+ the tracks), another train does not trigger an ON in any outer sensor.		
 	\end{enumerate}
 
 \subsection{Light}
