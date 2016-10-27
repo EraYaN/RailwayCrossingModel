@@ -17,7 +17,6 @@ if __name__ == '__main__':
     parser.add_argument('--verify', action="store_true", help='Verify the system')
     parser.add_argument('--show-graph', action="store_true", help='Show the LTS graph')
     parser.add_argument('--disable-lts-compile', action="store_true", help='Skip everything for the LTS compile.')
-    #TODO report making
     parser.add_argument('--output-dir', action="store", help='Output subdirectory',default="out")
     parser.add_argument('--trace-action', action="store", help='Project root directory name',default=None)
     parser.add_argument('--project-root', action="store", help='Project root directory name',default="./full-system/full-system")
