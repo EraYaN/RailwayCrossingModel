@@ -1,7 +1,7 @@
 % Railway Crossing Model
 % Group 8
 
-%NOTE: So in an error state, the system might still remain in the same state (do a loop back), but it might also try to correct the system.
+% NOTE: So in an error state, the system might still remain in the same state (do a loop back), but it might also try to correct the system.
 
 sort State = struct on | off;
 	 State_train = struct approaching_wte | occupied_wte | leaving_wte | exit_wte |
@@ -10,13 +10,16 @@ sort State = struct on | off;
 	 TrackID = struct t1 | t2;
 	 SensorID = struct s_w | s_m | s_e;
 
-map opp: State -> State;
-
-eqn opp(on) = off;
-	opp(off) = on;
-
-%Helper actions
+% Helper Actions
 act set_sensors: TrackID # SensorID # State;
+
+% Global Outside Actions
+act turnon_light1, turnoff_light1,
+	turnon_light2, turnoff_light2,
+	turnon_bell1, turnoff_bell1,
+	turnon_bell2, turnoff_bell2,
+	lower_barrier1, raise_barrier1,
+	lower_barrier2, raise_barrier2;
 
 act tx_lights,rx_lights,comm_lights: State;
 	tx_bells_to_lights,rx_bells_to_lights,comm_bells_to_lights: State;
@@ -28,16 +31,8 @@ act tx_lights,rx_lights,comm_lights: State;
 	tx_sensors_agg_to_barriers, rx_sensors_agg_to_barriers, comm_sensors_agg_to_barriers: Train;
 	done, error;
 
-% Global Outside Actions
-act turnon_light1, turnoff_light1,
-	turnon_light2, turnoff_light2,
-	turnon_bell1, turnoff_bell1,
-	turnon_bell2, turnoff_bell2,
-	lower_barrier1, raise_barrier1,
-	lower_barrier2, raise_barrier2;
-
 proc SENSORS(id: TrackID, train_state: State_train, sens_w: State, sens_m: State, sens_e: State) =
-%train from left to right
+% train from West to East
  ((sens_w == on ) && (sens_m == off) && (sens_e == off) && (train_state ==            idle)) -> tx_sensors(id,   train) . SENSORS(train_state = approaching_wte)
 +((sens_w == off) && (sens_m == off) && (sens_e == off) && (train_state == approaching_wte)) -> tx_sensors(id,   train) . SENSORS(train_state =  traversing_wte)
 +(                   (sens_m == on ) && (sens_e == off) && (train_state ==  traversing_wte)) -> tx_sensors(id,   train) . SENSORS(train_state =    occupied_wte)
@@ -45,7 +40,7 @@ proc SENSORS(id: TrackID, train_state: State_train, sens_w: State, sens_m: State
 +((sens_w == off) && (sens_m == off) && (sens_e == on ) && (train_state ==     leaving_wte)) -> tx_sensors(id,no_train) . SENSORS(train_state =        exit_wte)
 +((sens_w == off) && (sens_m == off) && (sens_e == off) && (train_state ==        exit_wte)) -> tx_sensors(id,no_train) . SENSORS(train_state =            idle)
 
-%train from right to left
+% train from East to West
 +((sens_w == off) && (sens_m == off) && (sens_e == on ) && (train_state ==            idle)) -> tx_sensors(id,   train) . SENSORS(train_state = approaching_etw)
 +((sens_w == off) && (sens_m == off) && (sens_e == off) && (train_state == approaching_etw)) -> tx_sensors(id,   train) . SENSORS(train_state =  traversing_etw)
 +((sens_w == off) && (sens_m == on )                    && (train_state ==  traversing_etw)) -> tx_sensors(id,   train) . SENSORS(train_state =    occupied_etw)
@@ -53,15 +48,15 @@ proc SENSORS(id: TrackID, train_state: State_train, sens_w: State, sens_m: State
 +((sens_w == on ) && (sens_m == off) && (sens_e == off) && (train_state ==     leaving_etw)) -> tx_sensors(id,no_train) . SENSORS(train_state =        exit_etw)
 +((sens_w == off) && (sens_m == off) && (sens_e == off) && (train_state ==        exit_etw)) -> tx_sensors(id,no_train) . SENSORS(train_state =            idle)
 
-%trigger sensors
-+(((train_state == idle && sens_e == off) ||(train_state ==    leaving_etw)) && sens_w == off) -> set_sensors(id,s_w,on ) . SENSORS(sens_w=on )
-+(((train_state == approaching_wte)       ||(train_state ==       exit_etw)) && sens_w == on) -> set_sensors(id,s_w,off) . SENSORS(sens_w=off)
+% trigger sensors
++(((train_state == idle && sens_e == off) ||(train_state ==    leaving_etw)) && sens_w == off) -> set_sensors(id,s_w,on ) . SENSORS(sens_w = on )
++(((train_state == approaching_wte)       ||(train_state ==       exit_etw)) && sens_w == on ) -> set_sensors(id,s_w,off) . SENSORS(sens_w = off)
 
-+(((train_state == traversing_etw)        ||(train_state == traversing_wte)) && sens_m == off) -> set_sensors(id,s_m,on ) . SENSORS(sens_m=on )
-+(((train_state ==   occupied_etw)        ||(train_state ==   occupied_wte)) && sens_m == on) -> set_sensors(id,s_m,off) . SENSORS(sens_m=off)
++(((train_state == traversing_etw)        ||(train_state == traversing_wte)) && sens_m == off) -> set_sensors(id,s_m,on ) . SENSORS(sens_m = on )
++(((train_state ==   occupied_etw)        ||(train_state ==   occupied_wte)) && sens_m == on ) -> set_sensors(id,s_m,off) . SENSORS(sens_m = off)
 
-+(((train_state == idle && sens_w == off) ||(train_state ==    leaving_wte)) && sens_e == off) -> set_sensors(id,s_e,on ) . SENSORS(sens_e=on )
-+(((train_state == approaching_etw)       ||(train_state ==       exit_wte)) && sens_e == on) -> set_sensors(id,s_e,off) . SENSORS(sens_e=off)
++(((train_state == idle && sens_w == off) ||(train_state ==    leaving_wte)) && sens_e == off) -> set_sensors(id,s_e,on ) . SENSORS(sens_e = on )
++(((train_state == approaching_etw)       ||(train_state ==       exit_wte)) && sens_e == on ) -> set_sensors(id,s_e,off) . SENSORS(sens_e = off)
 ;
 
 
@@ -73,16 +68,16 @@ proc SENSORAGGREGATOR(track1:Train,track2:Train) =
 + sum t: Train . rx_sensors(t2,t) . SENSORAGGREGATOR(track2 = t);
 
 proc LIGHTS(stateL: State,stateBe: State,T : Train) =
- ((stateL == on ) && (stateBe == off) && (T == no_train)) -> tx_lights(opp(stateL)) . (turnoff_light1|turnoff_light2) . LIGHTS(stateL=opp(stateL))
+ ((stateL == on ) && (stateBe == off) && (T == no_train)) -> tx_lights(stateL = off) . (turnoff_light1|turnoff_light2) . LIGHTS(stateL = off)
 +((stateL == off) && (stateBe == on ) && (T ==    train)) -> error . delta
 +((stateL == off) && (stateBe == on ) && (T == no_train)) -> error . delta
-+((stateL == off) && (stateBe == off) && (T ==    train)) -> tx_lights(opp(stateL)) . (turnon_light1|turnon_light2) . LIGHTS(stateL=opp(stateL))
-+ sum s: State . rx_bells_to_lights(s)      . LIGHTS(stateBe = s)
++((stateL == off) && (stateBe == off) && (T ==    train)) -> tx_lights(stateL = on ) . (turnon_light1 |turnon_light2 ) . LIGHTS(stateL = on )
++ sum s: State . rx_bells_to_lights(s)       . LIGHTS(stateBe = s)
 + sum t: Train . rx_sensors_agg_to_lights(t) . LIGHTS(T = t)
 ;
 
 proc BELLS(stateBe: State,stateL: State,stateBa: State, T : Train) =
- ((stateBe == on ) && (stateL == on ) && (stateBa == off) && (T == no_train)) -> (tx_bells_to_lights(opp(stateBe)) | tx_bells_to_barriers(opp(stateBe))) . (turnoff_bell1|turnoff_bell2) . BELLS(stateBe=opp(stateBe))
+ ((stateBe == on ) && (stateL == on ) && (stateBa == off) && (T == no_train)) -> (tx_bells_to_lights(stateBe = off) | tx_bells_to_barriers(stateBe = off)) . (turnoff_bell1|turnoff_bell2) . BELLS(stateBe = off)
 +((stateBe == on ) && (stateL == off) && (stateBa == on ) && (T ==    train)) -> error . delta
 +((stateBe == on ) && (stateL == off) && (stateBa == on ) && (T == no_train)) -> error . delta
 +((stateBe == on ) && (stateL == off) && (stateBa == off) && (T ==    train)) -> error . delta
@@ -90,7 +85,7 @@ proc BELLS(stateBe: State,stateL: State,stateBa: State, T : Train) =
 
 +((stateBe == off) && (stateL == on ) && (stateBa == on ) && (T ==    train)) -> error . delta
 +((stateBe == off) && (stateL == on ) && (stateBa == on ) && (T == no_train)) -> error . delta
-+((stateBe == off) && (stateL == on ) && (stateBa == off) && (T ==    train)) -> (tx_bells_to_lights(opp(stateBe)) | tx_bells_to_barriers(opp(stateBe))) . (turnon_bell1|turnon_bell2) . BELLS(stateBe=opp(stateBe))
++((stateBe == off) && (stateL == on ) && (stateBa == off) && (T ==    train)) -> (tx_bells_to_lights(stateBe = on ) | tx_bells_to_barriers(stateBe = on )) . (turnon_bell1 |turnon_bell2 ) . BELLS(stateBe = on )
 +((stateBe == off) && (stateL == off) && (stateBa == on ) && (T ==    train)) -> error . delta
 +((stateBe == off) && (stateL == off) && (stateBa == on ) && (T == no_train)) -> error . delta
 + sum s: State . rx_lights(s)      . BELLS(stateL  = s)
@@ -99,11 +94,10 @@ proc BELLS(stateBe: State,stateL: State,stateBa: State, T : Train) =
 ;
 
 proc BARRIERS(stateBa: State,stateBe: State,T : Train) =
- ((stateBa == on ) && (stateBe == on ) && (T == no_train)) -> tx_barriers(opp(stateBa)) . (raise_barrier1|raise_barrier2) . BARRIERS(stateBa=opp(stateBa))
+ ((stateBa == on ) && (stateBe == on ) && (T == no_train)) -> tx_barriers(stateBa=off) . (raise_barrier1|raise_barrier2) . BARRIERS(stateBa=off)
 +((stateBa == on ) && (stateBe == off) && (T ==    train)) -> error . delta
 +((stateBa == on ) && (stateBe == off) && (T == no_train)) -> error . delta
-+((stateBa == off) && (stateBe == on ) && (T ==    train)) -> tx_barriers(opp(stateBa)) . (lower_barrier1|lower_barrier2) . BARRIERS(stateBa=opp(stateBa))
-+ sum s: State . rx_bells_to_barriers(s)     . BARRIERS(stateBe = s)
++((stateBa == off) && (stateBe == on ) && (T ==    train)) -> tx_barriers(stateBa=on ) . (lower_barrier1|lower_barrier2) . BARRIERS(stateBa=on ) + sum s: State . rx_bells_to_barriers(s)     . BARRIERS(stateBe=s)
 + sum t: Train . rx_sensors_agg_to_barriers(t) . BARRIERS(T = t)
 ;
 

@@ -5,13 +5,18 @@
 \input{../../.library/style.tex}
 \addbibresource{../../.library/bibliography.bib}
 \begin{document}
-%TODO[L]: make the tables fit, update trainon/off and implement broadcast signals.
-\chapter{Interactions}
-\label{ch:interactions}
+%TODO[L,old]: make the tables fit, update trainon/off and implement broadcast signals.
+\chapter{Interactions}\label{ch:interactions}
 This system implements five parallel components that interact with each other and the environment.
 In this section the interactions of the different components are defined per component and divided in input and output signals.
 
-\section{Sensor Controllers}
+\section{Type Definitions}\label{sec:interactions-typedef}
+All the system components make use of a couple type definitions.
+The \texttt{sort} structures used throughout the report are described below.
+
+To make a distinction between the $n$ tracks of \cref{fig:system-architecture}, 
+
+\section{\nameref{sec:architecture-sensor-aggregator}}
 \begin{table}[H]
 \centering
     \begin{tabular}{|l|l|l|}
@@ -26,7 +31,7 @@ In this section the interactions of the different components are defined per com
 \cref{tab:sensorSignals} shows the interactions of the sensor controller with the sensor aggregator and the sensors.
 The only job of the individual sensor controllers is to tell the sensor aggregator if there is a train on \textit{their} track so the aggregator can then send a signal to the other controllers if there is a train on \textit{any} track.
 
-\section{Sensor Aggregator}
+\section{\nameref{sec:architecture-sensor-aggregator}}
 \begin{table}[H]
 \centering
     \begin{tabular}{|l|l|l|}
@@ -44,7 +49,7 @@ In \cref{tab:sensorAggSignals} the interactions of the sensor aggregator with th
 Apart from the normal communication signals the presence of two debug signals should be noted.
 These were necessary to verify the requirements of the sensor controller.
 
-\section{Light Controller}
+\section{\nameref{sec:architecture-light-controller}}
 \begin{table}[H]
 \centering
     \begin{tabular}{|l|l|l|}
@@ -62,7 +67,7 @@ These were necessary to verify the requirements of the sensor controller.
 In \cref{tab:lightsSignals} the interactions of the lights controller with the other controllers and the lights are shown.
 Most of the interactions are communications with the other controllers with the actions \textit{turnon\_lights} and \textit{turnoff\_lights} being responsible for actually controlling the lights.
 
-\section{Bell Controller}
+\section{\nameref{sec:architecture-bell-controller}}
 \begin{table}[H]
 \centering
     \begin{tabular}{|l|l|l|}
@@ -80,7 +85,7 @@ Most of the interactions are communications with the other controllers with the 
 
 The interactions of the bells controller shown in \cref{tab:bellsSignals} look a lot like those of the lights controller and require no further explanation.
 
-\section{Barrier Controller}
+\section{\nameref{sec:architecture-barrier-controller}}
 \begin{table}[H]
 \centering
     \begin{tabular}{|l|l|}
