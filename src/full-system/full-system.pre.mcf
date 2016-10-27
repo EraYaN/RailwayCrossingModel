@@ -10,7 +10,7 @@
 
 
 &&
-[true*][(set_sensors(t1,s_e,off)||set_sensors(t1,s_w,off)).!(set_sensors(t1,s_w,on)||set_sensors(t1,s_e,on))*.set_sensors(t1,s_m,off).!(set_sensors(t1,s_e,off)||set_sensors(t1,s_w,off))*.comm_sensors(t1, train)]false %.There cannot be a train signal when a train has passed the crossing but hasn't passed the track.
+[true*][(set_sensors(t1,s_e,off)||set_sensors(t1,s_w,off)).!(set_sensors(t1,s_w,on)||set_sensors(t1,s_e,on))*.set_sensors(t1,s_m,off).!(set_sensors(t1,s_e,off)||set_sensors(t1,s_w,off))*.comm_sensors(t1, train)]false %There cannot be a train signal when a train has passed the crossing but hasn't passed the track.
 
 &&
 
@@ -18,72 +18,72 @@
 
 &&
 
-[true*][comm_sensors(t1,train).!comm_sensors(t1,no_train)*.comm_sensors_agg_to_lights(no_train)]false %Sensor aggregator can't send a no_train signal there is a train on t1
+[true*][comm_sensors(t1,train).!comm_sensors(t1,no_train)*.(comm_sensors_agg_to_lights(no_train)|comm_sensors_agg_to_bells(no_train)|comm_sensors_agg_to_barriers(no_train))]false %Sensor aggregator can't send a no_train signal there is a train on t1
 
 &&
 
-[true*][comm_sensors(t2,train).!comm_sensors(t2,no_train)*.comm_sensors_agg_to_lights(no_train)]false %Sensor aggregator can't send a no_train signal there is a train on t2
+[true*][comm_sensors(t2,train).!comm_sensors(t2,no_train)*.(comm_sensors_agg_to_lights(no_train)|comm_sensors_agg_to_bells(no_train)|comm_sensors_agg_to_barriers(no_train))]false %Sensor aggregator can't send a no_train signal there is a train on t2
 
 &&
 
-[true*][comm_sensors(t1,no_train).!comm_sensors(t1,train)*.comm_sensors(t2, no_train).!(comm_sensors(t2, train)||comm_sensors(t1, train))*.comm_sensors_agg_to_lights(train)]false %Sensor aggregator cannot send a train signal if both tracks are empty (t1->t2)
+[true*][comm_sensors(t1,no_train).!comm_sensors(t1,train)*.comm_sensors(t2, no_train).!(comm_sensors(t2, train)||comm_sensors(t1, train))*.(comm_sensors_agg_to_lights(train)|comm_sensors_agg_to_bells(train)|comm_sensors_agg_to_barriers(train))]false %Sensor aggregator cannot send a train signal if both tracks are empty (t1->t2)
 
 &&
 
-[true*][comm_sensors(t2,no_train).!comm_sensors(t2,train)*.comm_sensors(t1, no_train).!(comm_sensors(t2, train)||comm_sensors(t1, train))*.comm_sensors_agg_to_lights(train)]false %Sensor aggregator cannot send a train signal if both tracks are empty (t2->t1)
+[true*][comm_sensors(t2,no_train).!comm_sensors(t2,train)*.comm_sensors(t1, no_train).!(comm_sensors(t2, train)||comm_sensors(t1, train))*.(comm_sensors_agg_to_lights(train)|comm_sensors_agg_to_bells(train)|comm_sensors_agg_to_barriers(train))]false %Sensor aggregator cannot send a train signal if both tracks are empty (t2->t1)
 
 &&
 
-[true*][comm_sensors_agg_to_lights(no_train).!comm_sensors_agg_to_lights(train)*.turnon_lights]false %The lights cannot turn on when there is no train on the tracks
+[true*][(comm_sensors_agg_to_lights(no_train)|comm_sensors_agg_to_bells(no_train)|comm_sensors_agg_to_barriers(no_train)).!(comm_sensors_agg_to_lights(train)|comm_sensors_agg_to_bells(train)|comm_sensors_agg_to_barriers(train))*.(turnon_light1|turnon_light2)]false %The lights cannot turn on when there is no train on the tracks
 
 &&
 
-[true*][comm_sensors_agg_to_lights(train).!comm_sensors_agg_to_lights(no_train)*.turnoff_lights]false %The lights cannot turn off as long as there is a train on the tracks
+[true*][(comm_sensors_agg_to_lights(train)|comm_sensors_agg_to_bells(train)|comm_sensors_agg_to_barriers(train)).!(comm_sensors_agg_to_lights(no_train)|comm_sensors_agg_to_bells(no_train)|comm_sensors_agg_to_barriers(no_train))*.(turnoff_light1|turnoff_light2)]false %The lights cannot turn off as long as there is a train on the tracks
 
 &&
 
-[true*][turnon_bells.!turnoff_bells*.turnoff_lights]false %The lights cannot turn off as long as the bells are on 
+[true*][(turnon_bell1|turnon_bell2).!(turnoff_bell1|turnoff_bell2)*.(turnoff_light1|turnoff_light2)]false %The lights cannot turn off as long as the bells are on 
 
 &&
 
-[true*][turnoff_lights.!turnon_lights*.turnon_bells]false %The bells cannot turn on if the lights are off
+[true*][(turnoff_light1|turnoff_light2).!(turnon_light1|turnon_light2)*.(turnon_bell1|turnon_bell2)]false %The bells cannot turn on if the lights are off
 
 &&
 
-[true*][comm_sensors_agg_to_bells(no_train).!comm_sensors_agg_to_bells(train)*.turnon_bells]false %The bells cannot turn on if there is no train on the track
+[true*][comm_sensors_agg_to_bells(no_train).!comm_sensors_agg_to_bells(train)*.(turnon_bell1|turnon_bell2)]false %The bells cannot turn on if there is no train on the track
 
 &&
 
-[true*][lower_barriers.!raise_barriers*.turnoff_bells]false %The bells cannot turn off if the barriers are lowered
+[true*][(lower_barrier1|lower_barrier2).!(raise_barrier1|raise_barrier2)*.(turnoff_bell1|turnoff_bell2)]false %The bells cannot turn off if the barriers are lowered
 
 &&
 
-[true*][comm_sensors_agg_to_bells(train).!comm_sensors_agg_to_bells(no_train)*.turnoff_bells]false %The bells cannot turn off if there is a train on the track
+[true*][comm_sensors_agg_to_bells(train).!comm_sensors_agg_to_bells(no_train)*.(turnoff_bell1|turnoff_bell2)]false %The bells cannot turn off if there is a train on the track
 
 &&
 
-[true*][comm_sensors_agg_to_barriers(train).!comm_sensors_agg_to_barriers(no_train)*.raise_barriers]false %The barriers cannot be raised when there is a train on the tracks
+[true*][comm_sensors_agg_to_barriers(train).!comm_sensors_agg_to_barriers(no_train)*.(raise_barrier1|raise_barrier2)]false %The barriers cannot be raised when there is a train on the tracks
 
 &&
 
-[true*][comm_sensors_agg_to_barriers(no_train).!comm_sensors_agg_to_barriers(train)*.lower_barriers]false %The barriers cannot be lowered if there is no train on the tracks
+[true*][comm_sensors_agg_to_barriers(no_train).!comm_sensors_agg_to_barriers(train)*.(lower_barrier1|lower_barrier2)]false %The barriers cannot be lowered if there is no train on the tracks
 
 &&
 
-[true*][turnoff_bells.!turnon_bells*.lower_barriers]false %The barriers cannot be lowered if the bells are off
+[true*][(turnoff_bell1|turnoff_bell2).!(turnon_bell1|turnon_bell2)*.(lower_barrier1|lower_barrier2)]false %The barriers cannot be lowered if the bells are off
 
 &&
 
-[true*]<true*.lower_barriers>true %From every state, the crossing needs to be able to be closed
+[true*]<true*.(lower_barrier1|lower_barrier2)>true %From every state, the crossing needs to be able to be closed
 
 &&
 
-[true*]<true*.turnoff_lights>true %From every state, the crossing needs to be able to be opened
+[true*]<true*.(turnoff_light1|turnoff_light2)>true %From every state, the crossing needs to be able to be opened
 
 &&
 
-[true*.lower_barriers]<true*.turnoff_lights>true %From the closed state, the open state needs possible to reach.
+[true*.(lower_barrier1|lower_barrier2)]<true*.(turnoff_light1|turnoff_light2)>true %From the closed state, the open state needs possible to reach.
 
 &&
-[true*.turnoff_lights]<true*.lower_barriers>true % From the open state, the closed state needs to be possible to reach.
+[true*.(turnoff_light1|turnoff_light2)]<true*.(lower_barrier1|lower_barrier2)>true % From the open state, the closed state needs to be possible to reach.
 
