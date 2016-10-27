@@ -77,6 +77,9 @@ These requirements should be considered either for a train that it is moving fro
 The sensors are considered to generate an action whenever their state has suffered a change, that way, we will only be able to know if a sensor is on, if its previous state was off and vice versa.
 Whenever an output signal from the sensor controller stating a train has been detected should be sent, we will refer it as a train signal, while we will refer a no-train signal otherwise.
 The requirements for the sensors are the following:
+%TODO[jeroen]:These first six requirements are not verifiable
+%TODO[jeroen]:I would expect everything up to this point to be part of the introduction.
+%TODO[c]: this whole part is old anyways (based on the old shitty model), I think we have to rewrite this whole part, and make it short as if it could be an introductionary part-thingy
 	\begin{enumerate}
 		\item There cannot be a no-train signal if a train is approaching.
 		\item There cannot be a no-train signal if the train is transiting.
