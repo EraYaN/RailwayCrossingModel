@@ -37,7 +37,7 @@ act turnon_light1, turnoff_light1,
 	lower_barrier2, raise_barrier2;
 
 proc SENSORS(id: TrackID, train_state: State_train, sens_w: State, sens_m: State, sens_e: State) =
-%train from left to right
+%train from west to east
  ((sens_w == on ) && (sens_m == off) && (sens_e == off) && (train_state ==            idle)) -> tx_sensors(id,   train) . SENSORS(train_state = approaching_wte)
 +((sens_w == off) && (sens_m == off) && (sens_e == off) && (train_state == approaching_wte)) -> tx_sensors(id,   train) . SENSORS(train_state =  traversing_wte)
 +(                   (sens_m == on ) && (sens_e == off) && (train_state ==  traversing_wte)) -> tx_sensors(id,   train) . SENSORS(train_state =    occupied_wte)
@@ -45,7 +45,7 @@ proc SENSORS(id: TrackID, train_state: State_train, sens_w: State, sens_m: State
 +((sens_w == off) && (sens_m == off) && (sens_e == on ) && (train_state ==     leaving_wte)) -> tx_sensors(id,no_train) . SENSORS(train_state =        exit_wte)
 +((sens_w == off) && (sens_m == off) && (sens_e == off) && (train_state ==        exit_wte)) -> tx_sensors(id,no_train) . SENSORS(train_state =            idle)
 
-%train from right to left
+%train from east to west
 +((sens_w == off) && (sens_m == off) && (sens_e == on ) && (train_state ==            idle)) -> tx_sensors(id,   train) . SENSORS(train_state = approaching_etw)
 +((sens_w == off) && (sens_m == off) && (sens_e == off) && (train_state == approaching_etw)) -> tx_sensors(id,   train) . SENSORS(train_state =  traversing_etw)
 +((sens_w == off) && (sens_m == on )                    && (train_state ==  traversing_etw)) -> tx_sensors(id,   train) . SENSORS(train_state =    occupied_etw)
