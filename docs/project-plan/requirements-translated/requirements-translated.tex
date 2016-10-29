@@ -5,9 +5,11 @@
 
 \begin{document}
 \chapter{Translated Requirements}
+\label{ch:translated-requirements}
 After having described the system and it's requirements in natural language it's time to formulate them as $\mu$-calculus formulae that can be used for verification. In \cref{ch:interactions} all the actions in the model that will be used in the formulae in this chapter were described.
 
 \section{Sensors}
+\label{sec:translated-requirements-sensors}
 In \cref{tab:sensors_transitions} the sensors' states and the consequent \texttt{    train} or \texttt{no\_train} output signal are displayed when a train is moving from East to West and from West to East.
 
 \begin{table}[H]
@@ -83,7 +85,8 @@ tracks):
 
 \end{enumerate}
 
-\section{Sensor Agreggator}
+\section{Sensor Aggregator}
+\label{sec:translated-requirements-sensor-aggregator}
 
 \begin{enumerate}
 \item Sensor aggregator cannot send a \texttt{no\_train} signal there is a train:
@@ -97,6 +100,7 @@ tracks):
 \end{enumerate}
 
 \section{Lights}
+\label{sec:translated-requirements-lights}
 
 \begin{enumerate}
     \item The lights cannot turn on when there is no train on the tracks:\\
@@ -111,6 +115,7 @@ tracks):
 
 
 \section{Bells}
+\label{sec:translated-requirements-bells}
 
 \begin{enumerate}
     \item The bells cannot turn on if the lights are off:\\     
@@ -128,6 +133,7 @@ tracks):
 
 
 \section{Barriers}
+\label{sec:translated-requirements-barriers}
 
 \begin{enumerate}
     \item The barriers cannot be raised when there is a train on the tracks:\\
@@ -143,6 +149,7 @@ tracks):
 
 
 \section{General}
+\label{sec:translated-requirements-general}
 
 \begin{enumerate}
     \item From every state, the crossing needs to be able to be closed (barriers lowered, lights and bells on):\\
