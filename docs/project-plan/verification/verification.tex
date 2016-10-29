@@ -7,5 +7,12 @@
 \begin{document}
 \chapter{Verification}
 \label{ch:verification}
-All the μ-calculus formulas from the chapter \cref{}
+All the μ-calculus formulas from \cref{ch:translated-requirements} were put in a *.pre.mcf file.
+This is basically a \textbackslash n\&\&\textbackslash n separated file.
+Our build script splits this into many *.mcf files and runs the lts2pbes and pbes2bool tools on them.
+Then it collects all the results and either displays a lot of green to the user or a lot of red.
+Before the verification takes place the model is built using mcrl22lps and lps2lts.
+There is also the possibility to generate all the traces of a certain action using lps2lts and tracepp.
+All this is implemented in python (3.5), tested on Windows 7, Windows 10, Linux mint 16
+
 \end{document}
