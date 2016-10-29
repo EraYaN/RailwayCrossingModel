@@ -27,49 +27,103 @@ In \cref{tab:sensors_transitions} the sensors' states and the consequent \texttt
     \label{tab:sensors_transitions}
 \end{table}
 
-Based on this, the following translated requirements may be formulated: 
+Based on this, the following translated requirements may be formulated for both tracks: 
 
 \begin{enumerate}
 \item There cannot be a \texttt{no\_train} signal after a train has triggered an ON in any outer sensor for the first time (i.e a train has entered the tracks) and has not triggered an 
-an OFF in the middle sensor:\\
+an OFF in the middle sensor:
+%TODO[]:Fix identation
+\begin{enumerate}[label=\roman*]
+\item \texttt{[true*][set\_sensors(t1,s\_w,off).!(set\_sensors(t1,s\_m,on)||set\_sensors(t1,s\_e,on) ||set\_sensors(t1,s\_w,on))*.set\_sensors(t1,s\_w,on).!set\_sensors(t1,s\_m,off)*. comm\_sensors(t1,no\_train)]false}
 
-\item There cannot be a \texttt{train} signal after a train has triggered an OFF in the middle sensor and has not triggered an OFF in any outer sensor (i.e. a train is leaving the
-tracks):\\
 
-\item There cannot be a \texttt{train} signal if after a train has triggered an OFF in any outer sensor and not triggered an ON in the middle sensor (i.e a train has exit
- the tracks), another train does not trigger an ON in any outer sensor:\\
+\item \texttt{[true*][set\_sensors(t1,s\_w,off).!(set\_sensors(t1,s\_m,on)||set\_sensors(t1,s\_e,on) ||set\_sensors(t1,s\_w, on))*.set\_sensors(t1,s\_e, on).!set\_sensors(t1,s\_m,off)*. comm\_sensors(t1,no\_train)]false }
+
+
+\item \texttt{[true*][set\_sensors(t1,s\_e,off).!(set\_sensors(t1,s\_m,on)||set\_sensors(t1,s\_e,on) ||set\_sensors(t1,s\_w,on))*.set\_sensors(t1,s\_w,on).!set\_sensors(t1,s\_m,off)*. comm\_sensors(t1,no\_train)]false} 
+
+
+\item \texttt{[true*][set\_sensors(t1,s\_e,off).!(set\_sensors(t1,s\_m,on)||set\_sensors(t1,s\_e,on) ||set\_sensors(t1,s\_w,on))*.set\_sensors(t1,s\_e,on).!set\_sensors(t1,s\_m,off)*. comm\_sensors(t1,no\_train)]false}
+
+\item \texttt{[true*][set\_sensors(t2,s\_w,off).!(set\_sensors(t2,s\_m,on)||set\_sensors(t2,s\_e,on) ||set\_sensors(t2,s\_w,on))*.set\_sensors(t2,s\_w,on).!set\_sensors(t2,s\_m,off)*. comm\_sensors(t2,no\_train)]false}
+
+\item \texttt{[true*][set\_sensors(t2,s\_w,off).!(set\_sensors(t2,s\_m,on)||set\_sensors(t2,s\_e,on) ||set\_sensors(t2,s\_w,on))*.set\_sensors(t2,s\_e,on).!set\_sensors(t2,s\_m,off)*. comm\_sensors(t2,no\_train)]false}
+
+
+\item \texttt{[true*][set\_sensors(t2,s\_e,off).!(set\_sensors(t2,s\_m,on)||set\_sensors(t2,s\_e,on) ||set\_sensors(t2,s\_w,on))*.set\_sensors(t2,s\_w,on).!set\_sensors(t2,s\_m,off)*. comm\_sensors(t2,no\_train)]false}
+
+
+\item \texttt{[true*][set\_sensors(t2,s\_e,off).!(set\_sensors(t2,s\_m,on)||set\_sensors(t2,s\_e,on) ||set\_sensors(t2,s\_w,on))*.set\_sensors(t2,s\_e,on).!set\_sensors(t2,s\_m,off)*. comm\_sensors(t2,no\_train)]false}
 
 \end{enumerate}
 
+\item There cannot be a \texttt{train} signal after a train has triggered an OFF in the middle sensor and has not triggered an OFF in any outer sensor (i.e. a train is leaving the
+tracks):
+\begin{enumerate}[label=\roman*]
+\item \texttt{[true*][set\_sensors(t1,s\_e,off).!(set\_sensors(t1,s\_w,on)||set\_sensors(t1,s\_e,on))*. set\_sensors(t1,s\_m,off).!set\_sensors(t1,s\_w,off)*.comm\_sensors(t1,train)]false}
+
+
+\item \texttt{[true*][set\_sensors(t1,s\_w,off).!(set\_sensors(t1,s\_w,on)||set\_sensors(t1,s\_e,on))*. set\_sensors(t1,s\_m,off).!set\_sensors(t1,s\_e,off)*.comm\_sensors(t1,train)]false}
+
+\item \texttt{[true*][set\_sensors(t2,s\_e,off).!(set\_sensors(t2,s\_m,on)||set\_sensors(t2,s\_e,on) ||set\_sensors(t2,s\_w,on))*.set\_sensors(t2,s\_e,on).!set\_sensors(t2,s\_m,off)*. comm\_sensors(t2,no\_train)]false}
+
+
+\item \texttt{[true*][set\_sensors(t2,s\_e,off).!(set\_sensors(t2,s\_w,on)||set\_sensors(t2,s\_e,on))*. set\_sensors(t2,s\_m,off).!set\_sensors(t2,s\_w,off)*.comm\_sensors(t2,train)]false}
+
+\end{enumerate}
+
+\item There cannot be a \texttt{train} signal if after a train has triggered an OFF in any outer sensor and not triggered an ON in the middle sensor (i.e a train has exit
+ the tracks), another train does not trigger an ON in any outer sensor: 
+\begin{enumerate}[label=\roman*]
+\item \texttt{[true*][ set\_sensors(t1,s\_m,off). !(set\_sensors(t1,s\_e,off)|| set\_sensors(t1,s\_w,off))*.(set\_sensors(t1,s\_e,off)||set\_sensors(t1,s\_w,off)). !(set\_sensors(t1,s\_e,on)||set\_sensors(t1,s\_w,on))*.comm\_sensors(t1,train)]false}
+
+\item \texttt{[true*][ set\_sensors(t2,s\_m,off). !(set\_sensors(t2,s\_e,off)|| set\_sensors(t2,s\_w,off))*.(set\_sensors(t2,s\_e,off)||set\_sensors(t2,s\_w,off)). !(set\_sensors(t2,s\_e,on)||set\_sensors(t2,s\_w,on))*.comm\_sensors(t2,train)]false}
+ 
+\end{enumerate}
+
+\end{enumerate}
+
+\section{Sensor Agreggator}
+
+\begin{enumerate}
+\item Sensor aggregator cannot send a \texttt{no\_train} signal there is a train:
+\begin{enumerate}[label=\roman*]
+\item \texttt{[true*][comm\_sensors(t1,train) .!comm\_sensors(t1,no\_train)* . (comm\_sensors\_agg\_to\_lights(no\_train)|comm\_sensors\_agg \_to\_bells(no\_train)| comm\_sensors\_agg\_to\_barriers(no\_train))]false} 
+
+\item \texttt{[true*][comm\_sensors(t2,train) .!comm\_sensors(t2,no\_train)* . (comm\_sensors\_agg\_to\_lights(no\_train)|comm\_sensors\_agg\_to\_bells(no\_train)| comm\_sensors\_agg\_to\_barriers(no\_train))]false}
+
+\end{enumerate}
+
+\end{enumerate}
 
 \section{Lights}
 
 \begin{enumerate}
     \item The lights cannot turn on when there is no train on the tracks:\\
-        \texttt{[true*][tx\_sensors\_agg(no\_train).\notbar{tx\_sensors\_agg(train)}*.turnon\_lights]false}
+        \texttt{[true*][(comm\_sensors\_agg\_to\_lights(no\_train)|comm\_sensors\_agg\_to\_bells(no\_train)| comm\_sensors\_agg\_to\_barriers(no\_train)).!(comm\_sensors\_agg\_to\_lights(train)| comm\_sensors\_agg\_to\_bells(train)|comm\_sensors\_agg\_to\_barriers(train))*. (turnon\_light1|turnon\_light2)]false}
 
     \item The lights cannot turn off as long as there is a train on the tracks:\\
-        \texttt{[true*][tx\_sensors\_agg(train).\notbar{tx\_sensors\_agg(no\_train)}*.turnoff\_lights]false}
+        \texttt{[true*][(comm\_sensors\_agg\_to\_lights(train)|comm\_sensors\_agg\_to\_bells(train)| comm\_sensors\_agg\_to\_barriers(train)).!(comm\_sensors\_agg\_to\_lights(no\_train)| comm\_sensors\_agg\_to\_bells(no\_train)|comm\_sensors\_agg\_to\_barriers(no\_train))*. (turnoff\_light1|turnoff\_light2)]false}
 
     \item The lights cannot turn off as long as the bells are on:\\
-        \texttt{[true*][turnon\_bells.\notbar{turnoff\_bells}*.turnoff\_lights]false}
+        \texttt{[true*][(turnon\_bell1|turnon\_bell2).!(turnoff\_bell1|turnoff\_bell2)*. (turnoff\_light1|turnoff\_light2)]false}
 \end{enumerate}
 
 
 \section{Bells}
 
 \begin{enumerate}
-    \item The bells cannot turn on if the lights are off:\\
-        \texttt{[true*][turnoff\_lights.\notbar{turnon\_lights}*.turnoff\_bells]false}
+    \item The bells cannot turn on if the lights are off:\\     
+        \texttt{[true*][(turnoff\_light1|turnoff\_light2).!(turnon\_light1|turnon\_light2)*. (turnon\_bell1|turnon\_bell2)]false}
 
     \item The bells cannot turn on if there is no train on the track:\\
-        \texttt{[true*][tx\_sensors\_agg(no\_train).\notbar{tx\_sensors\_agg(train)}*.turnon\_bells]false}
+        \texttt{[true*][comm\_sensors\_agg\_to\_bells(no\_train).!comm\_sensors\_agg\_to\_bells(train)*. (turnon\_bell1|turnon\_bell2)]false}
 
     \item The bells cannot turn off if the barriers are lowered:\\
-        \texttt{[true*][lower\_barriers.\notbar{raise\_barriers}*.turnoff\_bells]false}
+        \texttt{[true*][(lower\_barrier1|lower\_barrier2).!(raise\_barrier1|raise\_barrier2)*. (turnoff\_bell1|turnoff\_bell2)]false}
 
     \item The bells cannot turn off if there is a train on the track:\\
-        \texttt{[true*][tx\_sensors\_agg(train).\notbar{tx\_sensors\_agg(no\_train)}*.turnoff\_bells]false}
+        \texttt{[true*][comm\_sensors\_agg\_to\_bells(train).!comm\_sensors\_agg\_to\_bells(no\_train)*. (turnoff\_bell1|turnoff\_bell2)]false}
 \end{enumerate}
 
 
@@ -77,13 +131,14 @@ tracks):\\
 
 \begin{enumerate}
     \item The barriers cannot be raised when there is a train on the tracks:\\
-        \texttt{[true*][tx\_sensors\_agg(train).\notbar{tx\_sensors\_agg(no\_train)}*.raise\_barriers]false}
+        \texttt{[true*][comm\_sensors\_agg\_to\_barriers(train).!comm\_sensors\_agg\_to\_barriers(no\_train)*. (raise\_barrier1|raise\_barrier2)]false}
 
-    \item The barriers cannot be lowered if there is no train on the tracks:\\
-        \texttt{[true*][tx\_sensors\_agg(no\_train).\notbar{tx\_sensors\_agg(train)}*.lower\_barriers]false}
+    \item The barriers cannot be lowered if there is no train on the tracks:\\   
+        \texttt{[true*][comm\_sensors\_agg\_to\_barriers(no\_train).!comm\_sensors\_agg\_to\_barriers(train)*. (lower\_barrier1|lower\_barrier2)]false}
 
-    \item The barriers cannot be lowered if the bells are off:\\
-        \texttt{[true*][turnoff\_bells.\notbar{turnon\_bells}*.lower\_barriers]false}
+    \item The barriers cannot be lowered if the bells are off:\\    
+        \texttt{[true*][(turnoff\_bell1|turnoff\_bell2). !(turnon\_bell1|turnon\_bell2)*. (lower\_barrier1|lower\_barrier2)]false}
+        
 \end{enumerate}
 
 
@@ -91,10 +146,16 @@ tracks):\\
 
 \begin{enumerate}
     \item From every state, the crossing needs to be able to be closed (barriers lowered, lights and bells on):\\
-        \texttt{[true*]<true*.lower\_barriers>true}
+        \texttt{[true*]<true*.(lower\_barrier1|lower\_barrier2)>true}
 
-    \item From every state, the crossing needs to be able to be opened(lights and bells off, barriers raised):\\
-        \texttt{[true*]<true*.turnoff\_lights>true}
+    \item From every state, the crossing needs to be able to be opened (lights and bells off, barriers raised):\\
+        \texttt{[true*]<true*.(turnoff\_light1|turnoff\_light2)>true}
+        
+     \item From the closed state, the open state needs to be possible to reach:\\    
+     	\texttt{[true*.(lower\_barrier1|lower\_barrier2)]<true*.(turnoff\_light1|turnoff\_light2)>true}
+     	
+     \item From the open state, the closed state needs to be possible to reach:\\    
+     \texttt{[true*.(turnoff\_light1|turnoff\_light2)]<true*.(lower\_barrier1|lower\_barrier2)>true}
 \end{enumerate}
 
 \end{document}
