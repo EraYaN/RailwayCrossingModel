@@ -15,10 +15,10 @@ map opp: State -> State;
 eqn opp(on) = off;
 	opp(off) = on;
 
-%Helper actions
+% Helper actions
 act set_sensors: TrackID # SensorID # State;
 
-%Communication actions
+% Communication actions
 act tx_lights,rx_lights,comm_lights: State;
 	tx_bells_to_lights,rx_bells_to_lights,comm_bells_to_lights: State;
 	tx_bells_to_barriers,rx_bells_to_barriers,comm_bells_to_barriers: State;
@@ -108,24 +108,17 @@ proc BARRIERS(stateBa: State,stateBe: State,T : Train) =
 + sum t: Train . rx_sensors_agg_to_barriers(t) . BARRIERS(T = t)
 ;
 
-init %hide(
-	%{
-		%comm_lights,
-		%comm_bells,
-		%comm_barriers,
-		%comm_sensors,
-		%comm_sensors_agg,
-		%rx_sensors,
-		%rx_sensors_agg,
-		%rx_barriers,
-		%rx_lights,
-		%rx_bells,
-		%tx_sensors,
-		%tx_sensors_agg,
-		%tx_barriers,
-		%tx_lights,
-		%tx_bells
-	%},
+init hide(
+	{
+		comm_lights,
+		comm_bells_to_lights,
+		comm_bells_to_barriers,
+		comm_barriers,
+		comm_sensors,
+		comm_sensors_agg_to_lights,
+		comm_sensors_agg_to_bells,
+		comm_sensors_agg_to_barriers
+	},
 	allow(
 		{
 			comm_lights,
@@ -134,12 +127,12 @@ init %hide(
 			comm_barriers,
 			comm_sensors,
 			comm_sensors_agg_to_lights|
-			comm_sensors_agg_to_bells|
+			comm_sensors_agg_to_bells |
 			comm_sensors_agg_to_barriers,
 			turnoff_light1|turnoff_light2,
-			turnon_light1|turnon_light2,
-			turnon_bell1|turnon_bell2,
-			turnoff_bell1|turnoff_bell2,
+			turnon_light1 |turnon_light2,
+			turnon_bell1  |turnon_bell2,
+			turnoff_bell1 |turnoff_bell2,
 			lower_barrier1|lower_barrier2,
 			raise_barrier1|raise_barrier2,
 			error,
@@ -163,5 +156,5 @@ init %hide(
 			BELLS(off,off,off,no_train)          ||
 			BARRIERS(off,off,no_train)
 		)
-	%)
+	)
 );
