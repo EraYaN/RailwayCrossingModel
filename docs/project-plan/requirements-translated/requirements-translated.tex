@@ -14,16 +14,18 @@ In \cref{tab:sensors_transitions} the sensors' states and the consequent \texttt
 
 \begin{table}[H]
 \centering
-    \begin{tabular}{|c|c|c|c|c|}
-    \hline 
-    $S_{w}$ & $S_{m}$ & $S_{e}$ & East to West       & West to East       \\ \hline 
-    OFF     & OFF     & OFF     & \texttt{no\_train} & \texttt{no\_train} \\ \hline 
-    ON      & OFF     & OFF     & \texttt{    train} & \texttt{no\_train} \\ \hline 
-    OFF     & OFF     & OFF     & \texttt{    train} & \texttt{no\_train} \\ \hline 
-    OFF     & ON      & OFF     & \texttt{    train} & \texttt{    train} \\ \hline 
-    OFF     & OFF     & OFF     & \texttt{no\_train} & \texttt{    train} \\ \hline 
-    OFF     & OFF     & ON      & \texttt{no\_train} & \texttt{    train} \\ \hline 
-    OFF     & OFF     & OFF     & \texttt{no\_train} & \texttt{no\_train} \\ \hline 
+    \begin{tabular}{ccccc}
+    \toprule
+    \textbf{$S_{w}$} & \textbf{$S_{m}$} & \textbf{$S_{e}$} & \textbf{East to West}       & \textbf{West to East}       \\ 
+    \midrule 
+    OFF     & OFF     & OFF     & \texttt{no\_train} & \texttt{no\_train} \\ 
+    ON      & OFF     & OFF     & \texttt{    train} & \texttt{no\_train} \\  
+    OFF     & OFF     & OFF     & \texttt{    train} & \texttt{no\_train} \\  
+    OFF     & ON      & OFF     & \texttt{    train} & \texttt{    train} \\  
+    OFF     & OFF     & OFF     & \texttt{no\_train} & \texttt{    train} \\  
+    OFF     & OFF     & ON      & \texttt{no\_train} & \texttt{    train} \\  
+    OFF     & OFF     & OFF     & \texttt{no\_train} & \texttt{no\_train} \\ 
+    \bottomrule 
     \end{tabular}
     \caption{Sensors states and sensor controller output signal for a train moving in either possible direction.}
     \label{tab:sensors_transitions}

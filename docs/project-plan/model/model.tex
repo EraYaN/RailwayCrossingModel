@@ -16,8 +16,8 @@ Note that all the \nameref{ch:interactions} are described in \cref{ch:interactio
 Since this is the easiest subsystem, this was modeled first.
 The behaviour of the \nameref{sec:architecture-light-controller} can be expressed rather simple, when it knows a train is coming, the subsystems goes to its \texttt{on} state.
 The lights stay on until the train is gone, and the bells are \texttt{off}.
-When drawn as a Finite State Machine it looks like \label{fig:fsm-light}.
-Transforming this FSM to a Transition Link System (TLS) is rather easy, since it can just be unfolded to \label{fig:tls-light}.
+When drawn as a Finite State Machine it looks like \label{fig:fsm-light-model}.
+Transforming this FSM to a Transition Link System (TLS) is rather easy, since it can just be unfolded to \label{fig:tls-light-model}.
 The tick in the last state means that the system can go back to its idle state (which is the top state).
 
 We also included two error states, this is the case when the barriers are closed but the lights are not on.
@@ -30,13 +30,13 @@ When the state of the controller changes, it first does an transmit action to te
     \centering
             \subimport{resources/}{fsm-light.tikz}
             \caption{FSM light}
-            \label{fig:fsm-light}
+            \label{fig:fsm-light-model}
         \end{subfigure}
         \begin{subfigure}[b]{0.4\textwidth}
     \centering
             \subimport{resources/}{tls-light.tikz}
             \caption{TLS light}
-            \label{fig:tls-light}
+            \label{fig:tls-light-model}
         \end{subfigure}
     \caption{Diagrams showing the functioning \nameref{sec:architecture-light-controller}}
     \label{fig:light}
@@ -44,7 +44,7 @@ When the state of the controller changes, it first does an transmit action to te
 
 \section{\nameref{sec:architecture-barrier-controller}}
 This subsystem is of similar complexity as the \nameref{sec:architecture-light-controller} just above, since they have the same number of receiving actions.
-Between these subsystem is a lot of duality, because it is the same process except that the Barriers can only close when the Bell is on (and a train is comming), and the Barriers can open as soon as it receives an action that the train is gone.
+Between these subsystem is a lot of duality, because it is the same process except that the Barriers can only close when the Bell is on (and a train is coming), and the Barriers can open as soon as it receives an action that the train is gone.
 
 \section{\nameref{sec:architecture-bell-controller}}
 Being right in the middle of two other parallel systems, the conditions for doing a certain action get a bit more complex, since the state of both the \nameref{sec:architecture-light-controller} and  \nameref{sec:architecture-barrier-controller} have to be taken into account.

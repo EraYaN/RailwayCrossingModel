@@ -26,27 +26,80 @@ The last structure that is used throughout the model is \texttt{Train} which is 
 Each track has its on set of three sensors, each of the sensors can do \texttt{set\_sensors} action, this actions has three parameters being \texttt{TrackID}, \texttt{SensorID} and \texttt{State}.
 
 \subsection{Outgoing}
-The outgoing actions for each of the three controllers are showed in the table below, they are self explanatory.
+The outgoing actions for each of the three controllers are showed in \cref{tab:external-actions}, they are self explanatory.
 
 \begin{table}[H]
-\centering
-    \begin{tabular}{|l|l|l|}
-    \hline
-\nameref{sec:architecture-light-controller} & \nameref{sec:architecture-bell-controller} & \nameref{sec:architecture-barrier-controller} \\ \hline
-\texttt{turnon\_light1}                     & \texttt{turnon\_bell1}                     & \texttt{lower\_barrier1} \\
-\texttt{turnon\_light2}                     & \texttt{turnon\_bell2}                     & \texttt{lower\_barrier2} \\
-\texttt{turnoff\_light1}                    & \texttt{turnoff\_bell1}                    & \texttt{raise\_barrier1} \\
-\texttt{turnoff\_light2}                    & \texttt{turnoff\_bell2}                    & \texttt{raise\_barrier2} \\ \hline
+    \centering
+    \caption{External interactions of the system}
+    \label{tab:external-actions}
+    \begin{tabular}{lll}
+        \toprule
+        \textbf{\nameref{sec:architecture-light-controller}} & \textbf{\nameref{sec:architecture-bell-controller}} & \textbf{\nameref{sec:architecture-barrier-controller}} \\ 
+        \midrule
+        \texttt{turnon\_light1}                     & \texttt{turnon\_bell1}                     & \texttt{lower\_barrier1} \\
+        \texttt{turnon\_light2}                     & \texttt{turnon\_bell2}                     & \texttt{lower\_barrier2} \\
+        \texttt{turnoff\_light1}                    & \texttt{turnoff\_bell1}                    & \texttt{raise\_barrier1} \\
+        \texttt{turnoff\_light2}                    & \texttt{turnoff\_bell2}                    & \texttt{raise\_barrier2} \\ 
+        \bottomrule
     \end{tabular}
-    \caption{Interactions of the sensor controller}
-    \label{tab:sensorSignals}
+    
 \end{table}
 
 \subsection{Error}
-In our model there are also some error states, these are modeled by first doing an \texttt{error} action and then entering the deadlock state by doing the action \texttt{delta}.
+In our model there are also some error states, these are modelled by first doing an \texttt{error} action and then entering the deadlock state by doing the action \texttt{delta}.
 
 
 \subsection{Internal Communication}
+In \cref{tab:internal-actions} all internal actions are shown.
+The first section is the action that make sure the sensors can get triggered.
+The second section are the action that are used to communicate between the lights, bells, and barriers.
+The last two sections are to communicate the sensors values to the aggregator and distribute the signal to the light, bells, and barriers.
 
+\begin{table}[H]
+    \centering
+    \caption{Internal interactions of the system}
+    \label{tab:internal-actions}
+    \begin{tabular}{ll}
+        \toprule
+        \textbf{Action} & \textbf{Data} \\ 
+        \midrule
+        %Helper actions
+        set\_sensors & TrackID, SensorID, State \\
+        \midrule
+        %Communication actions
+        tx\_lights & State \\
+        rx\_lights & State \\
+        comm\_lights & State \\
+        tx\_bells\_to\_lights & State \\
+        rx\_bells\_to\_lights & State \\
+        comm\_bells\_to\_lights & State \\
+        tx\_bells\_to\_barriers & State \\
+        rx\_bells\_to\_barriers & State \\
+        comm\_bells\_to\_barriers & State \\
+        tx\_barriers & State \\
+        rx\_barriers & State \\
+        comm\_barriers & State \\
+        \midrule
+        tx\_sensors & TrackID, Train \\
+        rx\_sensors & TrackID, Train \\
+        comm\_sensors & TrackID, Train \\
+        \midrule
+        tx\_sensors\_agg\_to\_lights & Train \\
+        rx\_sensors\_agg\_to\_lights & Train \\
+        comm\_sensors\_agg\_to\_lights & Train \\
+        tx\_sensors\_agg\_to\_bells & Train \\
+        rx\_sensors\_agg\_to\_bells & Train \\
+        comm\_sensors\_agg\_to\_bells & Train \\
+        tx\_sensors\_agg\_to\_barriers & Train \\
+        rx\_sensors\_agg\_to\_barriers & Train \\
+        comm\_sensors\_agg\_to\_barriers & Train \\
+        \midrule
+        error & \\
+        \bottomrule
+    \end{tabular}
+    
+
+
+\end{table}
 
 \end{document}
