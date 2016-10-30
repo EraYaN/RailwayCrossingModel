@@ -1,7 +1,0 @@
-act a,b,c,d,e,f;
-
-proc P = a.b.c.Q;
-	 Q = d.P + e.R;
-	 R = (a + b).c.d.e.f.delta;
-
-init P;
