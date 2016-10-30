@@ -6,6 +6,7 @@
 \addbibresource{../../.library/bibliography.bib}
 \begin{document}
 \chapter{Architecture}
+\label{ch:architecture}
 The system will be divided in several separate entities, in \cref{fig:system-architecture} a simple schematic view is shown.
 
 \begin{figure}[H]
@@ -15,7 +16,7 @@ The system will be divided in several separate entities, in \cref{fig:system-arc
 	\label{fig:system-architecture}
 \end{figure}
 
-\section{Track Sensor Controller}\label{sec:architecture-track-sensor-controller}
+\section{Track Sensor Controller}\label{sec:architecture-sensor-controller}
 Each Track has a Track Sensor Controller to interface with the sensors $S_{n,w}$, $S_{n,m}$, $S_{n,e}$ (where $n = 1,2,3,..$ for the number of the track).
 This unit determines if there is a train on the track and whenever it is entering or leaving.
 It has one boolean output signal, $train\_on\_track$ (or abbreviated to $T$).

@@ -6,5 +6,59 @@
 \addbibresource{../../.library/bibliography.bib}
 \begin{document}
 \chapter{Model Description}
+So a functional model has to be designed as described in \cref{fig:system-architecture} of \cref{ch:architecture}:`\cref{ch:architecture}'. 
+In the following sections every subsystem is explained.
+Our design process is explained only for one of the subsystems, but the same method was used for all the subsystems.
+Note that all the \nameref{ch:interactions} are described in \cref{ch:interactions}.
+
+
+\section{\nameref{sec:architecture-light-controller}}
+Since this is the easiest subsystem, this was modeled first.
+The behaviour of the \nameref{sec:architecture-light-controller} can be expressed rather simple, when it knows a train is coming, the subsystems goes to its \texttt{on} state. The lights stay on until the train is gone, and the bells are \texttt{off}. When drawn as a Finite State Machine it looks like \label{fig:fsm-light}. Transforming this FSM to a Transition Link System (TLS) is rather easy, since it can just be unfolded to \label{fig:tls-light}. The tick in the last state means that the system can go back to its idle state (which is the top state).
+
+We also included two error states, this is the case when the barriers are closed but the lights are not on.
+The input of the system is done by summing over the possible different parameters of the receiving actions, which are from the \nameref{sec:architecture-bell-controller} and the \nameref{sec:architecture-sensor-aggregator}.
+When the state of the controller changes, it first does an transmit action to tell the connected other systems that it changed states (\texttt{tx\_lights(state)}) followed by a multi-action either turning on or off both of the external lights, and finally to keep the system running the \texttt{LIGHTS} process is called recursively with the state value.
+
+\begin{figure}[H]
+    \centering
+        \begin{subfigure}[b]{0.4\textwidth}
+    \centering
+            \subimport{resources/}{fsm-light.tikz}
+            \caption{FSM light}
+            \label{fig:fsm-light}
+        \end{subfigure}
+        \begin{subfigure}[b]{0.4\textwidth}
+    \centering
+            \subimport{resources/}{tls-light.tikz}
+            \caption{TLS light}
+            \label{fig:tls-light}
+        \end{subfigure}
+    \caption{Diagrams showing the functioning \nameref{sec:architecture-light-controller}}
+    \label{fig:light}
+\end{figure}
+
+\section{\nameref{sec:architecture-barrier-controller}}
+This subsystem is of similar complexity as the \nameref{sec:architecture-light-controller} just above, since they have the same number of receiving actions. Between these subsystem is a lot of duality, because it is the same process except that the Barriers can only close when the Bell is on (and a train is comming), and the Barriers can open as soon as it receives an action that the train is gone.
+
+\section{\nameref{sec:architecture-bell-controller}}
+Being right in the middle of two other parallel systems, the conditions for doing a certain action get a bit more complex, since the state of both the \nameref{sec:architecture-light-controller} and  \nameref{sec:architecture-barrier-controller} have to be taken into account. Being dependent on those 2 other subsystems, there are a few more situations in which an error action should be triggered, with all the permutations of these situations a total of 8 states are defined which will trigger the error action.
+
+\section{\nameref{sec:architecture-sensor-controller}}
+With three incoming actions being the different sensors, this is the most complex subsystem. The implemented process can be split up into three different parts. The first two parts are dual/opposites, it takes care of the internal state in the case of a train going from `West to East' or from `East to West'. The last part is there to be able to produce all the different states of the system. It takes care of changing the sensor states in such a way that it simulates a train going either of the two directions.
+
+For remembering the current position of a train 5 different states per direction are defined, in order being:
+\begin{itemize}
+    \item approaching
+    \item occupied
+    \item leaving
+    \item exit
+    \item traversing
+\end{itemize}
+
+%TODO[c] make a timeline of a train going in both directions?
+
+\section{\nameref{sec:architecture-sensor-aggregator}}
+To make the model more flexible we designed the \nameref{sec:architecture-sensor-controller} in such a way that it controls only a single track. This means that you can model crossings with $n$ tracks. The \nameref{sec:architecture-sensor-aggregator} combines all these actions into one single action (\texttt{train} or \texttt{no\_train}) for the rest of the system. Combining these actions is a logical OR operation, so when all the tracks have \texttt{no\_train}, a \texttt{no\_train} is send to the rest of the system. For every other combination of incoming actions, a transmit action is done passing the \texttt{train} structure.
 
 \end{document}
