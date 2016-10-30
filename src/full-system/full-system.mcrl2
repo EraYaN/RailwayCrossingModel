@@ -1,7 +1,19 @@
-% Railway Crossing Model
-% Group 8
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                Railway Crossing Model                %
+%              System Validation Project               %
+%                   IN4387 2016/2017                   %
+%                                                      %
+%                       Group 8                        %
+%                   Project Members:                   %
+%                   Erwin R. de Haan                   %
+%                Patricia García Ferrin                %
+%                Lars T. J. van Leeuwen                %
+%                  Casper D. van Wezel                 %
+%                                                      %
+%                         v1.0                         %
+%                      2016-10-30                      %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-%NOTE: So in an error state, the system might still remain in the same state (do a loop back), but it might also try to correct the system.
 
 sort State = struct on | off;
 	 State_train = struct approaching_wte | traversing_wte | occupied_wte | leaving_wte | exit_wte |
