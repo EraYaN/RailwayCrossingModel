@@ -7,13 +7,17 @@
 \begin{document}
 \chapter{Verification}
 \label{ch:verification}
+\section{Tools and automation}
 All the μ-calculus formulas from \cref{ch:translated-requirements} were put in a *.pre.mcf file.
 This is basically a \textbackslash n\&\&\textbackslash n separated file.
 Our build script splits this into many *.mcf files and runs the lts2pbes and pbes2bool tools on them.
 Then it collects all the results and either displays a lot of green to the user or a lot of red.
 Before the verification takes place the model is built using mcrl22lps and lps2lts.
 There is also the possibility to generate all the traces of a certain action using lps2lts and tracepp.
-All this is implemented in python 3.5; tested on Windows 7, Windows 10, Linux mint 17.3; using the latest stable mCRL2.
+All this is implemented in python 3.5; tested on Windows 7, Windows 10, Linux mint 17.3; using mCRL2 version 201409.1.13218.
 
+\section{Process}
+The first attempt at verification was not successful. Barely any requirements turned out to be verified for the model. The requirements that did successfully verify often were trivially verified because they required actions to not happen in certain conditions that ended up not happening in any condition. A lot of debugging was required for both the model and the way the requirements were formulated in $\mu$-calculus. A major challenge in this process was that it was sometimes hard to determine if a problem in the model or a problem in the $\mu$-calculus was at fault for a requirement not verifying.
 
+In general the requirements for the lights, barriers and the bell were considered correctly formulated because of their simplicity meaning that problems in the verification of those requirements had to be fixed in the model. The requirements for the sensor controllers were a lot harder to formulate in $\mu$-calculus. Problems with the verification of those requirements often had to be solved in the requirements itself requiring changes in not only the $\mu$-calculus formulations but sometimes even the requirements in natural language that turned out to be unverifiable otherwise. The independent verification of the sensor controllers and the sensor aggregator was for example a last minute change that turned out to be necessary to get all requirements to verify. Another notable change in regards to the sensors was the need for a track ID in the set\_sensors actions. In earlier versions of the model that track ID was absent making it appear as if there was only one set of sensors for both tracks. In the end a model and set of requirements was realised that was fully verified.
 \end{document}
