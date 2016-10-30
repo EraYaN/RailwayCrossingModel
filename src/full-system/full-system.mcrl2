@@ -4,8 +4,8 @@
 %NOTE: So in an error state, the system might still remain in the same state (do a loop back), but it might also try to correct the system.
 
 sort State = struct on | off;
-	 State_train = struct approaching_wte | occupied_wte | leaving_wte | exit_wte | traversing_wte |
-						  approaching_etw | occupied_etw | leaving_etw | exit_etw | traversing_etw | idle;
+	 State_train = struct approaching_wte | traversing_wte | occupied_wte | leaving_wte | exit_wte |
+						  approaching_etw | traversing_etw | occupied_etw | leaving_etw | exit_etw | idle;
 	 Train = struct train | no_train;
 	 TrackID = struct t1 | t2;
 	 SensorID = struct s_w | s_m | s_e;
