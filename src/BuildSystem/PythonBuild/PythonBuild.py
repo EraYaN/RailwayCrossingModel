@@ -19,7 +19,7 @@ if __name__ == '__main__':
     parser.add_argument('--disable-lts-compile', action="store_true", help='Skip everything for the LTS compile.')
     parser.add_argument('--output-dir', action="store", help='Output subdirectory',default="out")
     parser.add_argument('--trace-action', action="store", help='Project root directory name',default=None)
-    parser.add_argument('--project-root', action="store", help='Project root directory name',default="./full-system/full-system")
+    parser.add_argument('--project-root', action="store", help='Project root directory name',default="../../full-system")
     parser.add_argument('--project-name', action="store", help='Project base name',default="full-system")
     try:
         verified = False
