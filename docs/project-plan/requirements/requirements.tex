@@ -31,18 +31,25 @@ Below a sketch shows the basic configuration of all the system components and th
 \end{figure}
 
 \section{System Functionality}\label{sec:requirements}
-The most obvious requirement is of course that the system has to prevent cars from driving on the crossing when there is a train coming.
+The function of the system is of course preventing cars from driving on the crossing when there is a train coming.
 This means that the barriers have to be closed with the lights and bells being on before a train enters the crossing and that they have to stay closed until the crossing is clear of trains.
-Besides this trivial requirement, there are a couple other functional requirements for the system.
+There are two other functions that the system needs to be able to fulfil:
 
 \begin{enumerate}
 \item The system has to be able to handle trains arriving on both tracks from both directions.
 	\begin{enumerate}
-	\item When a train left the crossing and the barriers are opening again, a new train can re-trigger the closing sequence again, which has priority over the opening sequence.
-	\end{enumerate}
+	\item When a train left the crossing and the barriers are opening again, a new train can re-trigger the closing sequence again, which has priority over the opening sequence.	
+	\end{enumerate}	
 
-\item The beams, lights and bells on both sides of the track operate synchronously.
+\item The barriers, lights and bells on each side of the track will operate in parallel but following the sequence of operation that will be explained in the following section.
 \end{enumerate}
+
+The first one will be expressed further on as a general requirement or liveness requirement for the system.
+Here it will be considered that the system can handle trains moving in both track when the requirements that will be enunciated  later on are verified for both tracks.
+In other words, the normal sequence of operation can be triggered when any train comes in any track.
+
+The second one will be implemented in the model with different multiactions.	
+
 
 
 \subsection{Sequence}
@@ -65,16 +72,17 @@ Crossing opening:
 \end{enumerate}
 
 \section{Requirements defined}
+Firstly, we will give some definitions that may help to the description and understanding of the formulated requirements.
 A train `on the track' means that a train is somewhere, either partially or completely, between the two outer train sensors of a train track.
 A train is `approaching' when it triggers one of the external sensors for the first time, while it is `exiting' the track when it triggers the other external sensor.
 When the middle sensor is triggered, we consider the track `occupied'.
 As for the transition states, a train is `traversing' when it is moving from `approaching' to `occupied' and it is `leaving' when it is moving between `occupied' and `exit' states.\\
-Regarding the lights, \texttt{Lights ON} means the actual lights are blinking but the Light Controller only gives an action to an external blinking controller which is not part of this project scope.
+%Regarding the lights, \texttt{Lights ON} means the actual lights are blinking but the Light Controller only gives an action to an external blinking controller which is not part of this project scope.
 
 \subsection{Sensors}
 These requirements should be considered either for a train that it is moving from West to East and from East to West.
 The sensors are considered to generate an action whenever their state has suffered a change, that way, we will only be able to know if a sensor is on, if its previous state was off and vice versa.
-Whenever an output signal from the sensor controller stating a train has been detected should be sent, we will refer it as a train signal, while we will refer a no-train signal otherwise.
+Whenever an output signal from the sensor controller stating a train has been detected should be sent, we will refer it as a \texttt{train} signal, while we will refer a \texttt{no\_train} signal otherwise.
 The requirements for the sensors are the following:
 %TODO[jeroen]:These first six requirements are not verifiable
 %TODO[jeroen]:I would expect everything up to this point to be part of the introduction.
@@ -84,11 +92,11 @@ The requirements for the sensors are the following:
 an OFF in the middle sensor.
 		\item There cannot be a \texttt{train} signal after a train has triggered an OFF in the middle sensor and has not triggered an OFF in any outer sensor (i.e. a train is leaving the
 tracks).
-		\item There cannot be a \texttt{train} signal if after a train has triggered an OFF in any outer sensor and not triggered an ON in the middle sensor (i.e a train has exit
- the tracks), another train does not trigger an ON in any outer sensor.		
+		\item There cannot be a \texttt{train} signal if after a train has triggered an OFF in any outer sensor and not triggered an ON in the middle sensor (i.e a train has exited
+ the tracks); another train does not trigger an ON in any outer sensor.		
 	\end{enumerate}
 
-\subsection{Light}
+\subsection{Lights}
 	\begin{enumerate}
 		\item The lights cannot turn on when there is no train on the tracks.
 		\item The lights cannot turn off as long as there is a train on the tracks.
