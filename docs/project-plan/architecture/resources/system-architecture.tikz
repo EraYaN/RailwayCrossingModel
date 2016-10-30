@@ -4,7 +4,7 @@
 	signal/.style={node distance = 0.5cm,inner sep=0pt,outer sep=0pt,minimum width=0.6cm}]
 
 
-	\node[system] (sensors) {$n$\textsuperscript{th} - \nameref{sec:architecture-track-sensor-controller}};
+	\node[system] (sensors) {$n$\textsuperscript{th} - \nameref{sec:architecture-sensor-controller}};
 	\node[system,right = 2cm of sensors] (system_agg) {\nameref{sec:architecture-sensor-aggregator}};
 	\node[system,right = 2.8cm of system_agg] (lights) {\nameref{sec:architecture-light-controller}};
 	\node[system,below = 0.5cm of lights] (bells) {\nameref{sec:architecture-bell-controller}};
