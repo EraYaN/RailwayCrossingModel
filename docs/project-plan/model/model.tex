@@ -16,8 +16,8 @@ Note that all the \nameref{ch:interactions} are described in \cref{ch:interactio
 Since this is the easiest subsystem, this was modeled first.
 The behaviour of the \nameref{sec:architecture-light-controller} can be expressed rather simple, when it knows a train is coming, the subsystems goes to its \texttt{on} state.
 The lights stay on until the train is gone, and the bells are \texttt{off}.
-When drawn as a Finite State Machine it looks like \label{fig:fsm-light-model}.
-Transforming this FSM to a Transition Link System (TLS) is rather easy, since it can just be unfolded to \label{fig:tls-light-model}.
+When drawn as a Finite State Machine it looks like \cref{fig:fsm-light-model}.
+Transforming this FSM to a Transition Link System (TLS) is rather easy, since it can just be unfolded to \cref{fig:tls-light-model}.
 The tick in the last state means that the system can go back to its idle state (which is the top state).
 
 We also included two error states, this is the case when the barriers are closed but the lights are not on.
