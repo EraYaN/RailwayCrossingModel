@@ -57,16 +57,15 @@ The first two parts are dual/opposites, it takes care of the internal state in t
 The last part is there to be able to produce all the different states of the system.
 It takes care of changing the sensor states in such a way that it simulates a train going either of the two directions.
 
-For remembering the current position of a train 5 different states per direction are defined, in order being:
-\begin{itemize}
-    \item approaching
-    \item occupied
-    \item leaving
-    \item exit
-    \item traversing
-\end{itemize}
+For remembering the current position of a train 5 different states per direction are defined (in \texttt{State\_train}), below the figure shows the position of a train with respect to the sensors for all 5 states.
 
-%TODO[c] make a timeline of a train going in both directions?
+\begin{figure}[H]
+    \centering
+    \subimport{resources/}{train-positions.tikz}
+    \caption{Different positions states of a train going from West to East}
+    \label{fig:train-positions}
+\end{figure}
+
 
 \section{\nameref{sec:architecture-sensor-aggregator}}
 To make the model more flexible we designed the \nameref{sec:architecture-sensor-controller} in such a way that it controls only a single track.

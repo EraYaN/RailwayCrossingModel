@@ -1,0 +1,21 @@
+\begin{tikzpicture}[
+    track/.style={
+        postaction={draw=gray,densely dashed,line width=14pt},
+        postaction={draw=black,double distance=8pt,line width=2pt},
+        postaction={draw=gray,densely dashed,line width=8pt}},
+    train/.style={->,fill=black,line width=2pt,minimum width=2cm,minimum height=2pt},
+    sensor/.style={fill=blue,circle,inner sep=2pt,minimum size=0.1cm}]
+
+
+    \draw[track] (-5,0) to (5,0);
+    \node[sensor,label=below:{$S_{n,w}$}] at (-4,0) {};
+    \node[sensor,label=below:{$S_{n,m}$}] at (0,0) {};
+    \node[sensor,label=below:{$S_{n,e}$}] at (4,0) {};
+
+    \node[train,label=below:{\texttt{approaching\_wte}}] at (-4,-1) {};
+    \node[train,label=below:{\texttt{ traversing\_wte}}] at (-2,-2) {};
+    \node[train,label=below:{\texttt{   occupied\_wte}}] at ( 0,-3) {};
+    \node[train,label=below:{\texttt{    leaving\_wte}}] at ( 2,-2) {};
+    \node[train,label=below:{\texttt{       exit\_wte}}] at ( 4,-1) {};
+
+\end{tikzpicture}
